@@ -5,4 +5,4 @@ set -l notifs 'quickshell.service.notifications.warning = false'  # Notification
 set -l sni 'quickshell.service.sni.host.warning = false'  # StatusNotifierItem warnings on reload
 set -l process 'QProcess: Destroyed while process'  # Long running processes on reload
 
-qs -p (dirname (status filename)) --log-rules "$dbus;$notifs;$sni" | grep -vE -e $process
+qs -p (dirname (status filename)) --log-rules "$dbus;$notifs;$sni" | rg -v -e $process
