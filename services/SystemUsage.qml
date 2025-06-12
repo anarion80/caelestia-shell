@@ -11,6 +11,9 @@ Singleton {
     property real cpuTemp
     property real gpuPerc
     property real gpuTemp
+    property real gpuPstate
+    property real gpuPowerDraw
+    property real gpuFanSpeed
     property int memUsed
     property int memTotal
     readonly property real memPerc: memTotal > 0 ? memUsed / memTotal : 0
@@ -58,6 +61,9 @@ Singleton {
             cpuTemp.running = true;
             gpuUsage.running = true;
             gpuTemp.running = true;
+            gpuPowerDraw.running = true;
+            gpuPstate.running = true;
+            gpuFanSpeed.running = true;
         }
     }
 
@@ -97,7 +103,7 @@ Singleton {
         id: storage
 
         running: true
-        command: ["sh", "-c", "df | grep '^/dev/' | awk '{print $1, $3, $4}'"]
+        command: ["sh", "-c", "/bin/df / | grep '^/dev/' | awk '{print $1, $3, $4}'"]
         stdout: SplitParser {
             splitMarker: ""
             onRead: data => {
@@ -138,12 +144,11 @@ Singleton {
         id: cpuTemp
 
         running: true
-        command: ["fish", "-c", "cat /sys/class/thermal/thermal_zone*/temp | string join ' '"]
+        command: ["fish", "-c", "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/*/temp1_input"]
         stdout: SplitParser {
             onRead: data => {
-                const temps = data.trim().split(" ");
-                const sum = temps.reduce((acc, d) => acc + parseInt(d, 10), 0);
-                root.cpuTemp = sum / temps.length / 1000;
+                const temp = data.trim();
+                root.cpuTemp = temp / 1000;
             }
         }
     }
@@ -152,13 +157,10 @@ Singleton {
         id: gpuUsage
 
         running: true
-        command: ["sh", "-c", "cat /sys/class/drm/card*/device/gpu_busy_percent"]
+        command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits"]
         stdout: SplitParser {
-            splitMarker: ""
             onRead: data => {
-                const percs = data.trim().split("\n");
-                const sum = percs.reduce((acc, d) => acc + parseInt(d, 10), 0);
-                root.gpuPerc = sum / percs.length / 100;
+                root.gpuPerc = data / 100;
             }
         }
     }
@@ -167,26 +169,46 @@ Singleton {
         id: gpuTemp
 
         running: true
-        command: ["sh", "-c", "sensors | jq -nRc '[inputs]'"]
+        command: ["sh", "-c", "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits"]
         stdout: SplitParser {
             onRead: data => {
-                let eligible = false;
-                let sum = 0;
-                let count = 0;
-                for (const line of JSON.parse(data)) {
-                    if (line === "Adapter: PCI adapter")
-                        eligible = true;
-                    else if (line === "")
-                        eligible = false;
-                    else if (eligible) {
-                        const match = line.match(/^(temp[0-9]+|GPU core|edge)+:\s+\+([0-9]+\.[0-9]+)°C/);
-                        if (match) {
-                            sum += parseFloat(match[2]);
-                            count++;
-                        }
-                    }
-                }
-                root.gpuTemp = count > 0 ? sum / count : 0;
+                root.gpuTemp = data;
+            }
+        }
+    }
+
+    Process {
+        id: gpuPowerDraw
+
+        running: true
+        command: ["sh", "-c", "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits"]
+        stdout: SplitParser {
+            onRead: data => {
+                root.gpuPowerDraw = data;
+            }
+        }
+    }
+
+    Process {
+        id: gpuFanSpeed
+
+        running: true
+        command: ["sh", "-c", "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits"]
+        stdout: SplitParser {
+            onRead: data => {
+                root.gpuFanSpeed = data;
+            }
+        }
+    }
+
+    Process {
+        id: gpuPstate
+
+        running: true
+        command: ["sh", "-c", "nvidia-smi --query-gpu=pstate --format=csv,noheader,nounits"]
+        stdout: SplitParser {
+            onRead: data => {
+                root.gpuPstate = data;
             }
         }
     }
