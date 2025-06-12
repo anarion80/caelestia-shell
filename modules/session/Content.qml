@@ -23,8 +23,7 @@ Column {
         id: logout
 
         icon: "logout"
-        command: ["sh", "-c", "(uwsm stop | grep -q 'Compositor is not running' && loginctl terminate-user $USER) || uwsm stop"]
-
+        command: ["hyprctl", "dispatch", "exit"]
         KeyNavigation.down: shutdown
 
         Connections {
@@ -47,17 +46,17 @@ Column {
         KeyNavigation.down: hibernate
     }
 
-    AnimatedImage {
-        width: SessionConfig.sizes.button
-        height: SessionConfig.sizes.button
-        sourceSize.width: width
-        sourceSize.height: height
-
-        playing: visible
-        asynchronous: true
-        speed: 0.7
-        source: "root:/assets/kurukuru.gif"
-    }
+    // AnimatedImage {
+    //     width: SessionConfig.sizes.button
+    //     height: SessionConfig.sizes.button
+    //     sourceSize.width: width
+    //     sourceSize.height: height
+    //
+    //     playing: visible
+    //     asynchronous: true
+    //     speed: 0.7
+    //     source: "root:/assets/kurukuru.gif"
+    // }
 
     SessionButton {
         id: hibernate
