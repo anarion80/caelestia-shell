@@ -21,8 +21,8 @@ Singleton {
     property int storageTotal
     property real storagePerc: storageTotal > 0 ? storageUsed / storageTotal : 0
 
-    property int lastCpuIdle
-    property int lastCpuTotal
+    property int lastCpuIdle: 0
+    property int lastCpuTotal: 0
 
     function formatKib(kib: int): var {
         const mib = 1024;
@@ -52,7 +52,7 @@ Singleton {
 
     Timer {
         running: true
-        interval: 3000
+        interval: 1000
         repeat: true
         onTriggered: {
             stat.reload();
