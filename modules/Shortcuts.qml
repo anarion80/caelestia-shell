@@ -9,6 +9,15 @@ Scope {
     property bool launcherInterrupted
 
     CustomShortcut {
+        name: "showall"
+        description: "Toggle launcher, dashboard and osd"
+        onPressed: {
+            const v = Visibilities.getForActive();
+            v.launcher = v.dashboard = v.osd = !(v.launcher || v.dashboard || v.osd);
+        }
+    }
+
+    CustomShortcut {
         name: "session"
         description: "Toggle session menu"
         onPressed: {

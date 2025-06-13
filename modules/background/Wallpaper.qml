@@ -8,7 +8,7 @@ import QtQuick
 Item {
     id: root
 
-    property url source: Wallpapers.current ? `file://${Wallpapers.current}` : ""
+    property string source: Wallpapers.current
     property Image current: one
 
     anchors.fill: parent
@@ -32,19 +32,13 @@ Item {
         id: img
 
         function update(): void {
-            const srcPath = `${root.source}`.slice(7);
-            if (thumbnail.originalPath === srcPath) {
+            if (path === root.source)
                 root.current = this;
-            } else
-                path = srcPath;
+            else
+                path = root.source;
         }
 
         anchors.fill: parent
-
-        loadOriginal: true
-        asynchronous: true
-        cache: false
-        fillMode: Image.PreserveAspectCrop
 
         opacity: 0
         scale: Wallpapers.showPreview ? 1 : 0.8

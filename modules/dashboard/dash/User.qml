@@ -10,13 +10,13 @@ Row {
     id: root
 
     padding: Appearance.padding.large
-    spacing: Appearance.spacing.large
+    spacing: Appearance.spacing.normal
 
     StyledClippingRect {
         implicitWidth: info.implicitHeight
         implicitHeight: info.implicitHeight
 
-        radius: Appearance.rounding.full
+        radius: Appearance.rounding.large
         color: Colours.palette.m3surfaceContainerHigh
 
         MaterialIcon {
