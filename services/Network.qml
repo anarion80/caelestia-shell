@@ -23,31 +23,36 @@ Singleton {
     Process {
         id: getNetworks
         running: true
-        command: ["sh", "-c", `nmcli -g ACTIVE,SIGNAL,FREQ,SSID,BSSID d w | jq -ncR '[(inputs | split("(?<!\\\\\\\\):"; "g")) | select(.[3] | length >= 4)]'`]
-        stdout: SplitParser {
-            onRead: data => {
-                const networks = JSON.parse(data).map(n => [n[0] === "yes", parseInt(n[1]), parseInt(n[2]), n[3], n[4].replace(/\\/g, "")]);
+        command: ["nmcli", "-g", "ACTIVE,SIGNAL,FREQ,SSID,BSSID", "d", "w"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const PLACEHOLDER = "STRINGWHICHHOPEFULLYWONTBEUSED";
+                const rep = new RegExp("\\\\:", "g");
+                const rep2 = new RegExp(PLACEHOLDER, "g");
+
+                const networks = text.trim().split("\n").map(n => {
+                    const net = n.replace(rep, PLACEHOLDER).split(":");
+                    return {
+                        active: net[0] === "yes",
+                        strength: parseInt(net[1]),
+                        frequency: parseInt(net[2]),
+                        ssid: net[3],
+                        bssid: net[4].replace(rep2, ":")
+                    };
+                });
                 const rNetworks = root.networks;
 
-                const destroyed = rNetworks.filter(rn => !networks.find(n => n[2] === rn.frequency && n[3] === rn.ssid && n[4] === rn.bssid));
+                const destroyed = rNetworks.filter(rn => !networks.find(n => n.frequency === rn.frequency && n.ssid === rn.ssid && n.bssid === rn.bssid));
                 for (const network of destroyed)
                     rNetworks.splice(rNetworks.indexOf(network), 1).forEach(n => n.destroy());
 
                 for (const network of networks) {
-                    const match = rNetworks.find(n => n.frequency === network[2] && n.ssid === network[3] && n.bssid === network[4]);
+                    const match = rNetworks.find(n => n.frequency === network.frequency && n.ssid === network.ssid && n.bssid === network.bssid);
                     if (match) {
-                        match.active = network[0];
-                        match.strength = network[1];
-                        match.frequency = network[2];
-                        match.ssid = network[3];
-                        match.bssid = network[4];
+                        match.lastIpcObject = network;
                     } else {
                         rNetworks.push(apComp.createObject(root, {
-                            active: network[0],
-                            strength: network[1],
-                            frequency: network[2],
-                            ssid: network[3],
-                            bssid: network[4]
+                            lastIpcObject: network
                         }));
                     }
                 }
@@ -56,11 +61,12 @@ Singleton {
     }
 
     component AccessPoint: QtObject {
-        required property string ssid
-        required property string bssid
-        required property int strength
-        required property int frequency
-        required property bool active
+        required property var lastIpcObject
+        readonly property string ssid: lastIpcObject.ssid
+        readonly property string bssid: lastIpcObject.bssid
+        readonly property int strength: lastIpcObject.strength
+        readonly property int frequency: lastIpcObject.frequency
+        readonly property bool active: lastIpcObject.active
     }
 
     Component {

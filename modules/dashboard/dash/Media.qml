@@ -19,7 +19,7 @@ Item {
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    implicitWidth: DashboardConfig.sizes.mediaWidth
+    implicitWidth: Config.dashboard.sizes.mediaWidth
 
     Behavior on playerProgress {
         NumberAnimation {
@@ -31,7 +31,7 @@ Item {
 
     Timer {
         running: root.shouldUpdate && (Players.active?.isPlaying ?? false)
-        interval: DashboardConfig.mediaUpdateInterval
+        interval: Config.dashboard.mediaUpdateInterval
         triggeredOnStart: true
         repeat: true
         onTriggered: Players.active?.positionChanged()
@@ -43,16 +43,16 @@ Item {
         ShapePath {
             fillColor: "transparent"
             strokeColor: Colours.palette.m3surfaceContainerHigh
-            strokeWidth: DashboardConfig.sizes.mediaProgressThickness
+            strokeWidth: Config.dashboard.sizes.mediaProgressThickness
             capStyle: ShapePath.RoundCap
 
             PathAngleArc {
                 centerX: cover.x + cover.width / 2
                 centerY: cover.y + cover.height / 2
-                radiusX: (cover.width + DashboardConfig.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
-                radiusY: (cover.height + DashboardConfig.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
-                startAngle: -90 - DashboardConfig.sizes.mediaProgressSweep / 2
-                sweepAngle: DashboardConfig.sizes.mediaProgressSweep
+                radiusX: (cover.width + Config.dashboard.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
+                radiusY: (cover.height + Config.dashboard.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
+                startAngle: -90 - Config.dashboard.sizes.mediaProgressSweep / 2
+                sweepAngle: Config.dashboard.sizes.mediaProgressSweep
             }
 
             Behavior on strokeColor {
@@ -67,16 +67,16 @@ Item {
         ShapePath {
             fillColor: "transparent"
             strokeColor: Colours.palette.m3primary
-            strokeWidth: DashboardConfig.sizes.mediaProgressThickness
+            strokeWidth: Config.dashboard.sizes.mediaProgressThickness
             capStyle: ShapePath.RoundCap
 
             PathAngleArc {
                 centerX: cover.x + cover.width / 2
                 centerY: cover.y + cover.height / 2
-                radiusX: (cover.width + DashboardConfig.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
-                radiusY: (cover.height + DashboardConfig.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
-                startAngle: -90 - DashboardConfig.sizes.mediaProgressSweep / 2
-                sweepAngle: DashboardConfig.sizes.mediaProgressSweep * root.playerProgress
+                radiusX: (cover.width + Config.dashboard.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
+                radiusY: (cover.height + Config.dashboard.sizes.mediaProgressThickness) / 2 + Appearance.spacing.small
+                startAngle: -90 - Config.dashboard.sizes.mediaProgressSweep / 2
+                sweepAngle: Config.dashboard.sizes.mediaProgressSweep * root.playerProgress
             }
 
             Behavior on strokeColor {
@@ -95,7 +95,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Appearance.padding.large + DashboardConfig.sizes.mediaProgressThickness + Appearance.spacing.small
+        anchors.margins: Appearance.padding.large + Config.dashboard.sizes.mediaProgressThickness + Appearance.spacing.small
 
         implicitHeight: width
         color: Colours.palette.m3surfaceContainerHigh

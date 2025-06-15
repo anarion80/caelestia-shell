@@ -1,19 +1,15 @@
-pragma Singleton
+import Quickshell.Io
 
-import Quickshell
-import QtQuick
+JsonObject {
+    property bool expire: false
+    property int defaultExpireTimeout: 3000
+    property real clearThreshold: 0.3
+    property int expandThreshold: 20
+    property bool actionOnClick: false
 
-Singleton {
-    readonly property bool expire: true
-    readonly property int defaultExpireTimeout: 3000
-    readonly property real clearThreshold: 0.3
-    readonly property int expandThreshold: 20
-    readonly property bool actionOnClick: false
-    readonly property Sizes sizes: Sizes {}
-
-    component Sizes: QtObject {
-        readonly property int width: 400
-        readonly property int image: 41
-        readonly property int badge: 20
+    property JsonObject sizes: JsonObject {
+        property int width: 400
+        property int image: 41
+        property int badge: 20
     }
 }

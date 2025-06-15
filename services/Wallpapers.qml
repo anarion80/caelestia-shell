@@ -9,8 +9,9 @@ import QtQuick
 Singleton {
     id: root
 
-    readonly property string currentNamePath: `${Paths.state}/wallpaper/last.txt`.slice(7)
+    readonly property string currentNamePath: `${Paths.state}/wallpaper/path.txt`.slice(7)
     readonly property string path: `${Paths.pictures}/Wallpapers`.slice(7)
+    readonly property list<string> extensions: ["jpg", "jpeg", "png", "webp", "tif", "tiff"]
 
     readonly property list<Wallpaper> list: wallpapers.instances
     property bool showPreview: false
@@ -77,11 +78,10 @@ Singleton {
     Process {
         id: getPreviewColoursProc
 
-        command: ["caelestia", "scheme", "print", root.previewPath]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => {
-                Colours.load(data, true);
+        command: ["caelestia", "wallpaper", "-p", root.previewPath]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                Colours.load(text, true);
                 Colours.showPreview = true;
             }
         }
@@ -97,10 +97,9 @@ Singleton {
 
     Process {
         running: true
-        command: ["fd", ".", root.path, "-t", "f", "-e", "jpg", "-e", "jpeg", "-e", "png", "-e", "svg"]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => wallpapers.model = data.trim().split("\n")
+        command: ["find", root.path, "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
+        stdout: StdioCollector {
+            onStreamFinished: wallpapers.model = text.trim().split("\n").filter(w => root.extensions.includes(w.slice(w.lastIndexOf(".") + 1))).sort()
         }
     }
 

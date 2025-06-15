@@ -63,7 +63,7 @@ Item {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
 
-    implicitWidth: child.implicitWidth + BorderConfig.thickness * 2
+    implicitWidth: child.implicitWidth + Config.border.thickness * 2
 
     Item {
         id: child
@@ -97,8 +97,8 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                anchors.leftMargin: -BorderConfig.thickness
-                anchors.rightMargin: -BorderConfig.thickness
+                anchors.leftMargin: -Config.border.thickness
+                anchors.rightMargin: -Config.border.thickness
 
                 onWheel: event => {
                     const activeWs = Hyprland.activeClient?.workspace?.name;

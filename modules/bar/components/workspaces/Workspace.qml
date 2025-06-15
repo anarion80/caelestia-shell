@@ -19,7 +19,7 @@ Item {
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
-    readonly property bool hasWindows: isOccupied && BarConfig.workspaces.showWindows
+    readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows
 
     Layout.preferredWidth: childrenRect.width
     Layout.preferredHeight: size
@@ -27,24 +27,24 @@ Item {
     StyledText {
         id: indicator
 
-        readonly property string label: BarConfig.workspaces.label || root.ws
-        readonly property string occupiedLabel: BarConfig.workspaces.occupiedLabel || label
-        readonly property string activeLabel: BarConfig.workspaces.activeLabel || (root.isOccupied ? occupiedLabel : label)
+        readonly property string label: Config.bar.workspaces.label || root.ws
+        readonly property string occupiedLabel: Config.bar.workspaces.occupiedLabel || label
+        readonly property string activeLabel: Config.bar.workspaces.activeLabel || (root.isOccupied ? occupiedLabel : label)
 
         animate: true
-        text: Hyprland.activeWsId === root.ws ? `${activeLabel}` : root.isOccupied ? occupiedLabel : label
-        color: BarConfig.workspaces.occupiedBg || root.isOccupied || Hyprland.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.palette.m3outlineVariant
+        text: Hyprland.activeWsId === root.ws ? activeLabel : root.isOccupied ? occupiedLabel : label
+        color: Config.bar.workspaces.occupiedBg || root.isOccupied || Hyprland.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.palette.m3outlineVariant
         horizontalAlignment: StyledText.AlignHCenter
         verticalAlignment: StyledText.AlignVCenter
 
-        width: BarConfig.sizes.innerHeight
-        height: BarConfig.sizes.innerHeight
+        width: Config.bar.sizes.innerHeight
+        height: Config.bar.sizes.innerHeight
     }
 
     Loader {
         id: windows
 
-        active: BarConfig.workspaces.showWindows
+        active: Config.bar.workspaces.showWindows
         asynchronous: true
 
         anchors.horizontalCenter: indicator.horizontalCenter

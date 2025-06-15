@@ -14,7 +14,7 @@ Item {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
 
-    implicitWidth: NotifsConfig.sizes.width + padding * 2
+    implicitWidth: Config.notifs.sizes.width + padding * 2
     implicitHeight: {
         const count = list.count;
         if (count === 0)
@@ -29,19 +29,19 @@ Item {
         const panel = Visibilities.panels[screen];
         if (visibilities && panel) {
             if (visibilities.osd) {
-                const h = panel.osd.y - BorderConfig.rounding * 2;
+                const h = panel.osd.y - Config.border.rounding * 2;
                 if (height > h)
                     height = h;
             }
 
             if (visibilities.session) {
-                const h = panel.session.y - BorderConfig.rounding * 2;
+                const h = panel.session.y - Config.border.rounding * 2;
                 if (height > h)
                     height = h;
             }
         }
 
-        return Math.min((screen?.height ?? 0) - BorderConfig.thickness * 2, height + padding * 2);
+        return Math.min((screen?.height ?? 0) - Config.border.thickness * 2, height + padding * 2);
     }
 
     ClippingWrapperRectangle {
@@ -108,7 +108,7 @@ Item {
                     Anim {
                         target: notif
                         property: "x"
-                        to: (notif.x >= 0 ? NotifsConfig.sizes.width : -NotifsConfig.sizes.width) * 2
+                        to: (notif.x >= 0 ? Config.notifs.sizes.width : -Config.notifs.sizes.width) * 2
                         duration: Appearance.anim.durations.normal
                         easing.bezierCurve: Appearance.anim.curves.emphasized
                     }

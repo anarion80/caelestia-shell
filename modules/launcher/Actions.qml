@@ -96,7 +96,7 @@ Singleton {
             }))
 
     function fuzzyQuery(search: string): var {
-        return Fuzzy.go(search.slice(LauncherConfig.actionPrefix.length), preppedActions, {
+        return Fuzzy.go(search.slice(Config.launcher.actionPrefix.length), preppedActions, {
             all: true,
             keys: ["name", "desc"],
             scoreFn: r => r[0].score > 0 ? r[0].score * 0.9 + r[1].score * 0.1 : 0
@@ -104,7 +104,7 @@ Singleton {
     }
 
     function autocomplete(list: AppList, text: string): void {
-        list.search.text = `${LauncherConfig.actionPrefix}${text} `;
+        list.search.text = `${Config.launcher.actionPrefix}${text} `;
     }
 
     Process {

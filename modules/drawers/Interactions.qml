@@ -20,8 +20,8 @@ MouseArea {
     property bool osdShortcutActive
 
     function withinPanelHeight(panel: Item, x: real, y: real): bool {
-        const panelY = BorderConfig.thickness + panel.y;
-        return y >= panelY - BorderConfig.rounding && y <= panelY + panel.height + BorderConfig.rounding;
+        const panelY = Config.border.thickness + panel.y;
+        return y >= panelY - Config.border.rounding && y <= panelY + panel.height + Config.border.rounding;
     }
 
     function inRightPanel(panel: Item, x: real, y: real): bool {
@@ -30,7 +30,7 @@ MouseArea {
 
     function inTopPanel(panel: Item, x: real, y: real): bool {
         const panelX = bar.implicitWidth + panel.x;
-        return y < BorderConfig.thickness + panel.y + panel.height && x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
+        return y < Config.border.thickness + panel.y + panel.height && x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
 
     anchors.fill: parent
@@ -51,7 +51,10 @@ MouseArea {
         }
     }
 
-    onPositionChanged: ({x, y}) => {
+    onPositionChanged: ({
+            x,
+            y
+        }) => {
         // Show osd on hover
         const showOsd = inRightPanel(panels.osd, x, y);
 
@@ -68,9 +71,9 @@ MouseArea {
         // Show/hide session on drag
         if (pressed && withinPanelHeight(panels.session, x, y)) {
             const dragX = x - dragStart.x;
-            if (dragX < -SessionConfig.dragThreshold)
+            if (dragX < -Config.session.dragThreshold)
                 visibilities.session = true;
-            else if (dragX > SessionConfig.dragThreshold)
+            else if (dragX > Config.session.dragThreshold)
                 visibilities.session = false;
         }
 

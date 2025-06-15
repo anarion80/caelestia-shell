@@ -28,8 +28,8 @@ Column {
         value: Audio.volume
         onMoved: Audio.setVolume(value)
 
-        implicitWidth: OsdConfig.sizes.sliderWidth
-        implicitHeight: OsdConfig.sizes.sliderHeight
+        implicitWidth: Config.osd.sizes.sliderWidth
+        implicitHeight: Config.osd.sizes.sliderHeight
     }
 
     VerticalSlider {
@@ -37,7 +37,7 @@ Column {
         value: root.monitor?.brightness ?? 0
         onMoved: root.monitor?.setBrightness(value)
 
-        implicitWidth: OsdConfig.sizes.sliderWidth
-        implicitHeight: OsdConfig.sizes.sliderHeight
+        implicitWidth: Config.osd.sizes.sliderWidth
+        implicitHeight: Config.osd.sizes.sliderHeight
     }
 }

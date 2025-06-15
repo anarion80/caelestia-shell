@@ -7,6 +7,7 @@ import Quickshell.Io
 Singleton {
     id: root
 
+    property string loc
     property string icon
     property string description
     property real temperature
@@ -15,17 +16,28 @@ Singleton {
         wttrProc.running = true;
     }
 
+    onLocChanged: wttrProc.running = true
+
+    Process {
+        id: ipProc
+
+        running: true
+        command: ["curl", "ipinfo.io"]
+        stdout: StdioCollector {
+            onStreamFinished: root.loc = JSON.parse(text).loc
+        }
+    }
+
     Process {
         id: wttrProc
 
-        running: true
-        command: ["fish", "-c", `curl "https://wttr.in/$(curl ipinfo.io | jq -r '.city' | string replace -a ' ' '%20')?format=j1" | jq -c '.current_condition[0] | {code: .weatherCode, desc: .weatherDesc[0].value, temp: .temp_C}'`]
-        stdout: SplitParser {
-            onRead: data => {
-                const json = JSON.parse(data);
-                root.icon = Icons.getWeatherIcon(json.code);
-                root.description = json.desc;
-                root.temperature = parseFloat(json.temp);
+        command: ["curl", `https://wttr.in/${root.loc}?format=j1`]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const json = JSON.parse(text).current_condition[0];
+                root.icon = Icons.getWeatherIcon(json.weatherCode);
+                root.description = json.weatherDesc[0].value;
+                root.temperature = parseFloat(json.temp_C);
             }
         }
     }

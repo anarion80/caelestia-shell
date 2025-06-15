@@ -20,10 +20,10 @@ StyledRect {
 
     color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondaryContainer : Colours.palette.m3surfaceContainer
     radius: Appearance.rounding.normal
-    implicitWidth: NotifsConfig.sizes.width
+    implicitWidth: Config.notifs.sizes.width
     implicitHeight: inner.implicitHeight
 
-    x: NotifsConfig.sizes.width
+    x: Config.notifs.sizes.width
     Component.onCompleted: x = 0
 
     RetainableLock {
@@ -52,7 +52,7 @@ StyledRect {
                 root.modelData.notification.dismiss();
         }
         onReleased: event => {
-            if (Math.abs(root.x) < NotifsConfig.sizes.width * NotifsConfig.clearThreshold)
+            if (Math.abs(root.x) < Config.notifs.sizes.width * Config.notifs.clearThreshold)
                 root.x = 0;
             else
                 root.modelData.popup = false;
@@ -60,12 +60,12 @@ StyledRect {
         onPositionChanged: event => {
             if (pressed) {
                 const diffY = event.y - startY;
-                if (Math.abs(diffY) > NotifsConfig.expandThreshold)
+                if (Math.abs(diffY) > Config.notifs.expandThreshold)
                     root.expanded = diffY > 0;
             }
         }
         onClicked: event => {
-            if (!NotifsConfig.actionOnClick || event.button !== Qt.LeftButton)
+            if (!Config.notifs.actionOnClick || event.button !== Qt.LeftButton)
                 return;
 
             const actions = root.modelData.actions;
@@ -93,7 +93,10 @@ StyledRect {
         implicitHeight: root.nonAnimHeight
 
         Behavior on implicitHeight {
-            Anim {}
+            Anim {
+                duration: Appearance.anim.durations.expressiveDefaultSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            }
         }
 
         Loader {
@@ -104,14 +107,14 @@ StyledRect {
 
             anchors.left: parent.left
             anchors.top: parent.top
-            width: NotifsConfig.sizes.image
-            height: NotifsConfig.sizes.image
+            width: Config.notifs.sizes.image
+            height: Config.notifs.sizes.image
             visible: root.hasImage || root.hasAppIcon
 
             sourceComponent: ClippingRectangle {
                 radius: Appearance.rounding.full
-                implicitWidth: NotifsConfig.sizes.image
-                implicitHeight: NotifsConfig.sizes.image
+                implicitWidth: Config.notifs.sizes.image
+                implicitHeight: Config.notifs.sizes.image
 
                 Image {
                     anchors.fill: parent
@@ -137,8 +140,8 @@ StyledRect {
             sourceComponent: StyledRect {
                 radius: Appearance.rounding.full
                 color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3error : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3surfaceContainerHighest : Colours.palette.m3tertiaryContainer
-                implicitWidth: root.hasImage ? NotifsConfig.sizes.badge : NotifsConfig.sizes.image
-                implicitHeight: root.hasImage ? NotifsConfig.sizes.badge : NotifsConfig.sizes.image
+                implicitWidth: root.hasImage ? Config.notifs.sizes.badge : Config.notifs.sizes.image
+                implicitHeight: root.hasImage ? Config.notifs.sizes.badge : Config.notifs.sizes.image
 
                 Loader {
                     id: icon

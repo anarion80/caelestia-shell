@@ -14,14 +14,14 @@ ListView {
     required property TextField search
     required property PersistentProperties visibilities
 
-    property bool isAction: search.text.startsWith(LauncherConfig.actionPrefix)
+    property bool isAction: search.text.startsWith(Config.launcher.actionPrefix)
 
     function getModelValues() {
         let text = search.text;
         if (isAction)
             return Actions.fuzzyQuery(text);
-        if (text.startsWith(LauncherConfig.actionPrefix))
-            text = search.text.slice(LauncherConfig.actionPrefix.length);
+        if (text.startsWith(Config.launcher.actionPrefix))
+            text = search.text.slice(Config.launcher.actionPrefix.length);
         return Apps.fuzzyQuery(text);
     }
 
@@ -32,7 +32,7 @@ ListView {
 
     spacing: Appearance.spacing.small
     orientation: Qt.Vertical
-    implicitHeight: (LauncherConfig.sizes.itemHeight + spacing) * Math.min(LauncherConfig.maxShown, count) - spacing
+    implicitHeight: (Config.launcher.sizes.itemHeight + spacing) * Math.min(Config.launcher.maxShown, count) - spacing
 
     highlightMoveDuration: Appearance.anim.durations.normal
     highlightResizeDuration: 0

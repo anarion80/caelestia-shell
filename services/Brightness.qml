@@ -9,7 +9,7 @@ import QtQuick
 Singleton {
     id: root
 
-    property var ddcMonitors: []
+    property list<var> ddcMonitors: []
     readonly property list<Monitor> monitors: variants.instances
 
     function getMonitorForScreen(screen: ShellScreen): var {
@@ -49,19 +49,12 @@ Singleton {
         id: ddcProc
 
         command: ["ddcutil", "detect", "--brief"]
-        stdout: SplitParser {
-            splitMarker: "\n\n"
-            onRead: data => {
-                if (data.startsWith("Display ")) {
-                    const lines = data.split("\n").map(l => l.trim());
-                    root.ddcMonitors.push({
-                        model: lines.find(l => l.startsWith("Monitor:")).split(":")[2],
-                        busNum: lines.find(l => l.startsWith("I2C bus:")).split("/dev/i2c-")[1]
-                    });
-                }
-            }
+        stdout: StdioCollector {
+            onStreamFinished: root.ddcMonitors = text.trim().split("\n\n").filter(d => d.startsWith("Display ")).map(d => ({
+                        model: d.match(/Monitor:.*:(.*):.*/)[1],
+                        busNum: d.match(/I2C bus:[ ]*\/dev\/i2c-([0-9]+)/)[1]
+                    }))
         }
-        onExited: root.ddcMonitorsChanged()
     }
 
     Process {
@@ -87,9 +80,9 @@ Singleton {
         property real brightness
 
         readonly property Process initProc: Process {
-            stdout: SplitParser {
-                onRead: data => {
-                    const [, , , current, max] = data.split(" ");
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    const [, , , current, max] = text.split(" ");
                     monitor.brightness = parseInt(current) / parseInt(max);
                 }
             }

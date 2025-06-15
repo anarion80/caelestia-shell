@@ -31,14 +31,7 @@ https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
 
 ## Installation
 
-### Automated installation (recommended)
-
-Install [`caelestia-scripts`](https://github.com/caelestia-dots/scripts) and run `caelestia install shell`.
-
-### Manual installation
-
-Install all [dependencies](https://github.com/caelestia-dots/scripts/blob/main/install/shell.fish#L10), then
-clone this repo into `$XDG_CONFIG_HOME/quickshell/caelestia` and run `qs -c caelestia`.
+This is not implemented as of now.
 
 ## Usage
 

@@ -16,7 +16,7 @@ Shape {
     required property Item bar
 
     anchors.fill: parent
-    anchors.margins: BorderConfig.thickness
+    anchors.margins: Config.border.thickness
     anchors.leftMargin: bar.implicitWidth
     preferredRendererType: Shape.CurveRenderer
     opacity: Colours.transparency.enabled ? Colours.transparency.base : 1

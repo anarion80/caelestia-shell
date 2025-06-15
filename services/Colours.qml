@@ -36,12 +36,14 @@ Singleton {
 
     function load(data: string, isPreview: bool): void {
         const colours = isPreview ? preview : current;
-        for (const line of data.trim().split("\n")) {
-            let [name, colour] = line.split(" ");
-            name = name.trim();
-            name = colourNames.includes(name) ? name : `m3${name}`;
-            if (colours.hasOwnProperty(name))
-                colours[name] = `#${colour.trim()}`;
+        const scheme = JSON.parse(data);
+
+        light = scheme.mode === "light";
+
+        for (const [name, colour] of Object.entries(scheme.colours)) {
+            const propName = colourNames.includes(name) ? name : `m3${name}`;
+            if (colours.hasOwnProperty(propName))
+                colours[propName] = `#${colour}`;
         }
 
         if (!isPreview || (isPreview && endPreviewOnNextChange)) {
@@ -51,7 +53,7 @@ Singleton {
     }
 
     function setMode(mode: string): void {
-        setModeProc.command = ["caelestia", "scheme", "dynamic", "default", mode];
+        setModeProc.command = ["caelestia", "scheme", "-m", mode];
         setModeProc.startDetached();
     }
 
@@ -60,14 +62,7 @@ Singleton {
     }
 
     FileView {
-        path: `${Paths.state}/scheme/current-mode.txt`
-        watchChanges: true
-        onFileChanged: reload()
-        onLoaded: root.light = text() === "light"
-    }
-
-    FileView {
-        path: `${Paths.state}/scheme/current.txt`
+        path: `${Paths.state}/scheme.json`
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.load(text(), false)

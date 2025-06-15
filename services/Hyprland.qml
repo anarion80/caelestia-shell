@@ -41,10 +41,10 @@ Singleton {
 
     Process {
         id: getClients
-        command: ["sh", "-c", "hyprctl -j clients | jq -c"]
-        stdout: SplitParser {
-            onRead: data => {
-                const clients = JSON.parse(data);
+        command: ["hyprctl", "-j", "clients"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const clients = JSON.parse(text);
                 const rClients = root.clients;
 
                 const destroyed = rClients.filter(rc => !clients.find(c => c.address === rc.address));
@@ -68,10 +68,9 @@ Singleton {
     Process {
         id: getActiveClient
         command: ["hyprctl", "-j", "activewindow"]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => {
-                const client = JSON.parse(data);
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const client = JSON.parse(text);
                 const rClient = root.activeClient;
                 if (client.address) {
                     if (rClient)

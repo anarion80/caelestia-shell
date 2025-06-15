@@ -28,8 +28,8 @@ Item {
         return `${Math.floor(length / 60)}:${Math.floor(length % 60).toString().padStart(2, "0")}`;
     }
 
-    implicitWidth: cover.implicitWidth + DashboardConfig.sizes.mediaVisualiserSize * 2 + details.implicitWidth + details.anchors.leftMargin + bongocat.implicitWidth + bongocat.anchors.leftMargin * 2 + Appearance.padding.large * 2
-    implicitHeight: Math.max(cover.implicitHeight + DashboardConfig.sizes.mediaVisualiserSize * 2, details.implicitHeight, bongocat.implicitHeight) + Appearance.padding.large * 2
+    implicitWidth: cover.implicitWidth + Config.dashboard.sizes.mediaVisualiserSize * 2 + details.implicitWidth + details.anchors.leftMargin + bongocat.implicitWidth + bongocat.anchors.leftMargin * 2 + Appearance.padding.large * 2
+    implicitHeight: Math.max(cover.implicitHeight + Config.dashboard.sizes.mediaVisualiserSize * 2, details.implicitHeight, bongocat.implicitHeight) + Appearance.padding.large * 2
 
     Behavior on playerProgress {
         NumberAnimation {
@@ -41,7 +41,7 @@ Item {
 
     Timer {
         running: root.shouldUpdate && (Players.active?.isPlaying ?? false)
-        interval: DashboardConfig.mediaUpdateInterval
+        interval: Config.dashboard.mediaUpdateInterval
         triggeredOnStart: true
         repeat: true
         onTriggered: Players.active?.positionChanged()
@@ -66,7 +66,7 @@ Item {
         property color colour: Colours.palette.m3primary
 
         anchors.fill: cover
-        anchors.margins: -DashboardConfig.sizes.mediaVisualiserSize
+        anchors.margins: -Config.dashboard.sizes.mediaVisualiserSize
 
         onColourChanged: requestPaint()
 
@@ -81,7 +81,7 @@ Item {
             ctx.lineWidth = 360 / len - Appearance.spacing.small / 4;
             ctx.lineCap = "round";
 
-            const size = DashboardConfig.sizes.mediaVisualiserSize;
+            const size = Config.dashboard.sizes.mediaVisualiserSize;
             const cx = centerX;
             const cy = centerY;
             const rx = innerX + ctx.lineWidth / 2;
@@ -116,10 +116,10 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: Appearance.padding.large + DashboardConfig.sizes.mediaVisualiserSize
+        anchors.leftMargin: Appearance.padding.large + Config.dashboard.sizes.mediaVisualiserSize
 
-        implicitWidth: DashboardConfig.sizes.mediaCoverArtSize
-        implicitHeight: DashboardConfig.sizes.mediaCoverArtSize
+        implicitWidth: Config.dashboard.sizes.mediaCoverArtSize
+        implicitHeight: Config.dashboard.sizes.mediaCoverArtSize
 
         color: Colours.palette.m3surfaceContainerHigh
         radius: Appearance.rounding.full

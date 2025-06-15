@@ -1,14 +1,10 @@
-pragma Singleton
+import Quickshell.Io
 
-import Quickshell
-import QtQuick
+JsonObject {
+    property int mediaUpdateInterval: 500
+    property int visualiserBars: 45
 
-Singleton {
-    readonly property int mediaUpdateInterval: 500
-    readonly property int visualiserBars: 45
-    readonly property Sizes sizes: Sizes {}
-
-    component Sizes: QtObject {
+    property JsonObject sizes: JsonObject {
         readonly property int tabIndicatorHeight: 3
         readonly property int tabIndicatorSpacing: 5
         readonly property int infoWidth: 200

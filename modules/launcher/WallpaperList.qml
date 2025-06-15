@@ -14,8 +14,8 @@ PathView {
         const screenWidth = QsWindow.window?.screen.width * 0.8;
         if (!screenWidth)
             return 0;
-        const itemWidth = LauncherConfig.sizes.wallpaperWidth * 0.8;
-        const max = LauncherConfig.maxWallpapers;
+        const itemWidth = Config.launcher.sizes.wallpaperWidth * 0.8;
+        const max = Config.launcher.maxWallpapers;
         if (max * itemWidth > screenWidth) {
             const items = Math.floor(screenWidth / itemWidth);
             return items > 1 && items % 2 === 0 ? items - 1 : items;
@@ -43,7 +43,7 @@ PathView {
             Wallpapers.preview(currentItem.modelData.path);
     }
 
-    implicitWidth: Math.min(numItems, count) * (LauncherConfig.sizes.wallpaperWidth * 0.8 + Appearance.padding.larger * 2)
+    implicitWidth: Math.min(numItems, count) * (Config.launcher.sizes.wallpaperWidth * 0.8 + Appearance.padding.larger * 2)
     pathItemCount: numItems
     cacheItemCount: 4
 

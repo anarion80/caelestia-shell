@@ -15,7 +15,7 @@ Item {
     required property int padding
     required property int rounding
 
-    property bool showWallpapers: search.text.startsWith(`${LauncherConfig.actionPrefix}wallpaper `)
+    property bool showWallpapers: search.text.startsWith(`${Config.launcher.actionPrefix}wallpaper `)
     property var currentList: (showWallpapers ? wallpaperList : appList).item
 
     anchors.horizontalCenter: parent.horizontalCenter
@@ -29,7 +29,7 @@ Item {
             name: "apps"
 
             PropertyChanges {
-                root.implicitWidth: LauncherConfig.sizes.itemWidth
+                root.implicitWidth: Config.launcher.sizes.itemWidth
                 root.implicitHeight: Math.max(empty.height, appList.height)
                 appList.active: true
             }
@@ -43,8 +43,8 @@ Item {
             name: "wallpapers"
 
             PropertyChanges {
-                root.implicitWidth: Math.max(LauncherConfig.sizes.itemWidth, wallpaperList.width)
-                root.implicitHeight: LauncherConfig.sizes.wallpaperHeight
+                root.implicitWidth: Math.max(Config.launcher.sizes.itemWidth, wallpaperList.width)
+                root.implicitHeight: Config.launcher.sizes.wallpaperHeight
                 wallpaperList.active: true
             }
         }

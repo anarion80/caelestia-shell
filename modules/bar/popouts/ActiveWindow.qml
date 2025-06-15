@@ -61,8 +61,8 @@ Item {
                 captureSource: ToplevelManager.toplevels.values.find(t => t.title === Hyprland.activeClient?.title) ?? null
                 live: visible
 
-                constraintSize.width: BarConfig.sizes.windowPreviewSize
-                constraintSize.height: BarConfig.sizes.windowPreviewSize
+                constraintSize.width: Config.bar.sizes.windowPreviewSize
+                constraintSize.height: Config.bar.sizes.windowPreviewSize
             }
         }
     }

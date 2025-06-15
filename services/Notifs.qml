@@ -80,9 +80,9 @@ Singleton {
 
         readonly property Timer timer: Timer {
             running: true
-            interval: notif.notification.expireTimeout > 0 ? notif.notification.expireTimeout : NotifsConfig.defaultExpireTimeout
+            interval: notif.notification.expireTimeout > 0 ? notif.notification.expireTimeout : Config.notifs.defaultExpireTimeout
             onTriggered: {
-                if (NotifsConfig.expire)
+                if (Config.notifs.expire)
                     notif.popup = false;
             }
         }

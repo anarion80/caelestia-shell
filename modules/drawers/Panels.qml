@@ -24,7 +24,7 @@ Item {
     readonly property BarPopouts.Wrapper popouts: popouts
 
     anchors.fill: parent
-    anchors.margins: BorderConfig.thickness
+    anchors.margins: Config.border.thickness
     anchors.leftMargin: bar.implicitWidth
 
     Component.onCompleted: Visibilities.panels[screen] = this
@@ -83,7 +83,7 @@ Item {
         anchors.left: parent.left
         anchors.verticalCenter: parent.top
         anchors.verticalCenterOffset: {
-            const off = root.popouts.currentCenter - BorderConfig.thickness;
+            const off = root.popouts.currentCenter - Config.border.thickness;
             const diff = root.height - Math.floor(off + implicitHeight / 2);
             if (diff < 0)
                 return off + diff;

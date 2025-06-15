@@ -18,7 +18,7 @@ Item {
     onOccupiedChanged: {
         let count = 0;
         const start = groupOffset;
-        const end = start + BarConfig.workspaces.shown;
+        const end = start + Config.bar.workspaces.shown;
         for (const [ws, occ] of Object.entries(occupied)) {
             if (ws > start && ws <= end && occ) {
                 if (!occupied[ws - 1]) {
@@ -52,11 +52,11 @@ Item {
             readonly property Workspace end: root.workspaces[modelData.end - 1 - root.groupOffset] ?? null
 
             color: Colours.alpha(Colours.palette.m3surfaceContainerHigh, true)
-            radius: BarConfig.workspaces.rounded ? Appearance.rounding.full : 0
+            radius: Config.bar.workspaces.rounded ? Appearance.rounding.full : 0
 
             x: start?.x ?? 0
             y: start?.y ?? 0
-            implicitWidth: BarConfig.sizes.innerHeight
+            implicitWidth: Config.bar.sizes.innerHeight
             implicitHeight: end?.y + end?.height - start?.y
 
             anchors.horizontalCenter: parent.horizontalCenter
