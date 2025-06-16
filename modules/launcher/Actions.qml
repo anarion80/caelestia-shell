@@ -68,6 +68,39 @@ Singleton {
             }
         },
         Action {
+            name: qsTr("Shutdown")
+            desc: qsTr("Shutdown the system")
+            icon: "power_settings_new"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                shutdown.running = true;
+            }
+        },
+        Action {
+            name: qsTr("Reboot")
+            desc: qsTr("Reboot the system")
+            icon: "cached"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                reboot.running = true;
+            }
+        },
+        Action {
+            name: qsTr("Logout")
+            desc: qsTr("Log out of the current session")
+            icon: "exit_to_app"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                logout.running = true;
+            }
+        },
+        Action {
             name: qsTr("Lock")
             desc: qsTr("Lock the current session")
             icon: "lock"
@@ -89,7 +122,7 @@ Singleton {
         }
     ]
 
-    readonly property list<var> preppedActions: list.map(a => ({
+    readonly property list<var> preppedActions: list.filter(a => !a.disabled).map(a => ({
                 name: Fuzzy.prepare(a.name),
                 desc: Fuzzy.prepare(a.desc),
                 action: a
@@ -108,6 +141,24 @@ Singleton {
     }
 
     Process {
+        id: shutdown
+
+        command: ["systemctl", "poweroff"]
+    }
+
+    Process {
+        id: reboot
+
+        command: ["systemctl", "reboot"]
+    }
+
+    Process {
+        id: logout
+
+        command: ["sh", "-c", "(uwsm stop | grep -q 'Compositor is not running' && loginctl terminate-user $USER) || uwsm stop"]
+    }
+
+    Process {
         id: lock
 
         command: ["loginctl", "lock-session"]
@@ -123,6 +174,8 @@ Singleton {
         required property string name
         required property string desc
         required property string icon
+        property bool disabled
+        property string disabledReason
 
         function onClicked(list: AppList): void {
         }

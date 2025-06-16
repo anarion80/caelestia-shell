@@ -1,8 +1,10 @@
 pragma Singleton
 
+import "root:/config"
 import "root:/utils"
 import Quickshell
 import Quickshell.Io
+import QtQuick
 
 Singleton {
     id: root
@@ -13,15 +15,18 @@ Singleton {
     property real temperature
 
     function reload(): void {
-        wttrProc.running = true;
+        if (Config.dashboard.weatherLocation)
+            loc = Config.dashboard.weatherLocation;
+        else
+            ipProc.running = true;
     }
 
     onLocChanged: wttrProc.running = true
+    Component.onCompleted: reload()
 
     Process {
         id: ipProc
 
-        running: true
         command: ["curl", "ipinfo.io"]
         stdout: StdioCollector {
             onStreamFinished: root.loc = JSON.parse(text).loc
