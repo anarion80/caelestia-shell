@@ -56,10 +56,10 @@ Item {
 
             x: start?.x ?? 0
             y: start?.y ?? 0
-            implicitWidth: BarConfig.sizes.innerHeight
-            implicitHeight: end?.y + end?.height - start?.y
+            implicitWidth: end?.y + end?.width - start?.y
+            implicitHeight: BarConfig.sizes.innerHeigth
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
 
             scale: 0
             Component.onCompleted: scale = 1

@@ -25,7 +25,7 @@ Item {
 
     anchors.fill: parent
     anchors.margins: BorderConfig.thickness
-    anchors.leftMargin: bar.implicitWidth
+    anchors.topMargin: bar.implicitHeight
 
     Component.onCompleted: Visibilities.panels[screen] = this
 
@@ -80,11 +80,11 @@ Item {
 
         screen: root.screen
 
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.top
-        anchors.verticalCenterOffset: {
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.left
+        anchors.horizontalCenterOffset: {
             const off = root.popouts.currentCenter - BorderConfig.thickness;
-            const diff = root.height - Math.floor(off + implicitHeight / 2);
+            const diff = root.width - Math.floor(off + implicitWidth / 2);
             if (diff < 0)
                 return off + diff;
             return off;

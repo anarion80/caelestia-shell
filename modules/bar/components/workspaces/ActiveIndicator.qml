@@ -14,14 +14,14 @@ StyledRect {
     required property int groupOffset
 
     readonly property int currentWsIdx: Hyprland.activeWsId - 1 - groupOffset
-    property real leading: getWsY(currentWsIdx)
-    property real trailing: getWsY(currentWsIdx)
+    property real leading: getWsX(currentWsIdx)
+    property real trailing: getWsX(currentWsIdx)
     property real currentSize: workspaces[currentWsIdx]?.size ?? 0
     property real offset: Math.min(leading, trailing)
     property real size: {
         const s = Math.abs(leading - trailing) + currentSize;
         if (BarConfig.workspaces.activeTrail && lastWs > currentWsIdx)
-            return Math.min(getWsY(lastWs) + (workspaces[lastWs]?.size ?? 0) - offset, s);
+            return Math.min(getWsX(lastWs) + (workspaces[lastWs]?.size ?? 0) - offset, s);
         return s;
     }
 
@@ -35,16 +35,23 @@ StyledRect {
         return y;
     }
 
+    function getWsX(idx: int): real {
+        let x = 0;
+        for (let i = 0; i < idx; i++)
+            x += workspaces[i]?.size ?? 0;
+        return x;
+    }
+
     onCurrentWsIdxChanged: {
         lastWs = cWs;
         cWs = currentWsIdx;
     }
 
     clip: true
-    x: 1
-    y: offset + 1
-    implicitWidth: BarConfig.sizes.innerHeight - 2
-    implicitHeight: size - 2
+    x: offset + 1
+    y: 1
+    implicitWidth: size - 2
+    implicitHeight: BarConfig.sizes.innerWidth - 2
     radius: BarConfig.workspaces.rounded ? Appearance.rounding.full : 0
     color: Colours.palette.m3primary
 
@@ -63,12 +70,12 @@ StyledRect {
         maskSpreadAtMin: 1
         maskThresholdMin: 0.5
 
-        x: 0
-        y: -parent.offset
+        x: -parent.offset
+        y: 0 
         implicitWidth: root.maskWidth
         implicitHeight: root.maskHeight
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     Behavior on leading {

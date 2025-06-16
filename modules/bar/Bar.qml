@@ -60,34 +60,34 @@ Item {
     }
 
     anchors.top: parent.top
-    anchors.bottom: parent.bottom
+    anchors.right: parent.right
     anchors.left: parent.left
 
-    implicitWidth: child.implicitWidth + BorderConfig.thickness * 2
+    implicitHeight: child.implicitHeight + BorderConfig.thickness * 2
 
     Item {
         id: child
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
 
-        implicitWidth: Math.max(osIcon.implicitWidth, workspaces.implicitWidth, activeWindow.implicitWidth, tray.implicitWidth, clock.implicitWidth, statusIcons.implicitWidth, power.implicitWidth)
+        implicitHeight: Math.max(osIcon.implicitHeight, workspaces.implicitHeight, activeWindow.implicitHeight, tray.implicitHeight, clock.implicitHeight, statusIcons.implicitHeight, power.implicitHeight)
 
         OsIcon {
             id: osIcon
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: Appearance.padding.large
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: Appearance.padding.large
         }
 
         StyledRect {
             id: workspaces
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: osIcon.bottom
-            anchors.topMargin: Appearance.spacing.normal
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: osIcon.right
+            anchors.leftMargin: Appearance.spacing.normal
 
             radius: Appearance.rounding.full
             color: Colours.palette.m3surfaceContainer
@@ -97,8 +97,8 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                anchors.leftMargin: -BorderConfig.thickness
-                anchors.rightMargin: -BorderConfig.thickness
+                anchors.topMargin: -BorderConfig.thickness
+                anchors.bottomMargin: -BorderConfig.thickness
 
                 onWheel: event => {
                     const activeWs = Hyprland.activeClient?.workspace?.name;
@@ -119,9 +119,9 @@ Item {
         ActiveWindow {
             id: activeWindow
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: workspaces.bottom
-            anchors.bottom: tray.top
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: workspaces.right
+            anchors.right: tray.left
             anchors.margins: Appearance.spacing.large
 
             monitor: Brightness.getMonitorForScreen(root.screen)
@@ -130,31 +130,31 @@ Item {
         Tray {
             id: tray
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: clock.top
-            anchors.bottomMargin: Appearance.spacing.larger
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: clock.left
+            anchors.rightMargin: Appearance.spacing.larger
         }
 
         Clock {
             id: clock
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: statusIcons.top
-            anchors.bottomMargin: Appearance.spacing.normal
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: statusIcons.left
+            anchors.rightMargin: Appearance.spacing.normal
         }
 
         StyledRect {
             id: statusIcons
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: power.top
-            anchors.bottomMargin: Appearance.spacing.normal
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: power.left
+            anchors.rightMargin: Appearance.spacing.normal
 
             radius: Appearance.rounding.full
             color: Colours.palette.m3surfaceContainer
 
-            implicitHeight: statusIconsInner.implicitHeight + Appearance.padding.normal * 2
+            implicitWidth: statusIconsInner.implicitWidth + Appearance.padding.normal * 2
 
             StatusIcons {
                 id: statusIconsInner
@@ -166,9 +166,9 @@ Item {
         Power {
             id: power
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: Appearance.padding.large
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: Appearance.padding.large
         }
     }
 }

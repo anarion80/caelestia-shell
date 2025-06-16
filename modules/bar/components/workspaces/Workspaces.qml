@@ -19,7 +19,7 @@ Item {
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
-    ColumnLayout {
+    RowLayout {
         id: layout
 
         spacing: 0

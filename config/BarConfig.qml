@@ -20,8 +20,8 @@ Singleton {
         property int shown: 8
         property bool rounded: true
         property bool activeIndicator: true
-        property bool occupiedBg: false
-        property bool showWindows: false
+        property bool occupiedBg: true
+        property bool showWindows: true
         property bool activeTrail: true
         property string label: "  "
         property string occupiedLabel: "󰮯 "

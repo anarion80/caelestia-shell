@@ -24,6 +24,11 @@ MouseArea {
         return y >= panelY - BorderConfig.rounding && y <= panelY + panel.height + BorderConfig.rounding;
     }
 
+    function withinPanelWidth(panel: Item, x: real, y: real): bool {
+        const panelX = BorderConfig.thickness + panel.x;
+        return x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
+    }
+
     function inRightPanel(panel: Item, x: real, y: real): bool {
         return x > bar.implicitWidth + panel.x && withinPanelHeight(panel, x, y);
     }
@@ -87,13 +92,13 @@ MouseArea {
 
         // Show popouts on hover
         const popout = panels.popouts;
-        if (x < bar.implicitWidth + popout.width) {
-            if (x < bar.implicitWidth)
+        if (y < bar.implicitHeigth + popout.height) {
+            if (y < bar.implicitHeight)
                 // Handle like part of bar
                 bar.checkPopout(y);
             else
                 // Keep on hover
-                popouts.hasCurrent = withinPanelHeight(popout, x, y);
+                popouts.hasCurrent = withinPanelWidth(popout, x, y);
         } else
             popouts.hasCurrent = false;
     }

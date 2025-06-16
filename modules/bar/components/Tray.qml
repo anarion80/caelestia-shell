@@ -13,7 +13,7 @@ Item {
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
-    Column {
+    Row {
         id: layout
 
         spacing: Appearance.spacing.small

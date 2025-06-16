@@ -12,13 +12,13 @@ Item {
     property color colour: Colours.palette.m3secondary
 
     readonly property Item network: network
-    readonly property real bs: bluetooth.y
-    readonly property real be: repeater.count > 0 ? devices.y + devices.implicitHeight : bluetooth.y + bluetooth.implicitHeight
+    readonly property real bs: bluetooth.x
+    readonly property real be: repeater.count > 0 ? devices.x + devices.implicitWidth : bluetooth.x + bluetooth.implicitWidth
     readonly property Item battery: battery
 
     clip: true
-    implicitWidth: Math.max(network.implicitWidth, bluetooth.implicitWidth, devices.implicitWidth, battery.implicitWidth)
-    implicitHeight: network.implicitHeight + bluetooth.implicitHeight + bluetooth.anchors.topMargin + (repeater.count > 0 ? devices.implicitHeight + devices.anchors.topMargin : 0) + battery.implicitHeight + battery.anchors.topMargin
+    implicitWidth: network.implicitWidth + bluetooth.implicitWidth + bluetooth.anchors.leftMargin + (repeater.count > 0 ? devices.implicitWidth + devices.anchors.leftMargin : 0) + battery.implicitWidth + battery.anchors.leftMargin
+    implicitHeight: Math.max(network.implicitHeight, bluetooth.implicitHeight, devices.implicitHeight, battery.implicitHeight)
 
     MaterialIcon {
         id: network
@@ -27,27 +27,27 @@ Item {
         text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
         color: root.colour
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     MaterialIcon {
         id: bluetooth
 
-        anchors.horizontalCenter: network.horizontalCenter
-        anchors.top: network.bottom
-        anchors.topMargin: Appearance.spacing.small
+        anchors.verticalCenter: network.verticalCenter
+        anchors.left: network.right
+        anchors.leftMargin: Appearance.spacing.small
 
         animate: true
         text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
         color: root.colour
     }
 
-    Column {
+    Row {
         id: devices
 
-        anchors.horizontalCenter: bluetooth.horizontalCenter
-        anchors.top: bluetooth.bottom
-        anchors.topMargin: Appearance.spacing.small
+        anchors.verticalCenter: bluetooth.verticalCenter
+        anchors.left: bluetooth.right
+        anchors.leftMargin: Appearance.spacing.small
 
         Repeater {
             id: repeater
@@ -69,9 +69,9 @@ Item {
     MaterialIcon {
         id: battery
 
-        anchors.horizontalCenter: devices.horizontalCenter
-        anchors.top: repeater.count > 0 ? devices.bottom : bluetooth.bottom
-        anchors.topMargin: Appearance.spacing.small
+        anchors.verticalCenter: devices.verticalCenter
+        anchors.left: repeater.count > 0 ? devices.right : bluetooth.right
+        anchors.leftMargin: Appearance.spacing.small
 
         animate: true
         text: {

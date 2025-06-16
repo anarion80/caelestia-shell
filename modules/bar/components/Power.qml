@@ -14,8 +14,8 @@ MaterialIcon {
         anchors.centerIn: parent
         anchors.horizontalCenterOffset: 1
 
-        implicitWidth: parent.implicitHeight + Appearance.padding.small * 2
-        implicitHeight: implicitWidth
+        implicitWidth: implicitHeight
+        implicitHeight: parent.implicitWidth + Appearance.padding.small * 2
 
         radius: Appearance.rounding.full
 

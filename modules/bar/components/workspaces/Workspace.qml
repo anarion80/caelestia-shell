@@ -15,14 +15,14 @@ Item {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property real size: childrenRect.height + (hasWindows ? Appearance.padding.normal : 0)
+    readonly property real size: childrenRect.width + (hasWindows ? Appearance.padding.normal : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
     readonly property bool hasWindows: isOccupied && BarConfig.workspaces.showWindows
 
-    Layout.preferredWidth: childrenRect.width
-    Layout.preferredHeight: size
+    Layout.preferredWidth: size
+    Layout.preferredHeight: childrenRect.height
 
     StyledText {
         id: indicator
@@ -47,8 +47,8 @@ Item {
         active: BarConfig.workspaces.showWindows
         asynchronous: true
 
-        anchors.horizontalCenter: indicator.horizontalCenter
-        anchors.top: indicator.bottom
+        anchors.verticalCenter: indicator.verticalCenter
+        anchors.left: indicator.right
 
         sourceComponent: Column {
             spacing: Appearance.spacing.small

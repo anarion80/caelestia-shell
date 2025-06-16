@@ -32,10 +32,10 @@ Variants {
             WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
             mask: Region {
-                x: bar.implicitWidth
-                y: BorderConfig.thickness
-                width: win.width - bar.implicitWidth - BorderConfig.thickness
-                height: win.height - BorderConfig.thickness * 2
+                x: BorderConfig.thickness
+                y: bar.implicitWidth
+                width: win.width - BorderConfig.thickness * 2
+                height: win.height - bar.implicitHeight - BorderConfig.thickness
                 intersection: Intersection.Xor
 
                 regions: regions.instances
@@ -54,8 +54,8 @@ Variants {
                 Region {
                     required property Item modelData
 
-                    x: modelData.x + bar.implicitWidth
-                    y: modelData.y + BorderConfig.thickness
+                    x: modelData.x + BorderConfig.thickness
+                    y: modelData.y + bar.implicitHeight
                     width: modelData.width
                     height: modelData.height
                     intersection: Intersection.Subtract
