@@ -17,8 +17,8 @@ Item {
 
     anchors.centerIn: parent
 
-    implicitWidth: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2 : 0
-    implicitHeight: (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2
+    implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
+    implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
 
     Item {
         id: content
@@ -67,6 +67,7 @@ Item {
 
                     function onHasCurrentChanged(): void {
                         if (root.hasCurrent && trayMenu.shouldBeActive) {
+                            console.log("onHasCurrentChanged and root.hasCurrent")
                             trayMenu.sourceComponent = null;
                             trayMenu.sourceComponent = trayMenuComp;
                         }
@@ -85,7 +86,8 @@ Item {
         }
     }
 
-    Behavior on implicitWidth {
+    
+Behavior on implicitWidth {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
@@ -115,8 +117,8 @@ Item {
         required property string name
         property bool shouldBeActive: root.currentName === name
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
 
         opacity: 0
         scale: 0.8

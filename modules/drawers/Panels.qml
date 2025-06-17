@@ -4,7 +4,7 @@ import "root:/modules/osd" as Osd
 import "root:/modules/notifications" as Notifications
 import "root:/modules/session" as Session
 import "root:/modules/launcher" as Launcher
-import "root:/modules/dashboard" as Dashboard
+// import "root:/modules/dashboard" as Dashboard
 import "root:/modules/bar/popouts" as BarPopouts
 import Quickshell
 import QtQuick
@@ -20,7 +20,7 @@ Item {
     readonly property Notifications.Wrapper notifications: notifications
     readonly property Session.Wrapper session: session
     readonly property Launcher.Wrapper launcher: launcher
-    readonly property Dashboard.Wrapper dashboard: dashboard
+    // readonly property Dashboard.Wrapper dashboard: dashboard
     readonly property BarPopouts.Wrapper popouts: popouts
 
     anchors.fill: parent
@@ -66,14 +66,14 @@ Item {
         anchors.bottom: parent.bottom
     }
 
-    Dashboard.Wrapper {
-        id: dashboard
-
-        visibilities: root.visibilities
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-    }
+    // Dashboard.Wrapper {
+    //     id: dashboard
+    //
+    //     visibilities: root.visibilities
+    //
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     anchors.top: parent.top
+    // }
 
     BarPopouts.Wrapper {
         id: popouts
@@ -81,10 +81,10 @@ Item {
         screen: root.screen
 
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.left
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: {
             const off = root.popouts.currentCenter - BorderConfig.thickness;
-            const diff = root.width - Math.floor(off + implicitWidth / 2);
+            const diff = root.height - Math.floor(off + implicitHeight / 2);
             if (diff < 0)
                 return off + diff;
             return off;

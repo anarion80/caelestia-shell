@@ -80,8 +80,8 @@ StackView {
 
                 required property QsMenuEntry modelData
 
-                implicitWidth: BarConfig.sizes.trayMenuWidth
-                implicitHeight: modelData.isSeparator ? 1 : children.implicitHeight
+                implicitWidth: modelData.isSeparator ? 1 : children.implicitWidth
+                implicitHeight: BarConfig.sizes.trayMenuWidth
 
                 radius: Appearance.rounding.full
                 color: modelData.isSeparator ? Colours.palette.m3outlineVariant : "transparent"

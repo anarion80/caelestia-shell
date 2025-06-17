@@ -13,47 +13,54 @@ Item {
     required property ShellScreen screen
     required property BarPopouts.Wrapper popouts
 
-    function checkPopout(y: real): void {
+    function checkPopout(x: real): void {
         const spacing = Appearance.spacing.small;
         const aw = activeWindow.child;
-        const awy = activeWindow.y + aw.y;
+        const awx = activeWindow.x + aw.x;
 
-        const ty = tray.y;
-        const th = tray.implicitHeight;
+        const tx = tray.x;
+        const tw = tray.implicitWidth;
         const trayItems = tray.items;
 
         const n = statusIconsInner.network;
-        const ny = statusIcons.y + statusIconsInner.y + n.y - spacing / 2;
+        const nx = statusIcons.x + statusIconsInner.x + n.x - spacing / 2;
 
-        const bls = statusIcons.y + statusIconsInner.y + statusIconsInner.bs - spacing / 2;
-        const ble = statusIcons.y + statusIconsInner.y + statusIconsInner.be + spacing / 2;
+        const bls = statusIcons.x + statusIconsInner.x + statusIconsInner.bs - spacing / 2;
+        const ble = statusIcons.x + statusIconsInner.x + statusIconsInner.be + spacing / 2;
 
         const b = statusIconsInner.battery;
-        const by = statusIcons.y + statusIconsInner.y + b.y - spacing / 2;
+        const bx = statusIcons.x + statusIconsInner.x + b.x - spacing / 2;
 
-        if (y >= awy && y <= awy + aw.implicitHeight) {
+        if (x >= awx && x <= awx + aw.implicitWidth) {
             popouts.currentName = "activewindow";
-            popouts.currentCenter = Qt.binding(() => activeWindow.y + aw.y + aw.implicitHeight / 2);
+            popouts.currentCenter = Qt.binding(() => activeWindow.x + aw.x + aw.implicitWidth / 2);
             popouts.hasCurrent = true;
-        } else if (y > ty && y < ty + th) {
-            const index = Math.floor(((y - ty) / th) * trayItems.count);
+            console.log("Within active window popup!");
+        } else if (x > tx && x < tx + tw) {
+            const index = Math.floor(((x - tx) / tw) * trayItems.count);
             const item = trayItems.itemAt(index);
 
             popouts.currentName = `traymenu${index}`;
-            popouts.currentCenter = Qt.binding(() => tray.y + item.y + item.implicitHeight / 2);
+            popouts.currentCenter = Qt.binding(() => tray.x + item.x + item.implicitWidth / 2);
+            console.log("Within tray popup!");
+            console.log("currentCenter: ", popouts.currentCenter);
             popouts.hasCurrent = true;
-        } else if (y >= ny && y <= ny + n.implicitHeight + spacing) {
+            console.log("Within tray popup!");
+        } else if (x >= nx && x <= nx + n.implicitWidth + spacing) {
             popouts.currentName = "network";
-            popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + n.y + n.implicitHeight / 2);
+            popouts.currentCenter = Qt.binding(() => statusIcons.x + statusIconsInner.x + n.x + n.implicitHeight / 2);
             popouts.hasCurrent = true;
-        } else if (y >= bls && y <= ble) {
+            console.log("Within network popup!");
+        } else if (x >= bls && x <= ble) {
             popouts.currentName = "bluetooth";
-            popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + statusIconsInner.bs + (statusIconsInner.be - statusIconsInner.bs) / 2);
+            popouts.currentCenter = Qt.binding(() => statusIcons.x + statusIconsInner.x + statusIconsInner.bs + (statusIconsInner.be - statusIconsInner.bs) / 2);
             popouts.hasCurrent = true;
-        } else if (y >= by && y <= by + b.implicitHeight + spacing) {
+            console.log("Within bluetooth popup!");
+        } else if (x >= bx && x <= bx + b.implicitWidth + spacing) {
             popouts.currentName = "battery";
-            popouts.currentCenter = Qt.binding(() => statusIcons.y + statusIconsInner.y + b.y + b.implicitHeight / 2);
+            popouts.currentCenter = Qt.binding(() => statusIcons.x + statusIconsInner.x + b.x + b.implicitWidth / 2);
             popouts.hasCurrent = true;
+            console.log("Within battery popup!");
         } else {
             popouts.hasCurrent = false;
         }
