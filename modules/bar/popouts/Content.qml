@@ -18,7 +18,11 @@ Item {
     anchors.centerIn: parent
 
     implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
-    implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
+    // implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
+    implicitHeight: 100 + Appearance.padding.large * 2
+
+    // anchors.horizontalCenter: parent.horizontalCenter
+    // anchors.bottom: parent.bottom
 
     Item {
         id: content
@@ -28,73 +32,73 @@ Item {
 
         clip: true
 
-        Popout {
-            name: "activewindow"
-            source: "ActiveWindow.qml"
-        }
+        // Popout {
+        //     name: "activewindow"
+        //     source: "ActiveWindow.qml"
+        // }
 
         Popout {
             name: "network"
             source: "Network.qml"
         }
+        //
+        // Popout {
+        //     name: "bluetooth"
+        //     source: "Bluetooth.qml"
+        // }
+        //
+        // Popout {
+        //     name: "battery"
+        //     source: "Battery.qml"
+        // }
 
-        Popout {
-            name: "bluetooth"
-            source: "Bluetooth.qml"
-        }
-
-        Popout {
-            name: "battery"
-            source: "Battery.qml"
-        }
-
-        Repeater {
-            model: ScriptModel {
-                values: [...SystemTray.items.values]
-            }
-
-            Popout {
-                id: trayMenu
-
-                required property SystemTrayItem modelData
-                required property int index
-
-                name: `traymenu${index}`
-                sourceComponent: trayMenuComp
-
-                Connections {
-                    target: root
-
-                    function onHasCurrentChanged(): void {
-                        if (root.hasCurrent && trayMenu.shouldBeActive) {
-                            console.log("onHasCurrentChanged and root.hasCurrent")
-                            trayMenu.sourceComponent = null;
-                            trayMenu.sourceComponent = trayMenuComp;
-                        }
-                    }
-                }
-
-                Component {
-                    id: trayMenuComp
-
-                    TrayMenu {
-                        popouts: root
-                        trayItem: trayMenu.modelData.menu
-                    }
-                }
-            }
-        }
+        // Repeater {
+        //     model: ScriptModel {
+        //         values: [...SystemTray.items.values]
+        //     }
+        //
+        //     Popout {
+        //         id: trayMenu
+        //
+        //         required property SystemTrayItem modelData
+        //         required property int index
+        //
+        //         name: `traymenu${index}`
+        //         sourceComponent: trayMenuComp
+        //
+        //         Connections {
+        //             target: root
+        //
+        //             function onHasCurrentChanged(): void {
+        //                 if (root.hasCurrent && trayMenu.shouldBeActive) {
+        //                     console.log("onHasCurrentChanged and root.hasCurrent")
+        //                     trayMenu.sourceComponent = null;
+        //                     trayMenu.sourceComponent = trayMenuComp;
+        //                 }
+        //             }
+        //         }
+        //
+        //         Component {
+        //             id: trayMenuComp
+        //
+        //             TrayMenu {
+        //                 popouts: root
+        //                 trayItem: trayMenu.modelData.menu
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     
-Behavior on implicitWidth {
+    Behavior on implicitHeight {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }
 
-    Behavior on implicitHeight {
-        enabled: root.implicitWidth > 0
+    Behavior on implicitWidth {
+        enabled: root.implicitHeight > 0
 
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
@@ -102,7 +106,7 @@ Behavior on implicitWidth {
     }
 
     Behavior on currentCenter {
-        enabled: root.implicitWidth > 0
+        enabled: root.implicitHeight > 0
 
         NumberAnimation {
             duration: Appearance.anim.durations.normal

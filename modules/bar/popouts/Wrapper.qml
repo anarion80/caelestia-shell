@@ -17,6 +17,10 @@ Item {
     implicitWidth: content.implicitWidth
     implicitHeight: content.implicitHeight
 
+    // visible: height > 0
+    // implicitHeight: content.implicitHeight 
+    // implicitWidth: content.implicitWidth
+
     Content {
         id: content
 

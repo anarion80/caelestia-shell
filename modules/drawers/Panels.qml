@@ -81,10 +81,10 @@ Item {
         screen: root.screen
 
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenter: parent.left
         anchors.horizontalCenterOffset: {
             const off = root.popouts.currentCenter - BorderConfig.thickness;
-            const diff = root.height - Math.floor(off + implicitHeight / 2);
+            const diff = root.width - Math.floor(off + implicitWidth / 2);
             if (diff < 0)
                 return off + diff;
             return off;
