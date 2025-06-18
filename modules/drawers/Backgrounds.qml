@@ -66,6 +66,6 @@ Shape {
         // startY: 0
         // startX: 0
         // startY: wrapper.y - rounding
-        startY: 50
+        startY: -1
     }
 }

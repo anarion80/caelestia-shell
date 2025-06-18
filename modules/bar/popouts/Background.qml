@@ -43,13 +43,13 @@ ShapePath {
         relativeY: -root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
-        // direction: PathArc.Counterclockwise
-        direction: root.ibr < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
+        direction: PathArc.Counterclockwise
+        // direction: root.ibr < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
     }
     PathLine {
         relativeX: 0
-        // relativeY: -(root.wrapper.height - root.roundingY * 2)
-        relativeY: -(root.wrapper.height - root.roundingY - root.roundingY * root.ibr)
+        relativeY: -(root.wrapper.height - root.roundingY * 2)
+        // relativeY: -(root.wrapper.height - root.roundingY - root.roundingY * root.ibr)
     }
     PathArc {
         relativeX: root.rounding

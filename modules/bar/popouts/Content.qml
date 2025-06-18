@@ -17,7 +17,8 @@ Item {
 
     anchors.centerIn: parent
 
-    implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
+    // implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
+    implicitWidth: 20 + Appearance.padding.large * 2
     // implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
     implicitHeight: 100 + Appearance.padding.large * 2
 
@@ -121,8 +122,10 @@ Item {
         required property string name
         property bool shouldBeActive: root.currentName === name
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
+        // anchors.horizontalCenter: parent.horizontalCenter
+        // anchors.bottom: parent.bottom
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
 
         opacity: 0
         scale: 0.8
@@ -140,37 +143,37 @@ Item {
             }
         }
 
-        transitions: [
-            Transition {
-                from: "active"
-                to: ""
-
-                SequentialAnimation {
-                    Anim {
-                        properties: "opacity,scale"
-                        duration: Appearance.anim.durations.small
-                    }
-                    PropertyAction {
-                        target: popout
-                        property: "active"
-                    }
-                }
-            },
-            Transition {
-                from: ""
-                to: "active"
-
-                SequentialAnimation {
-                    PropertyAction {
-                        target: popout
-                        property: "active"
-                    }
-                    Anim {
-                        properties: "opacity,scale"
-                    }
-                }
-            }
-        ]
+        // transitions: [
+        //     Transition {
+        //         from: "active"
+        //         to: ""
+        //
+        //         SequentialAnimation {
+        //             Anim {
+        //                 properties: "opacity,scale"
+        //                 duration: Appearance.anim.durations.small
+        //             }
+        //             PropertyAction {
+        //                 target: popout
+        //                 property: "active"
+        //             }
+        //         }
+        //     },
+        //     Transition {
+        //         from: ""
+        //         to: "active"
+        //
+        //         SequentialAnimation {
+        //             PropertyAction {
+        //                 target: popout
+        //                 property: "active"
+        //             }
+        //             Anim {
+        //                 properties: "opacity,scale"
+        //             }
+        //         }
+        //     }
+        // ]
     }
 
     component Anim: NumberAnimation {
