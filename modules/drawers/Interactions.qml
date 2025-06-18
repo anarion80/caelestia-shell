@@ -36,8 +36,8 @@ MouseArea {
     function inTopPanel(panel: Item, x: real, y: real): bool {
         // const panelX = bar.implicitWidth + panel.x;
         // return y < BorderConfig.thickness + panel.y + panel.height && x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
-        console.log("x: ", x);
-        console.log("y: ", y);
+        // console.log("x: ", x);
+        // console.log("y: ", y);
         const panelX = BorderConfig.thickness + panel.x;
         // console.log("panelx: ", panelX);
         return y < bar.implicitHeight + panel.y + panel.height && x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
@@ -84,16 +84,16 @@ MouseArea {
                 visibilities.session = false;
         }
 
-        // // Show dashboard on hover
-        // const showDashboard = inTopPanel(panels.dashboard, x, y);
-        //
-        // // Always update visibility based on hover if not in shortcut mode
-        // if (!dashboardShortcutActive) {
-        //     visibilities.dashboard = showDashboard;
-        // } else if (showDashboard) {
-        //     // If hovering over dashboard area while in shortcut mode, transition to hover control
-        //     dashboardShortcutActive = false;
-        // }
+        // Show dashboard on hover
+        const showDashboard = inTopPanel(panels.dashboard, x, y);
+
+        // Always update visibility based on hover if not in shortcut mode
+        if (!dashboardShortcutActive) {
+            visibilities.dashboard = showDashboard;
+        } else if (showDashboard) {
+            // If hovering over dashboard area while in shortcut mode, transition to hover control
+            dashboardShortcutActive = false;
+        }
 
         // Show popouts on hover
         const popout = panels.popouts;
@@ -115,16 +115,16 @@ MouseArea {
         function onLauncherChanged() {
             // If launcher is hidden, clear shortcut flags for dashboard and OSD
             if (!root.visibilities.launcher) {
-                // root.dashboardShortcutActive = false;
+                root.dashboardShortcutActive = false;
                 root.osdShortcutActive = false;
 
                 // Also hide dashboard and OSD if they're not being hovered
-                // const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
+                const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
                 const inOsdArea = root.inRightPanel(root.panels.osd, root.mouseX, root.mouseY);
 
-                // if (!inDashboardArea) {
-                //     root.visibilities.dashboard = false;
-                // }
+                if (!inDashboardArea) {
+                    root.visibilities.dashboard = false;
+                }
                 if (!inOsdArea) {
                     root.visibilities.osd = false;
                     root.osdHovered = false;
@@ -132,18 +132,18 @@ MouseArea {
             }
         }
 
-        // function onDashboardChanged() {
-        //     if (root.visibilities.dashboard) {
-        //         // Dashboard became visible, immediately check if this should be shortcut mode
-        //         const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
-        //         if (!inDashboardArea) {
-        //             root.dashboardShortcutActive = true;
-        //         }
-        //     } else {
-        //         // Dashboard hidden, clear shortcut flag
-        //         root.dashboardShortcutActive = false;
-        //     }
-        // }
+        function onDashboardChanged() {
+            if (root.visibilities.dashboard) {
+                // Dashboard became visible, immediately check if this should be shortcut mode
+                const inDashboardArea = root.inTopPanel(root.panels.dashboard, root.mouseX, root.mouseY);
+                if (!inDashboardArea) {
+                    root.dashboardShortcutActive = true;
+                }
+            } else {
+                // Dashboard hidden, clear shortcut flag
+                root.dashboardShortcutActive = false;
+            }
+        }
 
         function onOsdChanged() {
             if (root.visibilities.osd) {
