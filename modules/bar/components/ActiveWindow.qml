@@ -30,20 +30,20 @@ Item {
         }
     }
 
-    MouseArea {
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: child.right
-        anchors.right: parent.right
-
-        onWheel: event => {
-            const monitor = root.monitor;
-            if (event.angleDelta.y > 0)
-                monitor.setBrightness(monitor.brightness + 0.1);
-            else if (event.angleDelta.y < 0)
-                monitor.setBrightness(monitor.brightness - 0.1);
-        }
-    }
+    // MouseArea {
+    //     anchors.top: parent.top
+    //     anchors.bottom: parent.bottom
+    //     anchors.left: child.right
+    //     anchors.right: parent.right
+    //
+    //     onWheel: event => {
+    //         const monitor = root.monitor;
+    //         if (event.angleDelta.y > 0)
+    //             monitor.setBrightness(monitor.brightness + 0.1);
+    //         else if (event.angleDelta.y < 0)
+    //             monitor.setBrightness(monitor.brightness - 0.1);
+    //     }
+    // }
 
     Item {
         id: child
@@ -54,6 +54,7 @@ Item {
 
         clip: true
         implicitWidth: icon.implicitWidth + current.implicitWidth + current.anchors.leftMargin
+        // implicitWidth: 400 
         implicitHeight: Math.max(icon.implicitHeight, current.implicitHeight)
 
         MaterialIcon {
@@ -81,7 +82,7 @@ Item {
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             elide: Qt.ElideRight
-            elideWidth: root.width - icon.width
+            elideWidth: BarConfig.sizes.activeWindowWidth - icon.width
 
             onTextChanged: {
                 const next = child.current === text1 ? text2 : text1;

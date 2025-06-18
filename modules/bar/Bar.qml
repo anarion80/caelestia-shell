@@ -121,10 +121,19 @@ Item {
 
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: workspaces.right
-            anchors.right: tray.left
+            // anchors.right: filler.left
             anchors.margins: Appearance.spacing.large
 
             monitor: Brightness.getMonitorForScreen(root.screen)
+        }
+
+        StyledRect {
+            id: filler
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: activeWindow.right
+            anchors.right: tray.left
+            anchors.rightMargin: Appearance.spacing.larger
         }
 
         Tray {
