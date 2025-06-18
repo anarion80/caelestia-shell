@@ -100,12 +100,10 @@ MouseArea {
         if (y < bar.implicitHeight + popout.height) {
             if (y < bar.implicitHeight)
                 // Handle like part of bar
-                {console.log("Within bar popup height!");
-                bar.checkPopout(x)}
+                bar.checkPopout(x);
             else
                 // Keep on hover
-                {console.log("Hovering on bar popup!");
-                popouts.hasCurrent = withinPanelWidth(popout, x, y);}
+                popouts.hasCurrent = withinPanelWidth(popout, x, y);
         } else
             popouts.hasCurrent = false;
     }

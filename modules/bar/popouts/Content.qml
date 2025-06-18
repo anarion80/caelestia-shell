@@ -18,12 +18,7 @@ Item {
     anchors.centerIn: parent
 
     implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
-    // implicitWidth: 200 + Appearance.padding.large * 2
     implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
-    // implicitHeight: 200 + Appearance.padding.large * 2
-
-    // anchors.horizontalCenter: parent.horizontalCenter
-    // anchors.bottom: parent.bottom
 
     Item {
         id: content
@@ -90,7 +85,6 @@ Item {
         }
     }
 
-    
     Behavior on implicitHeight {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
@@ -115,30 +109,6 @@ Item {
         }
     }
 
-    // Behavior on implicitWidth {
-    //     Anim {
-    //         easing.bezierCurve: Appearance.anim.curves.emphasized
-    //     }
-    // }
-    //
-    // Behavior on implicitHeight {
-    //     enabled: root.implicitWidth > 0
-    //
-    //     Anim {
-    //         easing.bezierCurve: Appearance.anim.curves.emphasized
-    //     }
-    // }
-    //
-    // Behavior on currentCenter {
-    //     enabled: root.implicitWidth > 0
-    //
-    //     NumberAnimation {
-    //         duration: Appearance.anim.durations.normal
-    //         easing.type: Easing.BezierSpline
-    //         easing.bezierCurve: Appearance.anim.curves.emphasized
-    //     }
-    // }
-
     component Popout: Loader {
         id: popout
 
@@ -146,7 +116,7 @@ Item {
         property bool shouldBeActive: root.currentName === name
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
 
         opacity: 0
         scale: 0.8
