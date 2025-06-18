@@ -33,5 +33,6 @@ Scope {
         screen: root.screen
         name: "border-exclusion"
         exclusiveZone: BorderConfig.thickness
+        mask: Region {}
     }
 }
