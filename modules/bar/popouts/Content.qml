@@ -17,10 +17,10 @@ Item {
 
     anchors.centerIn: parent
 
-    // implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
-    implicitWidth: 20 + Appearance.padding.large * 2
-    // implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
-    implicitHeight: 100 + Appearance.padding.large * 2
+    implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
+    // implicitWidth: 200 + Appearance.padding.large * 2
+    implicitHeight: hasCurrent ? (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2 : 0
+    // implicitHeight: 200 + Appearance.padding.large * 2
 
     // anchors.horizontalCenter: parent.horizontalCenter
     // anchors.bottom: parent.bottom
@@ -33,62 +33,61 @@ Item {
 
         clip: true
 
-        // Popout {
-        //     name: "activewindow"
-        //     source: "ActiveWindow.qml"
-        // }
+        Popout {
+            name: "activewindow"
+            source: "ActiveWindow.qml"
+        }
 
         Popout {
             name: "network"
             source: "Network.qml"
         }
-        //
-        // Popout {
-        //     name: "bluetooth"
-        //     source: "Bluetooth.qml"
-        // }
-        //
-        // Popout {
-        //     name: "battery"
-        //     source: "Battery.qml"
-        // }
 
-        // Repeater {
-        //     model: ScriptModel {
-        //         values: [...SystemTray.items.values]
-        //     }
-        //
-        //     Popout {
-        //         id: trayMenu
-        //
-        //         required property SystemTrayItem modelData
-        //         required property int index
-        //
-        //         name: `traymenu${index}`
-        //         sourceComponent: trayMenuComp
-        //
-        //         Connections {
-        //             target: root
-        //
-        //             function onHasCurrentChanged(): void {
-        //                 if (root.hasCurrent && trayMenu.shouldBeActive) {
-        //                     console.log("onHasCurrentChanged and root.hasCurrent")
-        //                     trayMenu.sourceComponent = null;
-        //                     trayMenu.sourceComponent = trayMenuComp;
-        //                 }
-        //             }
-        //         }
-        //
-        //         Component {
-        //             id: trayMenuComp
-        //
-        //             TrayMenu {
-        //                 popouts: root
-        //                 trayItem: trayMenu.modelData.menu
-        //             }
-        //         }
-        //     }
-        // }
+        Popout {
+            name: "bluetooth"
+            source: "Bluetooth.qml"
+        }
+
+        Popout {
+            name: "battery"
+            source: "Battery.qml"
+        }
+
+        Repeater {
+            model: ScriptModel {
+                values: [...SystemTray.items.values]
+            }
+
+            Popout {
+                id: trayMenu
+
+                required property SystemTrayItem modelData
+                required property int index
+
+                name: `traymenu${index}`
+                sourceComponent: trayMenuComp
+
+                Connections {
+                    target: root
+
+                    function onHasCurrentChanged(): void {
+                        if (root.hasCurrent && trayMenu.shouldBeActive) {
+                            trayMenu.sourceComponent = null;
+                            trayMenu.sourceComponent = trayMenuComp;
+                        }
+                    }
+                }
+
+                Component {
+                    id: trayMenuComp
+
+                    TrayMenu {
+                        popouts: root
+                        trayItem: trayMenu.modelData.menu
+                    }
+                }
+            }
+        }
     }
 
     
@@ -116,21 +115,43 @@ Item {
         }
     }
 
+    // Behavior on implicitWidth {
+    //     Anim {
+    //         easing.bezierCurve: Appearance.anim.curves.emphasized
+    //     }
+    // }
+    //
+    // Behavior on implicitHeight {
+    //     enabled: root.implicitWidth > 0
+    //
+    //     Anim {
+    //         easing.bezierCurve: Appearance.anim.curves.emphasized
+    //     }
+    // }
+    //
+    // Behavior on currentCenter {
+    //     enabled: root.implicitWidth > 0
+    //
+    //     NumberAnimation {
+    //         duration: Appearance.anim.durations.normal
+    //         easing.type: Easing.BezierSpline
+    //         easing.bezierCurve: Appearance.anim.curves.emphasized
+    //     }
+    // }
+
     component Popout: Loader {
         id: popout
 
         required property string name
         property bool shouldBeActive: root.currentName === name
 
-        // anchors.horizontalCenter: parent.horizontalCenter
-        // anchors.bottom: parent.bottom
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
 
         opacity: 0
         scale: 0.8
         active: false
-        asynchronous: true
+        asynchronous: false
 
         states: State {
             name: "active"
@@ -143,37 +164,37 @@ Item {
             }
         }
 
-        // transitions: [
-        //     Transition {
-        //         from: "active"
-        //         to: ""
-        //
-        //         SequentialAnimation {
-        //             Anim {
-        //                 properties: "opacity,scale"
-        //                 duration: Appearance.anim.durations.small
-        //             }
-        //             PropertyAction {
-        //                 target: popout
-        //                 property: "active"
-        //             }
-        //         }
-        //     },
-        //     Transition {
-        //         from: ""
-        //         to: "active"
-        //
-        //         SequentialAnimation {
-        //             PropertyAction {
-        //                 target: popout
-        //                 property: "active"
-        //             }
-        //             Anim {
-        //                 properties: "opacity,scale"
-        //             }
-        //         }
-        //     }
-        // ]
+        transitions: [
+            Transition {
+                from: "active"
+                to: ""
+
+                SequentialAnimation {
+                    Anim {
+                        properties: "opacity,scale"
+                        duration: Appearance.anim.durations.small
+                    }
+                    PropertyAction {
+                        target: popout
+                        property: "active"
+                    }
+                }
+            },
+            Transition {
+                from: ""
+                to: "active"
+
+                SequentialAnimation {
+                    PropertyAction {
+                        target: popout
+                        property: "active"
+                    }
+                    Anim {
+                        properties: "opacity,scale"
+                    }
+                }
+            }
+        ]
     }
 
     component Anim: NumberAnimation {

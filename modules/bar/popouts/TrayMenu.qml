@@ -93,7 +93,7 @@ StackView {
                     anchors.right: parent.right
 
                     active: !item.modelData.isSeparator
-                    asynchronous: true
+                    asynchronous: false
 
                     sourceComponent: Item {
                         implicitHeight: label.implicitHeight
@@ -126,7 +126,7 @@ StackView {
                             anchors.left: parent.left
 
                             active: item.modelData.icon !== ""
-                            asynchronous: true
+                            asynchronous: false
 
                             sourceComponent: IconImage {
                                 implicitSize: label.implicitHeight
@@ -163,7 +163,7 @@ StackView {
                             anchors.right: parent.right
 
                             active: item.modelData.hasChildren
-                            asynchronous: true
+                            asynchronous: false
 
                             sourceComponent: MaterialIcon {
                                 text: "chevron_right"
@@ -177,7 +177,7 @@ StackView {
 
         Loader {
             active: menu.isSubMenu
-            asynchronous: true
+            asynchronous: false
 
             sourceComponent: Item {
                 implicitWidth: back.implicitWidth

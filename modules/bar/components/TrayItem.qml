@@ -42,7 +42,7 @@ MouseArea {
             }
             return icon;
         }
-        asynchronous: true
+        asynchronous: false
         anchors.fill: parent
     }
 }
