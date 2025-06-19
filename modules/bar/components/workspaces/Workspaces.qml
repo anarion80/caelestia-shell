@@ -38,7 +38,7 @@ Item {
 
     Loader {
         active: BarConfig.workspaces.occupiedBg
-        asynchronous: true
+        asynchronous: false
 
         z: -1
         anchors.fill: parent

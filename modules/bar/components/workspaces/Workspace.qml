@@ -45,12 +45,12 @@ Item {
         id: windows
 
         active: BarConfig.workspaces.showWindows
-        asynchronous: true
+        asynchronous: false
 
         anchors.verticalCenter: indicator.verticalCenter
         anchors.left: indicator.right
 
-        sourceComponent: Column {
+        sourceComponent: Row {
             spacing: Appearance.spacing.small
 
             add: Transition {

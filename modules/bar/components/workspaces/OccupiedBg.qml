@@ -56,7 +56,7 @@ Item {
 
             x: start?.x ?? 0
             y: start?.y ?? 0
-            implicitWidth: end?.y + end?.width - start?.y
+            implicitWidth: end?.x + end?.width - start?.x
             implicitHeight: BarConfig.sizes.innerHeight
 
             anchors.verticalCenter: parent.verticalCenter
