@@ -9,5 +9,5 @@ Singleton {
 
     readonly property color colour: Colours.palette.m3surface
     readonly property int thickness: Appearance.padding.small
-    readonly property int rounding: Appearance.rounding.large
+    readonly property int rounding: Appearance.rounding.normal
 }
