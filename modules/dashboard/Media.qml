@@ -202,7 +202,7 @@ Item {
         Row {
             id: controls
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
 
             spacing: Appearance.spacing.small
 
