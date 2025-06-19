@@ -52,7 +52,7 @@ Item {
 
     Loader {
         active: BarConfig.workspaces.activeIndicator
-        asynchronous: true
+        asynchronous: false
 
         sourceComponent: ActiveIndicator {
             workspaces: root.workspaces

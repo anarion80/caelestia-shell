@@ -51,7 +51,7 @@ StyledRect {
     x: offset + 1
     y: 1
     implicitWidth: size - 2
-    implicitHeight: BarConfig.sizes.innerWidth - 2
+    implicitHeight: BarConfig.sizes.innerHeight - 2
     radius: BarConfig.workspaces.rounded ? Appearance.rounding.full : 0
     color: Colours.palette.m3primary
 
@@ -70,8 +70,8 @@ StyledRect {
         maskSpreadAtMin: 1
         maskThresholdMin: 0.5
 
-        x: -parent.offset
-        y: 0 
+        x: -parent.offset 
+        y: 0
         implicitWidth: root.maskWidth
         implicitHeight: root.maskHeight
 
