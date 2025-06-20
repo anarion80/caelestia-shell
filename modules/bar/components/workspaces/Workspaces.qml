@@ -38,7 +38,7 @@ Item {
 
     Loader {
         active: BarConfig.workspaces.occupiedBg
-        asynchronous: false
+        asynchronous: true
 
         z: -1
         anchors.fill: parent
@@ -52,7 +52,7 @@ Item {
 
     Loader {
         active: BarConfig.workspaces.activeIndicator
-        asynchronous: false
+        asynchronous: true
 
         sourceComponent: ActiveIndicator {
             workspaces: root.workspaces

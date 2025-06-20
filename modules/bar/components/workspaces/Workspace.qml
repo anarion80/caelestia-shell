@@ -45,7 +45,7 @@ Item {
         id: windows
 
         active: BarConfig.workspaces.showWindows
-        asynchronous: false
+        asynchronous: true
 
         anchors.verticalCenter: indicator.verticalCenter
         anchors.left: indicator.right

@@ -121,7 +121,7 @@ Item {
         opacity: 0
         scale: 0.8
         active: false
-        asynchronous: false
+        asynchronous: true
 
         states: State {
             name: "active"
