@@ -5,6 +5,7 @@ import "root:/config"
 import Quickshell.Widgets
 import Quickshell.Wayland
 import QtQuick
+import QtQuick.Layouts
 
 Item {
     id: root
@@ -18,22 +19,29 @@ Item {
         anchors.centerIn: parent
         spacing: Appearance.spacing.normal
 
-        Row {
+        RowLayout {
             id: detailsRow
 
+            anchors.left: parent.left
+            anchors.right: parent.right
             spacing: Appearance.spacing.normal
 
             IconImage {
                 id: icon
 
+                Layout.alignment: Qt.AlignVCenter
                 implicitSize: details.implicitHeight
                 source: Icons.getAppIcon(Hyprland.activeClient?.wmClass ?? "", "image-missing")
             }
 
-            Column {
+            ColumnLayout {
                 id: details
 
+                spacing: 0
+                Layout.fillWidth: true
+
                 StyledText {
+                    Layout.fillWidth: true
                     text: Hyprland.activeClient?.title ?? ""
                     font.pointSize: Appearance.font.size.normal
 
@@ -42,11 +50,40 @@ Item {
                 }
 
                 StyledText {
+                    Layout.fillWidth: true
                     text: Hyprland.activeClient?.wmClass ?? ""
                     color: Colours.palette.m3onSurfaceVariant
 
                     elide: Text.ElideRight
-                    width: preview.implicitWidth - icon.implicitWidth - detailsRow.spacing
+                }
+            }
+
+            Item {
+                implicitWidth: expandIcon.implicitHeight + Appearance.padding.small * 2
+                implicitHeight: expandIcon.implicitHeight + Appearance.padding.small * 3
+
+                Layout.alignment: Qt.AlignVCenter
+
+                StateLayer {
+                    radius: Appearance.rounding.normal
+
+                    function onClicked(): void {
+                    // TODO
+                    }
+                }
+
+                MaterialIcon {
+                    id: expandIcon
+
+                    anchors.centerIn: parent
+                    anchors.horizontalCenterOffset: font.pointSize * 0.05
+
+                    text: "chevron_right"
+
+                    font.pointSize: Appearance.font.size.large
+                    font.variableAxes: ({
+                            opsz: Appearance.font.size.large
+                        })
                 }
             }
         }
@@ -58,18 +95,12 @@ Item {
             ScreencopyView {
                 id: preview
 
-                captureSource: ToplevelManager.toplevels.values.find(t => t.title === Hyprland.activeClient?.title) ?? null
+                captureSource: Hyprland.activeClient ? ToplevelManager.activeToplevel : null
                 live: visible
 
                 constraintSize.width: BarConfig.sizes.windowPreviewSize
                 constraintSize.height: BarConfig.sizes.windowPreviewSize
             }
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.emphasized
     }
 }
