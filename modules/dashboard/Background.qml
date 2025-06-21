@@ -23,7 +23,8 @@ ShapePath {
 
     PathLine {
         relativeX: 0
-        relativeY: root.wrapper.height - bar.implicitHeight + Appearance.padding.small - root.roundingY * 2 // move the dashboard above the bar
+        // relativeY: root.wrapper.height - bar.implicitHeight + Appearance.padding.small - root.roundingY * 2 // move the dashboard above the bar
+        relativeY: root.wrapper.height - root.roundingY * 2
     }
 
     PathArc {
@@ -49,7 +50,8 @@ ShapePath {
 
     PathLine {
         relativeX: 0
-        relativeY: -(root.wrapper.height - bar.implicitHeight + Appearance.padding.small - root.roundingY * 2) //move the dashboard above the bar
+        // relativeY: -(root.wrapper.height - bar.implicitHeight + Appearance.padding.small - root.roundingY * 2) //move the dashboard above the bar
+        relativeY: -(root.wrapper.height - root.roundingY * 2)
     }
 
     PathArc {
