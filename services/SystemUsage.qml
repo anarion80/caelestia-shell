@@ -76,7 +76,7 @@ Singleton {
             if (data) {
                 const stats = data.slice(1).map(n => parseInt(n, 10));
                 const total = stats.reduce((a, b) => a + b, 0);
-                const idle = stats[3];
+                const idle = stats[3] + (stats[4] ?? 0);
 
                 const totalDiff = total - root.lastCpuTotal;
                 const idleDiff = idle - root.lastCpuIdle;

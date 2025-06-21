@@ -36,7 +36,7 @@ StyledRect {
 
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: pressed ? Qt.ClosedHandCursor : undefined
+        cursorShape: body.hoveredLink ? Qt.PointingHandCursor : pressed ? Qt.ClosedHandCursor : undefined
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         preventStealing: true
 
@@ -177,6 +177,8 @@ StyledRect {
                     active: !root.hasAppIcon
                     asynchronous: true
                     anchors.centerIn: parent
+                    anchors.horizontalCenterOffset: -Appearance.font.size.large * 0.02
+                    anchors.verticalCenterOffset: Appearance.font.size.large * 0.02
 
                     sourceComponent: MaterialIcon {
                         text: {
@@ -197,7 +199,11 @@ StyledRect {
                                 return "download";
                             if (summary.includes("update"))
                                 return "update";
-                            if (summary.startsWith("file"))
+                            if (summary.includes("unable to"))
+                                return "deployed_code_alert";
+                            if (summary.includes("profile"))
+                                return "person";
+                            if (summary.includes("file"))
                                 return "folder_copy";
                             if (root.modelData.urgency === NotificationUrgency.Critical)
                                 return "release_alert";
@@ -206,6 +212,9 @@ StyledRect {
 
                         color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3onSurface : Colours.palette.m3onTertiaryContainer
                         font.pointSize: Appearance.font.size.large
+                        font.variableAxes: ({
+                                opsz: Appearance.font.size.large
+                            })
                     }
                 }
             }
@@ -349,6 +358,7 @@ StyledRect {
 
             StateLayer {
                 radius: Appearance.rounding.full
+                color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
 
                 function onClicked() {
                     root.expanded = !root.expanded;
@@ -412,6 +422,11 @@ StyledRect {
             font.pointSize: Appearance.font.size.small
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
+            onLinkActivated: link => {
+                Qt.openUrlExternally(link);
+                root.modelData.popup = false;
+            }
+
             opacity: root.expanded ? 1 : 0
 
             Behavior on opacity {
@@ -443,7 +458,7 @@ StyledRect {
                     required property NotificationAction modelData
 
                     radius: Appearance.rounding.full
-                    color: Colours.palette.m3surfaceContainerHigh
+                    color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondary : Colours.palette.m3surfaceContainerHigh
 
                     Layout.preferredWidth: actionText.width + Appearance.padding.normal * 2
                     Layout.preferredHeight: actionText.height + Appearance.padding.small * 2
@@ -452,6 +467,7 @@ StyledRect {
 
                     StateLayer {
                         radius: Appearance.rounding.full
+                        color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurface
 
                         function onClicked(): void {
                             action.modelData.invoke();
@@ -463,7 +479,7 @@ StyledRect {
 
                         anchors.centerIn: parent
                         text: actionTextMetrics.elidedText
-                        color: Colours.palette.m3onSurfaceVariant
+                        color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurfaceVariant
                         font.pointSize: Appearance.font.size.small
                     }
 

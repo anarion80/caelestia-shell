@@ -2,7 +2,6 @@ pragma Singleton
 
 import "root:/utils/scripts/fuzzysort.js" as Fuzzy
 import Quickshell
-import Quickshell.Io
 
 Singleton {
     id: root
@@ -23,15 +22,9 @@ Singleton {
     }
 
     function launch(entry: DesktopEntry): void {
-        launchProc.entry = entry;
-        launchProc.startDetached();
-    }
-
-    Process {
-        id: launchProc
-
-        property DesktopEntry entry
-
-        command: ["gtk-launch", entry?.id ?? ""]
+        if (entry.execString.startsWith("sh -c"))
+            Quickshell.execDetached(["sh", "-c", `gtk-launch ${entry.execString}`]);
+        else
+            Quickshell.execDetached(["sh", "-c", `gtk-launch '${entry.id}.desktop' || gtk-launch -- ${entry.execString}`]);
     }
 }

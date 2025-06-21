@@ -26,7 +26,7 @@ Item {
         anchors.topMargin: Appearance.padding.normal
         anchors.margins: Appearance.padding.large
 
-        nonAnimWidth: root.nonAnimWidth
+        nonAnimWidth: root.nonAnimWidth - anchors.margins * 2
         currentIndex: view.currentIndex
     }
 
@@ -85,6 +85,7 @@ Item {
 
                 Dash {
                     shouldUpdate: visible && this === view.currentItem
+                    visibilities: root.visibilities
                 }
 
                 Media {

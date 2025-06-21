@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import "root:/utils"
 import Quickshell
 import QtQuick
 import QtQuick.Controls
@@ -15,8 +16,8 @@ Item {
     required property int padding
     required property int rounding
 
-    property bool showWallpapers: search.text.startsWith(`${Config.launcher.actionPrefix}wallpaper `)
-    property var currentList: (showWallpapers ? wallpaperList : appList).item
+    readonly property bool showWallpapers: search.text.startsWith(`${Config.launcher.actionPrefix}wallpaper `)
+    property var currentList
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
@@ -29,8 +30,9 @@ Item {
             name: "apps"
 
             PropertyChanges {
+                root.currentList: appList.item
                 root.implicitWidth: Config.launcher.sizes.itemWidth
-                root.implicitHeight: Math.max(empty.height, appList.height)
+                root.implicitHeight: appList.implicitHeight > 0 ? appList.implicitHeight : empty.implicitHeight
                 appList.active: true
             }
 
@@ -43,14 +45,15 @@ Item {
             name: "wallpapers"
 
             PropertyChanges {
-                root.implicitWidth: Math.max(Config.launcher.sizes.itemWidth, wallpaperList.width)
+                root.currentList: wallpaperList.item
+                root.implicitWidth: Math.max(Config.launcher.sizes.itemWidth * 1.2, wallpaperList.implicitWidth)
                 root.implicitHeight: Config.launcher.sizes.wallpaperHeight
                 wallpaperList.active: true
             }
         }
     ]
 
-    transitions: Transition {
+    Behavior on state {
         SequentialAnimation {
             NumberAnimation {
                 target: root
@@ -61,27 +64,15 @@ Item {
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.standard
             }
-            PropertyAction {
-                targets: [appList, wallpaperList]
-                properties: "active"
-            }
-            ParallelAnimation {
-                NumberAnimation {
-                    target: root
-                    properties: "implicitWidth,implicitHeight"
-                    duration: Appearance.anim.durations.large
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.emphasized
-                }
-                NumberAnimation {
-                    target: root
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: Appearance.anim.durations.large
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.standard
-                }
+            PropertyAction {}
+            NumberAnimation {
+                target: root
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: Appearance.anim.durations.small
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
     }
@@ -96,7 +87,6 @@ Item {
         anchors.right: parent.right
 
         sourceComponent: AppList {
-            padding: root.padding
             search: root.search
             visibilities: root.visibilities
         }
@@ -118,39 +108,41 @@ Item {
         }
     }
 
-    Item {
+    Row {
         id: empty
 
         opacity: root.currentList?.count === 0 ? 1 : 0
         scale: root.currentList?.count === 0 ? 1 : 0.5
 
-        implicitWidth: icon.width + text.width + Appearance.spacing.small
-        implicitHeight: icon.height
+        spacing: Appearance.spacing.normal
+        padding: Appearance.padding.large
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
         MaterialIcon {
-            id: icon
-
-            text: "manage_search"
+            text: root.state === "wallpapers" ? "wallpaper_slideshow" : "manage_search"
             color: Colours.palette.m3onSurfaceVariant
             font.pointSize: Appearance.font.size.extraLarge
 
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        StyledText {
-            id: text
-
-            anchors.left: icon.right
-            anchors.leftMargin: Appearance.spacing.small
+        Column {
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTr("No results")
-            color: Colours.palette.m3onSurfaceVariant
-            font.pointSize: Appearance.font.size.larger
-            font.weight: 500
+            StyledText {
+                text: root.state === "wallpapers" ? qsTr("No wallpapers found") : qsTr("No results")
+                color: Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.larger
+                font.weight: 500
+            }
+
+            StyledText {
+                text: root.state === "wallpapers" && Wallpapers.list.length === 0 ? qsTr("Try putting some wallpapers in %1").arg(Paths.shortenHome(Config.paths.wallpaperDir)) : qsTr("Try searching for something else")
+                color: Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.normal
+            }
         }
 
         Behavior on opacity {
@@ -171,6 +163,8 @@ Item {
     }
 
     Behavior on implicitWidth {
+        enabled: root.visibilities.launcher
+
         NumberAnimation {
             duration: Appearance.anim.durations.large
             easing.type: Easing.BezierSpline
@@ -179,6 +173,8 @@ Item {
     }
 
     Behavior on implicitHeight {
+        enabled: root.visibilities.launcher
+
         NumberAnimation {
             duration: Appearance.anim.durations.large
             easing.type: Easing.BezierSpline

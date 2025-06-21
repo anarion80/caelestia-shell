@@ -1,5 +1,6 @@
 pragma Singleton
 
+import "root:/config"
 import "root:/utils/scripts/fuzzysort.js" as Fuzzy
 import "root:/utils"
 import Quickshell
@@ -9,8 +10,7 @@ import QtQuick
 Singleton {
     id: root
 
-    readonly property string currentNamePath: `${Paths.state}/wallpaper/path.txt`.slice(7)
-    readonly property string path: `${Paths.pictures}/Wallpapers`.slice(7)
+    readonly property string currentNamePath: Paths.strip(`${Paths.state}/wallpaper/path.txt`)
     readonly property list<string> extensions: ["jpg", "jpeg", "png", "webp", "tif", "tiff"]
 
     readonly property list<Wallpaper> list: wallpapers.instances
@@ -18,6 +18,7 @@ Singleton {
     readonly property string current: showPreview ? previewPath : actualCurrent
     property string previewPath
     property string actualCurrent
+    property bool previewColourLock
 
     readonly property list<var> preppedWalls: list.map(w => ({
                 name: Fuzzy.prepare(w.name),
@@ -35,8 +36,7 @@ Singleton {
 
     function setWallpaper(path: string): void {
         actualCurrent = path;
-        setWall.path = path;
-        setWall.startDetached();
+        Quickshell.execDetached(["caelestia", "wallpaper", "-f", path]);
     }
 
     function preview(path: string): void {
@@ -47,7 +47,8 @@ Singleton {
 
     function stopPreview(): void {
         showPreview = false;
-        Colours.endPreviewOnNextChange = true;
+        if (!previewColourLock)
+            Colours.showPreview = false;
     }
 
     reloadableId: "wallpapers"
@@ -72,7 +73,10 @@ Singleton {
         path: root.currentNamePath
         watchChanges: true
         onFileChanged: reload()
-        onLoaded: root.actualCurrent = text().trim()
+        onLoaded: {
+            root.actualCurrent = text().trim();
+            root.previewColourLock = false;
+        }
     }
 
     Process {
@@ -88,18 +92,20 @@ Singleton {
     }
 
     Process {
-        id: setWall
+        id: getWallsProc
 
-        property string path
-
-        command: ["caelestia", "wallpaper", "-f", path]
-    }
-
-    Process {
         running: true
-        command: ["find", root.path, "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
+        command: ["find", Config.paths.wallpaperDir, "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
         stdout: StdioCollector {
             onStreamFinished: wallpapers.model = text.trim().split("\n").filter(w => root.extensions.includes(w.slice(w.lastIndexOf(".") + 1))).sort()
+        }
+    }
+
+    Connections {
+        target: Config.paths
+
+        function onWallpaperDirChanged(): void {
+            getWallsProc.running = true;
         }
     }
 
