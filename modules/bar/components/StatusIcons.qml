@@ -62,6 +62,7 @@ Item {
                 animate: true
                 text: Icons.getBluetoothIcon(modelData.icon)
                 color: root.colour
+                fill: 1
             }
         }
     }
