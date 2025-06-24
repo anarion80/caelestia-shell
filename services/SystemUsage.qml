@@ -15,17 +15,17 @@ Singleton {
     property real gpuPstate
     property real gpuPowerDraw
     property real gpuFanSpeed
-    property int memUsed
-    property int memTotal
+    property real memUsed
+    property real memTotal
     readonly property real memPerc: memTotal > 0 ? memUsed / memTotal : 0
-    property int storageUsed
-    property int storageTotal
+    property real storageUsed
+    property real storageTotal
     property real storagePerc: storageTotal > 0 ? storageUsed / storageTotal : 0
 
-    property int lastCpuIdle: 0
-    property int lastCpuTotal: 0
+    property real lastCpuIdle
+    property real lastCpuTotal
 
-    function formatKib(kib: int): var {
+    function formatKib(kib: real): var {
         const mib = 1024;
         const gib = 1024 ** 2;
         const tib = 1024 ** 3;
