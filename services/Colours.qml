@@ -12,7 +12,8 @@ Singleton {
     readonly property list<string> colourNames: ["rosewater", "flamingo", "pink", "mauve", "red", "maroon", "peach", "yellow", "green", "teal", "sky", "sapphire", "blue", "lavender"]
 
     property bool showPreview
-    property bool endPreviewOnNextChange
+    property string scheme
+    property string flavour
     property bool light
     readonly property Colours palette: showPreview ? preview : current
     readonly property Colours current: Colours {}
@@ -36,38 +37,28 @@ Singleton {
 
     function load(data: string, isPreview: bool): void {
         const colours = isPreview ? preview : current;
-        for (const line of data.trim().split("\n")) {
-            let [name, colour] = line.split(" ");
-            name = name.trim();
-            name = colourNames.includes(name) ? name : `m3${name}`;
-            if (colours.hasOwnProperty(name))
-                colours[name] = `#${colour.trim()}`;
+        const scheme = JSON.parse(data);
+
+        if (!isPreview) {
+            root.scheme = scheme.name;
+            flavour = scheme.flavour;
         }
 
-        if (!isPreview || (isPreview && endPreviewOnNextChange)) {
-            showPreview = false;
-            endPreviewOnNextChange = false;
+        light = scheme.mode === "light";
+
+        for (const [name, colour] of Object.entries(scheme.colours)) {
+            const propName = colourNames.includes(name) ? name : `m3${name}`;
+            if (colours.hasOwnProperty(propName))
+                colours[propName] = `#${colour}`;
         }
     }
 
     function setMode(mode: string): void {
-        setModeProc.command = ["caelestia", "scheme", "dynamic", "default", mode];
-        setModeProc.startDetached();
-    }
-
-    Process {
-        id: setModeProc
+        Quickshell.execDetached(["caelestia", "scheme", "set", "--notify", "-m", mode]);
     }
 
     FileView {
-        path: `${Paths.state}/scheme/current-mode.txt`
-        watchChanges: true
-        onFileChanged: reload()
-        onLoaded: root.light = text() === "light"
-    }
-
-    FileView {
-        path: `${Paths.state}/scheme/current.txt`
+        path: `${Paths.state}/scheme.json`
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.load(text(), false)

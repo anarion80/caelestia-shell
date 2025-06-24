@@ -43,8 +43,8 @@ Image {
         property string path
 
         command: ["sha256sum", path]
-        stdout: SplitParser {
-            onRead: data => root.hash = data.split(" ")[0]
+        stdout: StdioCollector {
+            onStreamFinished: root.hash = text.split(" ")[0]
         }
     }
 }

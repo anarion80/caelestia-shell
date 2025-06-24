@@ -8,13 +8,13 @@ ShapePath {
     id: root
 
     required property Wrapper wrapper
-    readonly property real rounding: BorderConfig.rounding
+    readonly property real rounding: Config.border.rounding
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
-    property real fullHeightRounding: wrapper.height >= QsWindow.window?.height - BorderConfig.thickness * 2 ? -rounding : rounding
+    property real fullHeightRounding: wrapper.height >= QsWindow.window?.height - Config.border.thickness * 2 ? -rounding : rounding
 
     strokeWidth: -1
-    fillColor: BorderConfig.colour
+    fillColor: Config.border.colour
 
     PathLine {
         relativeX: -(root.wrapper.width + root.rounding)

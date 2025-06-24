@@ -49,7 +49,7 @@ Row {
             anchors.bottom: icon.top
             anchors.bottomMargin: Appearance.spacing.small
 
-            implicitWidth: DashboardConfig.sizes.resourceProgessThickness
+            implicitWidth: Config.dashboard.sizes.resourceProgessThickness
 
             color: Colours.palette.m3surfaceContainerHigh
             radius: Appearance.rounding.full

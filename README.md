@@ -10,13 +10,15 @@
 </div>
 
 > [!WARNING]
-> I am currently working on a complete overhaul for everything but the shell which should fix most issues with installation.
-> As such, I will not be working on the shell until the overhaul is finished. I will still try to answer issues, however other
-> than minor issues, I will most likely not be able to fix them (same goes for feature requests). PRs are still welcome though!
+> The overhaul is finished!
+> Installation is now via an [install script](https://github.com/caelestia-dots/caelestia/blob/main/install.fish) in the
+> [`caelestia` repo](https://github.com/caelestia-dots/caelestia).
+>
+> Anyone with an existing installation, please reinstall via the install script.
 > 
 > Some breaking changes:
 > - Rename the `scripts` repo -> `cli`
-> - Rename the `hypr` repo -> `caelestia` (this will be the main repo after the change)
+> - Rename the `hypr` repo -> `caelestia`
 > - Merge all other repos (except this and `cli`) into `caelestia`
 > - Installation for the `shell` and `cli` will be done via AUR packages; `caelestia` will have a meta package and an install script (should fix most installation issues)
 > - Overhaul the scheme system (should fix a few bugs with that and make it cleaner in general)
@@ -31,14 +33,7 @@ https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
 
 ## Installation
 
-### Automated installation (recommended)
-
-Install [`caelestia-scripts`](https://github.com/caelestia-dots/scripts) and run `caelestia install shell`.
-
-### Manual installation
-
-Install all [dependencies](https://github.com/caelestia-dots/scripts/blob/main/install/shell.fish#L10), then
-clone this repo into `$XDG_CONFIG_HOME/quickshell/caelestia` and run `qs -c caelestia`.
+This is not implemented as of now.
 
 ## Usage
 

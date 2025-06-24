@@ -1,13 +1,9 @@
-pragma Singleton
+import Quickshell.Io
 
-import Quickshell
-import QtQuick
+JsonObject {
+    property int dragThreshold: 30
 
-Singleton {
-    readonly property int dragThreshold: 30
-    readonly property Sizes sizes: Sizes {}
-
-    component Sizes: QtObject {
-        readonly property int button: 80
+    property JsonObject sizes: JsonObject {
+        property int button: 80
     }
 }

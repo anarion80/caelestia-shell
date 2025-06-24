@@ -42,7 +42,7 @@ StyledRect {
         path: root.modelData.path
         smooth: !root.PathView.view.moving
 
-        width: LauncherConfig.sizes.wallpaperWidth
+        width: Config.launcher.sizes.wallpaperWidth
         height: width / 16 * 9
     }
 

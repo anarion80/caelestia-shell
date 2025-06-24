@@ -58,12 +58,12 @@ Singleton {
             stat.reload();
             meminfo.reload();
             storage.running = true;
-            cpuTemp.running = true;
             gpuUsage.running = true;
             gpuTemp.running = true;
             gpuPowerDraw.running = true;
             gpuPstate.running = true;
             gpuFanSpeed.running = true;
+            sensors.running = true;
         }
     }
 
@@ -76,7 +76,7 @@ Singleton {
             if (data) {
                 const stats = data.slice(1).map(n => parseInt(n, 10));
                 const total = stats.reduce((a, b) => a + b, 0);
-                const idle = stats[3];
+                const idle = stats[3] + (stats[4] ?? 0);
 
                 const totalDiff = total - root.lastCpuTotal;
                 const idleDiff = idle - root.lastCpuIdle;
@@ -103,39 +103,41 @@ Singleton {
         id: storage
 
         running: true
-        command: ["sh", "-c", "/bin/df / | grep '^/dev/' | awk '{print $1, $3, $4}'"]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => {
-              const deviceMap = new Map();
+        command: ["sh", "-c", "/bin/df | grep '^/dev/' | awk '{print $1, $3, $4}'"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const deviceMap = new Map();
 
-              for (const line of data.trim().split("\n")) {
-                  if (line.trim() === "") continue;
+                for (const line of text.trim().split("\n")) {
+                    if (line.trim() === "")
+                        continue;
 
-                  const parts = line.trim().split(/\s+/);
-                  if (parts.length >= 3) {
-                      const device = parts[0];
-                      const used = parseInt(parts[1], 10) || 0;
-                      const avail = parseInt(parts[2], 10) || 0;
-                      
-                      // only keep the entry with the largest total space for each device
-                      if (!deviceMap.has(device) || 
-                          (used + avail) > (deviceMap.get(device).used + deviceMap.get(device).avail)) {
-                          deviceMap.set(device, { used: used, avail: avail });
-                      }
-                  }
-              }
+                    const parts = line.trim().split(/\s+/);
+                    if (parts.length >= 3) {
+                        const device = parts[0];
+                        const used = parseInt(parts[1], 10) || 0;
+                        const avail = parseInt(parts[2], 10) || 0;
 
-              let totalUsed = 0;
-              let totalAvail = 0;
-  
-              for (const [device, stats] of deviceMap) {
-                  totalUsed += stats.used;
-                  totalAvail += stats.avail;
-              }
+                        // Only keep the entry with the largest total space for each device
+                        if (!deviceMap.has(device) || (used + avail) > (deviceMap.get(device).used + deviceMap.get(device).avail)) {
+                            deviceMap.set(device, {
+                                used: used,
+                                avail: avail
+                            });
+                        }
+                    }
+                }
 
-              root.storageUsed = totalUsed;
-              root.storageTotal = totalUsed + totalAvail;
+                let totalUsed = 0;
+                let totalAvail = 0;
+
+                for (const [device, stats] of deviceMap) {
+                    totalUsed += stats.used;
+                    totalAvail += stats.avail;
+                }
+
+                root.storageUsed = totalUsed;
+                root.storageTotal = totalUsed + totalAvail;
             }
         }
     }
@@ -144,10 +146,10 @@ Singleton {
         id: cpuTemp
 
         running: true
-        command: ["fish", "-c", "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/*/temp1_input"]
-        stdout: SplitParser {
-            onRead: data => {
-                const temp = data.trim();
+        command: ["sh", "-c", "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/*/temp1_input"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const temp = text.trim();
                 root.cpuTemp = temp / 1000;
             }
         }
@@ -158,9 +160,9 @@ Singleton {
 
         running: true
         command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuPerc = data / 100;
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuPerc = text.trim() / 100;
             }
         }
     }
@@ -182,9 +184,9 @@ Singleton {
 
         running: true
         command: ["sh", "-c", "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuPowerDraw = data;
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuPowerDraw = text.trim();
             }
         }
     }
@@ -192,11 +194,12 @@ Singleton {
     Process {
         id: gpuFanSpeed
 
+
         running: true
         command: ["sh", "-c", "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuFanSpeed = data;
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuFanSpeed = text.trim();
             }
         }
     }
@@ -206,10 +209,52 @@ Singleton {
 
         running: true
         command: ["sh", "-c", "nvidia-smi --query-gpu=pstate --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuPstate = data;
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuPstate = text.trim();
             }
         }
     }
-}
+    
+    Process {
+        id: sensors
+
+        running: true
+        command: ["sensors"]
+        environment: ({
+                LANG: "C",
+                LC_ALL: "C"
+            })
+        stdout: StdioCollector {
+            onStreamFinished: {
+              let cpuTemp = text.match(/(?:Package id [0-9]+|Tdie):\s+((\+|-)[0-9.]+)(°| )C/);
+              if (!cpuTemp) {
+                  // If AMD Tdie pattern failed, try fallback on Tctl
+                  cpuTemp = text.match(/Tctl:\s+((\+|-)[0-9.]+)(°| )C/);
+              }
+              if (cpuTemp)
+                  root.cpuTemp = parseFloat(cpuTemp[1]);
+
+              let eligible = false;
+              let sum = 0;
+              let count = 0;
+
+              for (const line of text.trim().split("\n")) {
+                  if (line === "Adapter: PCI adapter")
+                      eligible = true;
+                  else if (line === "")
+                      eligible = false;
+                  else if (eligible) {
+                      const match = line.match(/^(temp[0-9]+|GPU core|edge)+:\s+\+([0-9]+\.[0-9]+)(°| )C/);
+                      if (match) {
+                          sum += parseFloat(match[2]);
+                          count++;
+                      }
+                  }
+              }
+
+              root.gpuTemp = count > 0 ? sum / count : 0;
+          }
+        }
+      }
+    }

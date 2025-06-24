@@ -16,7 +16,7 @@ Shape {
     required property Item bar
 
     anchors.fill: parent
-    anchors.margins: BorderConfig.thickness
+    anchors.margins: Config.border.thickness
     anchors.leftMargin: bar.implicitWidth
     preferredRendererType: Shape.CurveRenderer
     opacity: Colours.transparency.enabled ? Colours.transparency.base : 1
@@ -60,7 +60,7 @@ Shape {
         wrapper: panels.popouts
         invertBottomRounding: wrapper.y + wrapper.height + 1 >= root.height
 
-        startX: 0
-        startY: wrapper.y - rounding
+        startX: wrapper.x
+        startY: wrapper.y - rounding * sideRounding
     }
 }

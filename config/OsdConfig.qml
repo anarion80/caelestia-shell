@@ -1,14 +1,10 @@
-pragma Singleton
+import Quickshell.Io
 
-import Quickshell
-import QtQuick
+JsonObject {
+    property int hideDelay: 2000
 
-Singleton {
-    readonly property int hideDelay: 2000
-    readonly property Sizes sizes: Sizes {}
-
-    component Sizes: QtObject {
-        readonly property int sliderWidth: 30
-        readonly property int sliderHeight: 150
+    property JsonObject sizes: JsonObject {
+        property int sliderWidth: 30
+        property int sliderHeight: 150
     }
 }

@@ -20,7 +20,7 @@ StyledRect {
     property real offset: Math.min(leading, trailing)
     property real size: {
         const s = Math.abs(leading - trailing) + currentSize;
-        if (BarConfig.workspaces.activeTrail && lastWs > currentWsIdx)
+        if (Config.bar.workspaces.activeTrail && lastWs > currentWsIdx)
             return Math.min(getWsY(lastWs) + (workspaces[lastWs]?.size ?? 0) - offset, s);
         return s;
     }
@@ -43,9 +43,9 @@ StyledRect {
     clip: true
     x: 1
     y: offset + 1
-    implicitWidth: BarConfig.sizes.innerHeight - 2
+    implicitWidth: Config.bar.sizes.innerHeight - 2
     implicitHeight: size - 2
-    radius: BarConfig.workspaces.rounded ? Appearance.rounding.full : 0
+    radius: Config.bar.workspaces.rounded ? Appearance.rounding.full : 0
     color: Colours.palette.m3primary
 
     StyledRect {
@@ -72,13 +72,13 @@ StyledRect {
     }
 
     Behavior on leading {
-        enabled: BarConfig.workspaces.activeTrail
+        enabled: Config.bar.workspaces.activeTrail
 
         Anim {}
     }
 
     Behavior on trailing {
-        enabled: BarConfig.workspaces.activeTrail
+        enabled: Config.bar.workspaces.activeTrail
 
         Anim {
             duration: Appearance.anim.durations.normal * 2
@@ -86,19 +86,19 @@ StyledRect {
     }
 
     Behavior on currentSize {
-        enabled: BarConfig.workspaces.activeTrail
+        enabled: Config.bar.workspaces.activeTrail
 
         Anim {}
     }
 
     Behavior on offset {
-        enabled: !BarConfig.workspaces.activeTrail
+        enabled: !Config.bar.workspaces.activeTrail
 
         Anim {}
     }
 
     Behavior on size {
-        enabled: !BarConfig.workspaces.activeTrail
+        enabled: !Config.bar.workspaces.activeTrail
 
         Anim {}
     }

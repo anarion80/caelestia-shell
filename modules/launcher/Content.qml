@@ -74,17 +74,22 @@ Item {
             topPadding: Appearance.padding.larger
             bottomPadding: Appearance.padding.larger
 
-            placeholderText: qsTr("Type \"%1\" for commands").arg(LauncherConfig.actionPrefix)
+            placeholderText: qsTr("Type \"%1\" for commands").arg(Config.launcher.actionPrefix)
             background: null
 
             onAccepted: {
                 const currentItem = list.currentList?.currentItem;
                 if (currentItem) {
                     if (list.showWallpapers) {
+                        if (Colours.scheme === "dynamic" && currentItem.modelData.path !== Wallpapers.actualCurrent)
+                            Wallpapers.previewColourLock = true;
                         Wallpapers.setWallpaper(currentItem.modelData.path);
                         root.visibilities.launcher = false;
-                    } else if (text.startsWith(LauncherConfig.actionPrefix)) {
-                        currentItem.modelData.onClicked(list.currentList);
+                    } else if (text.startsWith(Config.launcher.actionPrefix)) {
+                        if (text.startsWith(`${Config.launcher.actionPrefix}calc `))
+                            currentItem.onClicked();
+                        else
+                            currentItem.modelData.onClicked(list.currentList);
                     } else {
                         Apps.launch(currentItem.modelData);
                         root.visibilities.launcher = false;
@@ -102,13 +107,18 @@ Item {
 
                 function onLauncherChanged(): void {
                     if (root.visibilities.launcher)
-                        search.forceActiveFocus();
+                        search.focus = true;
                     else {
                         search.text = "";
                         const current = list.currentList;
                         if (current)
                             current.currentIndex = 0;
                     }
+                }
+
+                function onSessionChanged(): void {
+                    if (root.visibilities.launcher && !root.visibilities.session)
+                        search.focus = true;
                 }
             }
         }
@@ -126,7 +136,7 @@ Item {
                     return 0;
                 if (mouse.pressed)
                     return 0.7;
-                if (mouse.hovered)
+                if (mouse.containsMouse)
                     return 0.8;
                 return 1;
             }
@@ -137,14 +147,10 @@ Item {
             MouseArea {
                 id: mouse
 
-                property bool hovered
-
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: search.text ? Qt.PointingHandCursor : undefined
 
-                onEntered: hovered = true
-                onExited: hovered = false
                 onClicked: search.text = ""
             }
 

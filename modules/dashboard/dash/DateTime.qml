@@ -8,7 +8,7 @@ Item {
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    implicitWidth: DashboardConfig.sizes.dateTimeWidth
+    implicitWidth: Config.dashboard.sizes.dateTimeWidth
 
     StyledText {
         id: hours

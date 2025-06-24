@@ -20,10 +20,10 @@ StyledRect {
 
     color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondaryContainer : Colours.palette.m3surfaceContainer
     radius: Appearance.rounding.normal
-    implicitWidth: NotifsConfig.sizes.width
+    implicitWidth: Config.notifs.sizes.width
     implicitHeight: inner.implicitHeight
 
-    x: NotifsConfig.sizes.width
+    x: Config.notifs.sizes.width
     Component.onCompleted: x = 0
 
     RetainableLock {
@@ -36,7 +36,7 @@ StyledRect {
 
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: pressed ? Qt.ClosedHandCursor : undefined
+        cursorShape: body.hoveredLink ? Qt.PointingHandCursor : pressed ? Qt.ClosedHandCursor : undefined
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         preventStealing: true
 
@@ -52,20 +52,20 @@ StyledRect {
                 root.modelData.notification.dismiss();
         }
         onReleased: event => {
-            if (Math.abs(root.x) < NotifsConfig.sizes.width * NotifsConfig.clearThreshold)
+            if (Math.abs(root.x) < Config.notifs.sizes.width * Config.notifs.clearThreshold)
                 root.x = 0;
             else
-                root.modelData.popup = false;
+                root.modelData.notification.dismiss(); // TODO: change back to popup when notif dock impled
         }
         onPositionChanged: event => {
             if (pressed) {
                 const diffY = event.y - startY;
-                if (Math.abs(diffY) > NotifsConfig.expandThreshold)
+                if (Math.abs(diffY) > Config.notifs.expandThreshold)
                     root.expanded = diffY > 0;
             }
         }
         onClicked: event => {
-            if (!NotifsConfig.actionOnClick || event.button !== Qt.LeftButton)
+            if (!Config.notifs.actionOnClick || event.button !== Qt.LeftButton)
                 return;
 
             const actions = root.modelData.actions;
@@ -93,7 +93,10 @@ StyledRect {
         implicitHeight: root.nonAnimHeight
 
         Behavior on implicitHeight {
-            Anim {}
+            Anim {
+                duration: Appearance.anim.durations.expressiveDefaultSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            }
         }
 
         Loader {
@@ -104,14 +107,14 @@ StyledRect {
 
             anchors.left: parent.left
             anchors.top: parent.top
-            width: NotifsConfig.sizes.image
-            height: NotifsConfig.sizes.image
+            width: Config.notifs.sizes.image
+            height: Config.notifs.sizes.image
             visible: root.hasImage || root.hasAppIcon
 
             sourceComponent: ClippingRectangle {
                 radius: Appearance.rounding.full
-                implicitWidth: NotifsConfig.sizes.image
-                implicitHeight: NotifsConfig.sizes.image
+                implicitWidth: Config.notifs.sizes.image
+                implicitHeight: Config.notifs.sizes.image
 
                 Image {
                     anchors.fill: parent
@@ -137,8 +140,8 @@ StyledRect {
             sourceComponent: StyledRect {
                 radius: Appearance.rounding.full
                 color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3error : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3surfaceContainerHighest : Colours.palette.m3tertiaryContainer
-                implicitWidth: root.hasImage ? NotifsConfig.sizes.badge : NotifsConfig.sizes.image
-                implicitHeight: root.hasImage ? NotifsConfig.sizes.badge : NotifsConfig.sizes.image
+                implicitWidth: root.hasImage ? Config.notifs.sizes.badge : Config.notifs.sizes.image
+                implicitHeight: root.hasImage ? Config.notifs.sizes.badge : Config.notifs.sizes.image
 
                 Loader {
                     id: icon
@@ -174,6 +177,8 @@ StyledRect {
                     active: !root.hasAppIcon
                     asynchronous: true
                     anchors.centerIn: parent
+                    anchors.horizontalCenterOffset: -Appearance.font.size.large * 0.02
+                    anchors.verticalCenterOffset: Appearance.font.size.large * 0.02
 
                     sourceComponent: MaterialIcon {
                         text: {
@@ -194,7 +199,11 @@ StyledRect {
                                 return "download";
                             if (summary.includes("update"))
                                 return "update";
-                            if (summary.startsWith("file"))
+                            if (summary.includes("unable to"))
+                                return "deployed_code_alert";
+                            if (summary.includes("profile"))
+                                return "person";
+                            if (summary.includes("file"))
                                 return "folder_copy";
                             if (root.modelData.urgency === NotificationUrgency.Critical)
                                 return "release_alert";
@@ -203,6 +212,9 @@ StyledRect {
 
                         color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3onSurface : Colours.palette.m3onTertiaryContainer
                         font.pointSize: Appearance.font.size.large
+                        font.variableAxes: ({
+                                opsz: Appearance.font.size.large
+                            })
                     }
                 }
             }
@@ -346,6 +358,7 @@ StyledRect {
 
             StateLayer {
                 radius: Appearance.rounding.full
+                color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
 
                 function onClicked() {
                     root.expanded = !root.expanded;
@@ -409,6 +422,11 @@ StyledRect {
             font.pointSize: Appearance.font.size.small
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
+            onLinkActivated: link => {
+                Qt.openUrlExternally(link);
+                root.modelData.notification.dismiss(); // TODO: change back to popup when notif dock impled
+            }
+
             opacity: root.expanded ? 1 : 0
 
             Behavior on opacity {
@@ -440,7 +458,7 @@ StyledRect {
                     required property NotificationAction modelData
 
                     radius: Appearance.rounding.full
-                    color: Colours.palette.m3surfaceContainerHigh
+                    color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondary : Colours.palette.m3surfaceContainerHigh
 
                     Layout.preferredWidth: actionText.width + Appearance.padding.normal * 2
                     Layout.preferredHeight: actionText.height + Appearance.padding.small * 2
@@ -449,6 +467,7 @@ StyledRect {
 
                     StateLayer {
                         radius: Appearance.rounding.full
+                        color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurface
 
                         function onClicked(): void {
                             action.modelData.invoke();
@@ -460,7 +479,7 @@ StyledRect {
 
                         anchors.centerIn: parent
                         text: actionTextMetrics.elidedText
-                        color: Colours.palette.m3onSurfaceVariant
+                        color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurfaceVariant
                         font.pointSize: Appearance.font.size.small
                     }
 

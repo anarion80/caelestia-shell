@@ -1,5 +1,6 @@
 pragma Singleton
 
+import "root:/config"
 import "root:/utils/scripts/fuzzysort.js" as Fuzzy
 import "root:/utils"
 import Quickshell
@@ -9,14 +10,15 @@ import QtQuick
 Singleton {
     id: root
 
-    readonly property string currentNamePath: `${Paths.state}/wallpaper/last.txt`.slice(7)
-    readonly property string path: `${Paths.pictures}/Wallpapers`.slice(7)
+    readonly property string currentNamePath: Paths.strip(`${Paths.state}/wallpaper/path.txt`)
+    readonly property list<string> extensions: ["jpg", "jpeg", "png", "webp", "tif", "tiff"]
 
     readonly property list<Wallpaper> list: wallpapers.instances
     property bool showPreview: false
     readonly property string current: showPreview ? previewPath : actualCurrent
     property string previewPath
     property string actualCurrent
+    property bool previewColourLock
 
     readonly property list<var> preppedWalls: list.map(w => ({
                 name: Fuzzy.prepare(w.name),
@@ -34,19 +36,21 @@ Singleton {
 
     function setWallpaper(path: string): void {
         actualCurrent = path;
-        setWall.path = path;
-        setWall.startDetached();
+        Quickshell.execDetached(["caelestia", "wallpaper", "-f", path]);
     }
 
     function preview(path: string): void {
         previewPath = path;
         showPreview = true;
-        getPreviewColoursProc.running = true;
+
+        if (Colours.scheme === "dynamic")
+            getPreviewColoursProc.running = true;
     }
 
     function stopPreview(): void {
         showPreview = false;
-        Colours.endPreviewOnNextChange = true;
+        if (!previewColourLock)
+            Colours.showPreview = false;
     }
 
     reloadableId: "wallpapers"
@@ -71,36 +75,39 @@ Singleton {
         path: root.currentNamePath
         watchChanges: true
         onFileChanged: reload()
-        onLoaded: root.actualCurrent = text().trim()
+        onLoaded: {
+            root.actualCurrent = text().trim();
+            root.previewColourLock = false;
+        }
     }
 
     Process {
         id: getPreviewColoursProc
 
-        command: ["caelestia", "scheme", "print", root.previewPath]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => {
-                Colours.load(data, true);
+        command: ["caelestia", "wallpaper", "-p", root.previewPath]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                Colours.load(text, true);
                 Colours.showPreview = true;
             }
         }
     }
 
     Process {
-        id: setWall
+        id: getWallsProc
 
-        property string path
-
-        command: ["caelestia", "wallpaper", "-f", path]
+        running: true
+        command: ["find", Config.paths.wallpaperDir, "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
+        stdout: StdioCollector {
+            onStreamFinished: wallpapers.model = text.trim().split("\n").filter(w => root.extensions.includes(w.slice(w.lastIndexOf(".") + 1))).sort()
+        }
     }
 
-    Process {
-        running: true
-        command: ["fd", ".", root.path, "-t", "f", "-e", "jpg", "-e", "jpeg", "-e", "png", "-e", "svg"]
-        stdout: SplitParser {
-            splitMarker: ""
-            onRead: data => wallpapers.model = data.trim().split("\n")
+    Connections {
+        target: Config.paths
+
+        function onWallpaperDirChanged(): void {
+            getWallsProc.running = true;
         }
     }
 

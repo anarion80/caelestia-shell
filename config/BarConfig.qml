@@ -1,22 +1,14 @@
-pragma Singleton
+import Quickshell.Io
 
-import Quickshell
-import QtQuick
-
-Singleton {
-    id: root
-
-    readonly property Sizes sizes: Sizes {}
-    readonly property Workspaces workspaces: Workspaces {}
-
-    component Sizes: QtObject {
+JsonObject {
+    property JsonObject sizes: JsonObject {
         property int innerHeight: 30
         property int windowPreviewSize: 400
         property int trayMenuWidth: 300
         property int batteryWidth: 250
     }
 
-    component Workspaces: QtObject {
+    property JsonObject workspaces: JsonObject {
         property int shown: 8
         property bool rounded: true
         property bool activeIndicator: true

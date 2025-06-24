@@ -14,7 +14,7 @@ Item {
         acc[curr.id] = curr.lastIpcObject.windows > 0;
         return acc;
     }, {})
-    readonly property int groupOffset: Math.floor((Hyprland.activeWsId - 1) / BarConfig.workspaces.shown) * BarConfig.workspaces.shown
+    readonly property int groupOffset: Math.floor((Hyprland.activeWsId - 1) / Config.bar.workspaces.shown) * Config.bar.workspaces.shown
 
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
@@ -27,7 +27,7 @@ Item {
         layer.smooth: true
 
         Repeater {
-            model: BarConfig.workspaces.shown
+            model: Config.bar.workspaces.shown
 
             Workspace {
                 occupied: root.occupied
@@ -37,7 +37,7 @@ Item {
     }
 
     Loader {
-        active: BarConfig.workspaces.occupiedBg
+        active: Config.bar.workspaces.occupiedBg
         asynchronous: true
 
         z: -1
@@ -51,7 +51,7 @@ Item {
     }
 
     Loader {
-        active: BarConfig.workspaces.activeIndicator
+        active: Config.bar.workspaces.activeIndicator
         asynchronous: true
 
         sourceComponent: ActiveIndicator {

@@ -65,7 +65,7 @@ Row {
         property bool primary
         readonly property real primaryMult: primary ? 1.2 : 1
 
-        readonly property real thickness: DashboardConfig.sizes.resourceProgessThickness * primaryMult
+        readonly property real thickness: Config.dashboard.sizes.resourceProgessThickness * primaryMult
 
         property color fg1: Colours.palette.m3primary
         property color fg2: Colours.palette.m3secondary
@@ -74,8 +74,8 @@ Row {
 
         anchors.verticalCenter: parent.verticalCenter
 
-        implicitWidth: DashboardConfig.sizes.resourceSize * primaryMult
-        implicitHeight: DashboardConfig.sizes.resourceSize * primaryMult
+        implicitWidth: Config.dashboard.sizes.resourceSize * primaryMult
+        implicitHeight: Config.dashboard.sizes.resourceSize * primaryMult
 
         onValue1Changed: canvas.requestPaint()
         onValue2Changed: canvas.requestPaint()

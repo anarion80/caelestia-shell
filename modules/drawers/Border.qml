@@ -16,7 +16,7 @@ Item {
         id: rect
 
         anchors.fill: parent
-        color: Colours.alpha(BorderConfig.colour, false)
+        color: Colours.alpha(Config.border.colour, false)
         visible: false
     }
 
@@ -29,9 +29,9 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            anchors.margins: BorderConfig.thickness
+            anchors.margins: Config.border.thickness
             anchors.leftMargin: root.bar.implicitWidth
-            radius: BorderConfig.rounding
+            radius: Config.border.rounding
         }
     }
 

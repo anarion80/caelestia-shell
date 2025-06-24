@@ -33,9 +33,9 @@ Variants {
 
             mask: Region {
                 x: bar.implicitWidth
-                y: BorderConfig.thickness
-                width: win.width - bar.implicitWidth - BorderConfig.thickness
-                height: win.height - BorderConfig.thickness * 2
+                y: Config.border.thickness
+                width: win.width - bar.implicitWidth - Config.border.thickness
+                height: win.height - Config.border.thickness * 2
                 intersection: Intersection.Xor
 
                 regions: regions.instances
@@ -55,7 +55,7 @@ Variants {
                     required property Item modelData
 
                     x: modelData.x + bar.implicitWidth
-                    y: modelData.y + BorderConfig.thickness
+                    y: modelData.y + Config.border.thickness
                     width: modelData.width
                     height: modelData.height
                     intersection: Intersection.Subtract

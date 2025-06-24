@@ -10,6 +10,7 @@ import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
+import QtQuick.Layouts
 
 Item {
     id: root
@@ -28,8 +29,8 @@ Item {
         return `${Math.floor(length / 60)}:${Math.floor(length % 60).toString().padStart(2, "0")}`;
     }
 
-    implicitWidth: cover.implicitWidth + DashboardConfig.sizes.mediaVisualiserSize * 2 + details.implicitWidth + details.anchors.leftMargin + bongocat.implicitWidth + bongocat.anchors.leftMargin * 2 + Appearance.padding.large * 2
-    implicitHeight: Math.max(cover.implicitHeight + DashboardConfig.sizes.mediaVisualiserSize * 2, details.implicitHeight, bongocat.implicitHeight) + Appearance.padding.large * 2
+    implicitWidth: cover.implicitWidth + Config.dashboard.sizes.mediaVisualiserSize * 2 + details.implicitWidth + details.anchors.leftMargin + bongocat.implicitWidth + bongocat.anchors.leftMargin * 2 + Appearance.padding.large * 2
+    implicitHeight: Math.max(cover.implicitHeight + Config.dashboard.sizes.mediaVisualiserSize * 2, details.implicitHeight, bongocat.implicitHeight) + Appearance.padding.large * 2
 
     Behavior on playerProgress {
         NumberAnimation {
@@ -41,7 +42,7 @@ Item {
 
     Timer {
         running: root.shouldUpdate && (Players.active?.isPlaying ?? false)
-        interval: DashboardConfig.mediaUpdateInterval
+        interval: Config.dashboard.mediaUpdateInterval
         triggeredOnStart: true
         repeat: true
         onTriggered: Players.active?.positionChanged()
@@ -66,7 +67,7 @@ Item {
         property color colour: Colours.palette.m3primary
 
         anchors.fill: cover
-        anchors.margins: -DashboardConfig.sizes.mediaVisualiserSize
+        anchors.margins: -Config.dashboard.sizes.mediaVisualiserSize
 
         onColourChanged: requestPaint()
 
@@ -81,7 +82,7 @@ Item {
             ctx.lineWidth = 360 / len - Appearance.spacing.small / 4;
             ctx.lineCap = "round";
 
-            const size = DashboardConfig.sizes.mediaVisualiserSize;
+            const size = Config.dashboard.sizes.mediaVisualiserSize;
             const cx = centerX;
             const cy = centerY;
             const rx = innerX + ctx.lineWidth / 2;
@@ -116,10 +117,10 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: Appearance.padding.large + DashboardConfig.sizes.mediaVisualiserSize
+        anchors.leftMargin: Appearance.padding.large + Config.dashboard.sizes.mediaVisualiserSize
 
-        implicitWidth: DashboardConfig.sizes.mediaCoverArtSize
-        implicitHeight: DashboardConfig.sizes.mediaCoverArtSize
+        implicitWidth: Config.dashboard.sizes.mediaCoverArtSize
+        implicitHeight: Config.dashboard.sizes.mediaCoverArtSize
 
         color: Colours.palette.m3surfaceContainerHigh
         radius: Appearance.rounding.full
@@ -145,7 +146,7 @@ Item {
         }
     }
 
-    Column {
+    ColumnLayout {
         id: details
 
         anchors.verticalCenter: parent.verticalCenter
@@ -154,54 +155,35 @@ Item {
 
         spacing: Appearance.spacing.small
 
-        StyledText {
+        ElideText {
             id: title
 
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            animate: true
-            horizontalAlignment: Text.AlignHCenter
-            text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
+            label: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
             color: Colours.palette.m3primary
             font.pointSize: Appearance.font.size.normal
-
-            width: parent.implicitWidth
-            elide: Text.ElideRight
         }
 
-        StyledText {
+        ElideText {
             id: album
 
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            animate: true
-            horizontalAlignment: Text.AlignHCenter
-            text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
+            label: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
             color: Colours.palette.m3outline
             font.pointSize: Appearance.font.size.small
-
-            width: parent.implicitWidth
-            elide: Text.ElideRight
         }
 
-        StyledText {
+        ElideText {
             id: artist
 
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            animate: true
-            horizontalAlignment: Text.AlignHCenter
-            text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
+            label: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
             color: Colours.palette.m3secondary
-
-            width: parent.implicitWidth
-            elide: Text.ElideRight
         }
 
-        Row {
+        RowLayout {
             id: controls
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: Appearance.spacing.small
+            Layout.bottomMargin: Appearance.spacing.smaller
 
             spacing: Appearance.spacing.small
 
@@ -299,9 +281,7 @@ Item {
         }
 
         Item {
-            anchors.left: parent.left
-            anchors.right: parent.right
-
+            Layout.fillWidth: true
             implicitHeight: Math.max(position.implicitHeight, length.implicitHeight)
 
             StyledText {
@@ -325,9 +305,8 @@ Item {
             }
         }
 
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
             spacing: Appearance.spacing.small
 
             Control {
@@ -349,7 +328,7 @@ Item {
 
                 property bool expanded
 
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
 
                 implicitWidth: slider.implicitWidth / 2
                 implicitHeight: currentPlayer.implicitHeight + Appearance.padding.small * 2
@@ -550,6 +529,28 @@ Item {
             fillMode: AnimatedImage.PreserveAspectFit
         }
     }
+
+    component ElideText: StyledText {
+        id: elideText
+
+        property alias label: metrics.text
+
+        Layout.fillWidth: true
+
+        animate: true
+        horizontalAlignment: Text.AlignHCenter
+        text: metrics.elidedText
+
+        TextMetrics {
+            id: metrics
+
+            font.family: elideText.font.family
+            font.pointSize: elideText.font.pointSize
+            elide: Text.ElideRight
+            elideWidth: elideText.width
+        }
+    }
+
     component Control: StyledRect {
         id: control
 
@@ -582,7 +583,8 @@ Item {
             id: icon
 
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: font.pointSize * 0.05
+            anchors.horizontalCenterOffset: -font.pointSize * 0.02
+            anchors.verticalCenterOffset: font.pointSize * 0.02
 
             animate: true
             fill: control.fill ? 1 : 0
