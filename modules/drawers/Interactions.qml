@@ -25,16 +25,15 @@ MouseArea {
     }
 
     function withinPanelWidth(panel: Item, x: real, y: real): bool {
-        const panelX = BorderConfig.thickness + panel.x;
-        return x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
+        const panelX = Config.border.thickness + panel.x;
+        return x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
 
     function inRightPanel(panel: Item, x: real, y: real): bool {
-        return x > BorderConfig.thickness + panel.x && withinPanelHeight(panel, x, y);
+        return x > Config.border.thickness + panel.x && withinPanelHeight(panel, x, y);
     }
 
     function inTopPanel(panel: Item, x: real, y: real): bool {
-
         const panelX = Config.border.thickness + panel.x;
         return y < bar.implicitHeight + panel.y + panel.height && x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
