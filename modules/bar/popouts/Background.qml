@@ -13,7 +13,7 @@ ShapePath {
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
     property real ibr: invertBottomRounding ? -1 : 1
 
-    property real sideRounding: startX > 0 ? -1 : 1
+    property real sideRounding: startY > 0 ? -1 : 1
 
     strokeWidth: -1
     fillColor: Config.border.colour
@@ -23,6 +23,7 @@ ShapePath {
         relativeY: root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
+        direction: root.sideRounding < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
     }
     PathLine {
         relativeX: 0
@@ -55,6 +56,7 @@ ShapePath {
         relativeY: -root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
+        direction: root.sideRounding < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
     }
 
     Behavior on fillColor {
