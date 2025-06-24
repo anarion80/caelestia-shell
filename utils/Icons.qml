@@ -191,6 +191,8 @@ Singleton {
             return "speaker";
         if (icon.includes("phone"))
             return "smartphone";
+        if (icon.includes("mouse"))
+            return "mouse";
         return "bluetooth";
     }
 

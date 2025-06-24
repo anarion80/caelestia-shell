@@ -58,12 +58,12 @@ Singleton {
             stat.reload();
             meminfo.reload();
             storage.running = true;
-            cpuTemp.running = true;
             gpuUsage.running = true;
             gpuTemp.running = true;
             gpuPowerDraw.running = true;
             gpuPstate.running = true;
             gpuFanSpeed.running = true;
+            sensors.running = true;
         }
     }
 
@@ -194,6 +194,7 @@ Singleton {
     Process {
         id: gpuFanSpeed
 
+
         running: true
         command: ["sh", "-c", "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits"]
         stdout: StdioCollector {
@@ -214,4 +215,46 @@ Singleton {
             }
         }
     }
-}
+    
+    Process {
+        id: sensors
+
+        running: true
+        command: ["sensors"]
+        environment: ({
+                LANG: "C",
+                LC_ALL: "C"
+            })
+        stdout: StdioCollector {
+            onStreamFinished: {
+              let cpuTemp = text.match(/(?:Package id [0-9]+|Tdie):\s+((\+|-)[0-9.]+)(°| )C/);
+              if (!cpuTemp) {
+                  // If AMD Tdie pattern failed, try fallback on Tctl
+                  cpuTemp = text.match(/Tctl:\s+((\+|-)[0-9.]+)(°| )C/);
+              }
+              if (cpuTemp)
+                  root.cpuTemp = parseFloat(cpuTemp[1]);
+
+              let eligible = false;
+              let sum = 0;
+              let count = 0;
+
+              for (const line of text.trim().split("\n")) {
+                  if (line === "Adapter: PCI adapter")
+                      eligible = true;
+                  else if (line === "")
+                      eligible = false;
+                  else if (eligible) {
+                      const match = line.match(/^(temp[0-9]+|GPU core|edge)+:\s+\+([0-9]+\.[0-9]+)(°| )C/);
+                      if (match) {
+                          sum += parseFloat(match[2]);
+                          count++;
+                      }
+                  }
+              }
+
+              root.gpuTemp = count > 0 ? sum / count : 0;
+          }
+        }
+      }
+    }

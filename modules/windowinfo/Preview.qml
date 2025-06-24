@@ -18,7 +18,7 @@ Item {
     Layout.preferredWidth: preview.implicitWidth + Appearance.padding.large * 2
     Layout.fillHeight: true
 
-    ClippingRectangle {
+    StyledClippingRect {
         id: preview
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -29,8 +29,43 @@ Item {
 
         implicitWidth: view.implicitWidth
 
-        color: "transparent"
+        color: Colours.palette.m3surfaceContainer
         radius: Appearance.rounding.small
+
+        Loader {
+            anchors.centerIn: parent
+            active: !Hyprland.activeClient
+            asynchronous: true
+
+            sourceComponent: ColumnLayout {
+                spacing: 0
+
+                MaterialIcon {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "web_asset_off"
+                    color: Colours.palette.m3outline
+                    font.pointSize: Appearance.font.size.extraLarge * 3
+                    font.variableAxes: ({
+                            opsz: Appearance.font.size.extraLarge * 3
+                        })
+                }
+
+                StyledText {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("No active client")
+                    color: Colours.palette.m3outline
+                    font.pointSize: Appearance.font.size.extraLarge
+                    font.weight: 500
+                }
+
+                StyledText {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("Try switching to a window")
+                    color: Colours.palette.m3outline
+                    font.pointSize: Appearance.font.size.large
+                }
+            }
+        }
 
         ScreencopyView {
             id: view

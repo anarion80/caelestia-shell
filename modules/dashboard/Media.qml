@@ -182,6 +182,8 @@ Item {
             id: controls
 
             Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: Appearance.spacing.small
+            Layout.bottomMargin: Appearance.spacing.smaller
 
             spacing: Appearance.spacing.small
 

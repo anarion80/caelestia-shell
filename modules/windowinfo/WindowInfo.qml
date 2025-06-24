@@ -40,6 +40,18 @@ Item {
 
                 Details {}
             }
+
+            StyledRect {
+                Layout.fillWidth: true
+                Layout.preferredHeight: buttons.implicitHeight
+
+                color: Colours.palette.m3surfaceContainer
+                radius: Appearance.rounding.normal
+
+                Buttons {
+                    id: buttons
+                }
+            }
         }
     }
 }

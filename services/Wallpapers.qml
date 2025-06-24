@@ -42,7 +42,9 @@ Singleton {
     function preview(path: string): void {
         previewPath = path;
         showPreview = true;
-        getPreviewColoursProc.running = true;
+
+        if (Colours.scheme === "dynamic")
+            getPreviewColoursProc.running = true;
     }
 
     function stopPreview(): void {
