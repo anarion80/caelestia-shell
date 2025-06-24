@@ -6,14 +6,15 @@ JsonObject {
         property int windowPreviewSize: 400
         property int trayMenuWidth: 300
         property int batteryWidth: 250
+        property int activeWindowWidth: 500
     }
 
     property JsonObject workspaces: JsonObject {
         property int shown: 8
         property bool rounded: true
         property bool activeIndicator: true
-        property bool occupiedBg: false
-        property bool showWindows: false
+        property bool occupiedBg: true
+        property bool showWindows: true
         property bool activeTrail: true
         property string label: "  "
         property string occupiedLabel: "󰮯 "

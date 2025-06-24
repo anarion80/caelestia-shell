@@ -1,8 +1,21 @@
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import "root:/utils"
 import QtQuick
 
+// Column {
+//   id: root
+//
+//   spacing: Appearance.spacing.normal
+//
+//   StyledText {
+//     text: Icons.osIcon
+//     font.pointSize: Appearance.font.size.smaller
+//     font.family: Appearance.font.family.mono
+//     color: Colours.palette.m3tertiary
+//   }
+// }
 Column {
     id: root
 

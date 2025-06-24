@@ -91,8 +91,8 @@ Item {
         required property string name
         property bool shouldBeActive: root.currentName === name
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
 
         opacity: 0
         scale: 0.8

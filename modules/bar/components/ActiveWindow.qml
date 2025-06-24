@@ -18,9 +18,9 @@ Item {
 
     MouseArea {
         anchors.top: parent.top
-        anchors.bottom: child.top
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.right: child.left
 
         onWheel: event => {
             if (event.angleDelta.y > 0)
@@ -30,20 +30,20 @@ Item {
         }
     }
 
-    MouseArea {
-        anchors.top: child.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        onWheel: event => {
-            const monitor = root.monitor;
-            if (event.angleDelta.y > 0)
-                monitor.setBrightness(monitor.brightness + 0.1);
-            else if (event.angleDelta.y < 0)
-                monitor.setBrightness(monitor.brightness - 0.1);
-        }
-    }
+    // MouseArea {
+    //     anchors.top: parent.top
+    //     anchors.bottom: parent.bottom
+    //     anchors.left: child.right
+    //     anchors.right: parent.right
+    //
+    //     onWheel: event => {
+    //         const monitor = root.monitor;
+    //         if (event.angleDelta.y > 0)
+    //             monitor.setBrightness(monitor.brightness + 0.1);
+    //         else if (event.angleDelta.y < 0)
+    //             monitor.setBrightness(monitor.brightness - 0.1);
+    //     }
+    // }
 
     Item {
         id: child
@@ -53,8 +53,9 @@ Item {
         anchors.centerIn: parent
 
         clip: true
-        implicitWidth: Math.max(icon.implicitWidth, current.implicitHeight)
-        implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
+        implicitWidth: icon.implicitWidth + current.implicitWidth + current.anchors.leftMargin
+        // implicitWidth: 400 
+        implicitHeight: Math.max(icon.implicitHeight, current.implicitHeight)
 
         MaterialIcon {
             id: icon
@@ -63,7 +64,7 @@ Item {
             text: Icons.getAppCategoryIcon(Hyprland.activeClient?.wmClass, "desktop_windows")
             color: root.colour
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         Title {
@@ -81,7 +82,7 @@ Item {
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             elide: Qt.ElideRight
-            elideWidth: root.height - icon.height
+            elideWidth: BarConfig.sizes.activeWindowWidth - icon.width
 
             onTextChanged: {
                 const next = child.current === text1 ? text2 : text1;
@@ -111,23 +112,23 @@ Item {
     component Title: StyledText {
         id: text
 
-        anchors.horizontalCenter: icon.horizontalCenter
-        anchors.top: icon.bottom
-        anchors.topMargin: Appearance.spacing.small
+        anchors.verticalCenter: icon.verticalCenter
+        anchors.left: icon.right
+        anchors.leftMargin: Appearance.spacing.small
 
         font.pointSize: metrics.font.pointSize
         font.family: metrics.font.family
         color: root.colour
         opacity: child.current === this ? 1 : 0
 
-        transform: Rotation {
-            angle: 90
-            origin.x: text.implicitHeight / 2
-            origin.y: text.implicitHeight / 2
-        }
+        // transform: Rotation {
+        //     angle: 90
+        //     origin.x: text.implicitHeight / 2
+        //     origin.y: text.implicitHeight / 2
+        // }
 
-        width: implicitHeight
-        height: implicitWidth
+        width: implicitWidth
+        height: implicitHeight
 
         Behavior on opacity {
             NumberAnimation {

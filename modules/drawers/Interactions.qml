@@ -24,13 +24,19 @@ MouseArea {
         return y >= panelY - Config.border.rounding && y <= panelY + panel.height + Config.border.rounding;
     }
 
+    function withinPanelWidth(panel: Item, x: real, y: real): bool {
+        const panelX = BorderConfig.thickness + panel.x;
+        return x >= panelX - BorderConfig.rounding && x <= panelX + panel.width + BorderConfig.rounding;
+    }
+
     function inRightPanel(panel: Item, x: real, y: real): bool {
-        return x > bar.implicitWidth + panel.x && withinPanelHeight(panel, x, y);
+        return x > BorderConfig.thickness + panel.x && withinPanelHeight(panel, x, y);
     }
 
     function inTopPanel(panel: Item, x: real, y: real): bool {
-        const panelX = bar.implicitWidth + panel.x;
-        return y < Config.border.thickness + panel.y + panel.height && x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
+
+        const panelX = Config.border.thickness + panel.x;
+        return y < bar.implicitHeight + panel.y + panel.height && x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
 
     anchors.fill: parent
@@ -69,11 +75,11 @@ MouseArea {
         }
 
         // Show/hide session on drag
-        if (pressed && withinPanelHeight(panels.session, x, y)) {
-            const dragX = x - dragStart.x;
-            if (dragX < -Config.session.dragThreshold)
+        if (pressed && withinPanelWidth(panels.session, x, y)) {
+            const dragY = y - dragStart.y;
+            if (dragY < -Config.session.dragThreshold)
                 visibilities.session = true;
-            else if (dragX > Config.session.dragThreshold)
+            else if (dragY > Config.session.dragThreshold)
                 visibilities.session = false;
         }
 
@@ -90,13 +96,13 @@ MouseArea {
 
         // Show popouts on hover
         const popout = panels.popouts;
-        if (x < bar.implicitWidth + popout.width) {
-            if (x < bar.implicitWidth)
+        if (y < bar.implicitHeight + popout.height) {
+            if (y < bar.implicitHeight)
                 // Handle like part of bar
-                bar.checkPopout(y);
+                bar.checkPopout(x);
             else
                 // Keep on hover
-                popouts.hasCurrent = withinPanelHeight(popout, x, y);
+                popouts.hasCurrent = withinPanelWidth(popout, x, y);
         } else
             popouts.hasCurrent = false;
     }
