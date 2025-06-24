@@ -9,6 +9,7 @@ Singleton {
 
     property real cpuPerc
     property real cpuTemp
+    property string gpuType: "NONE"
     property real gpuPerc
     property real gpuTemp
     property real gpuPstate
@@ -156,13 +157,37 @@ Singleton {
     }
 
     Process {
+        id: gpuTypeCheck
+
+        running: true
+        command: ["sh", "-c", "if ls /sys/class/drm/card*/device/gpu_busy_percent 2>/dev/null | grep -q .; then echo GENERIC; elif command -v nvidia-smi >/dev/null; then echo NVIDIA; else echo NONE; fi"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuType = text.trim();
+                gpuUsage.running = true;
+            }
+        }
+    }
+
+    Process {
         id: gpuUsage
 
         running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits"]
+        command: root.gpuType === "GENERIC" ? ["sh", "-c", "cat /sys/class/drm/card*/device/gpu_busy_percent"] : root.gpuType === "NVIDIA" ? ["nvidia-smi", "--query-gpu=utilization.gpu,temperature.gpu", "--format=csv,noheader,nounits"] : ["echo"]
         stdout: StdioCollector {
             onStreamFinished: {
-                root.gpuPerc = text.trim() / 100;
+                if (root.gpuType === "GENERIC") {
+                    const percs = text.trim().split("\n");
+                    const sum = percs.reduce((acc, d) => acc + parseInt(d, 10), 0);
+                    root.gpuPerc = sum / percs.length / 100;
+                } else if (root.gpuType === "NVIDIA") {
+                    const [usage, temp] = text.trim().split(",");
+                    root.gpuPerc = parseInt(usage, 10) / 100;
+                    root.gpuTemp = parseInt(temp, 10);
+                } else {
+                    root.gpuPerc = 0;
+                    root.gpuTemp = 0;
+                }
             }
         }
     }
@@ -227,31 +252,38 @@ Singleton {
             })
         stdout: StdioCollector {
             onStreamFinished: {
-              let cpuTemp = text.match(/(?:Package id [0-9]+|Tdie):\s+((\+|-)[0-9.]+)(°| )C/);
-              if (!cpuTemp) {
-                  // If AMD Tdie pattern failed, try fallback on Tctl
-                  cpuTemp = text.match(/Tctl:\s+((\+|-)[0-9.]+)(°| )C/);
-              }
-              if (cpuTemp)
-                  root.cpuTemp = parseFloat(cpuTemp[1]);
+                let cpuTemp = text.match(/(?:Package id [0-9]+|Tdie):\s+((\+|-)[0-9.]+)(°| )C/);
+                if (!cpuTemp)
+                    // If AMD Tdie pattern failed, try fallback on Tctl
+                    cpuTemp = text.match(/Tctl:\s+((\+|-)[0-9.]+)(°| )C/);
 
-              let eligible = false;
-              let sum = 0;
-              let count = 0;
+                if (cpuTemp)
+                    root.cpuTemp = parseFloat(cpuTemp[1]);
 
-              for (const line of text.trim().split("\n")) {
-                  if (line === "Adapter: PCI adapter")
-                      eligible = true;
-                  else if (line === "")
-                      eligible = false;
-                  else if (eligible) {
-                      const match = line.match(/^(temp[0-9]+|GPU core|edge)+:\s+\+([0-9]+\.[0-9]+)(°| )C/);
-                      if (match) {
-                          sum += parseFloat(match[2]);
-                          count++;
-                      }
-                  }
-              }
+                if (root.gpuType !== "GENERIC")
+                    return;
+
+                let eligible = false;
+                let sum = 0;
+                let count = 0;
+
+                for (const line of text.trim().split("\n")) {
+                    if (line === "Adapter: PCI adapter")
+                        eligible = true;
+                    else if (line === "")
+                        eligible = false;
+                    else if (eligible) {
+                        let match = line.match(/^(temp[0-9]+|GPU core|edge)+:\s+\+([0-9]+\.[0-9]+)(°| )C/);
+                        if (!match)
+                            // Fall back to junction/mem if GPU doesn't have edge temp (for AMD GPUs)
+                            match = line.match(/^(junction|mem)+:\s+\+([0-9]+\.[0-9]+)(°| )C/);
+
+                        if (match) {
+                            sum += parseFloat(match[2]);
+                            count++;
+                        }
+                    }
+                }
 
               root.gpuTemp = count > 0 ? sum / count : 0;
           }
