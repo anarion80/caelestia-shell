@@ -9,8 +9,10 @@ import QtQuick.Controls
 RowLayout {
     id: root
 
-    spacing: Appearance.spacing.large * 2
-    width: Config.lock.sizes.mediaWidth
+    required property bool isLarge
+
+    spacing: Appearance.spacing.large * (isLarge ? 2 : 1.5)
+    width: isLarge ? Config.lock.sizes.mediaWidth : Config.lock.sizes.mediaWidthSmall
 
     property real playerProgress: {
         const active = Players.active;
@@ -34,10 +36,13 @@ RowLayout {
     }
 
     Item {
-        Layout.bottomMargin: Config.lock.sizes.border / 2
+        Layout.alignment: Qt.AlignVCenter
+        Layout.topMargin: root.isLarge ? 0 : Config.lock.sizes.border / 2
+        Layout.bottomMargin: root.isLarge ? Config.lock.sizes.border / 2 : 0
+        Layout.leftMargin: root.isLarge ? 0 : Config.lock.sizes.border / 2
 
-        implicitWidth: Config.lock.sizes.mediaCoverSize
-        implicitHeight: Config.lock.sizes.mediaCoverSize
+        implicitWidth: root.isLarge ? Config.lock.sizes.mediaCoverSize : Config.lock.sizes.mediaCoverSizeSmall
+        implicitHeight: root.isLarge ? Config.lock.sizes.mediaCoverSize : Config.lock.sizes.mediaCoverSizeSmall
 
         ClippingWrapperRectangle {
             anchors.fill: parent
@@ -97,7 +102,7 @@ RowLayout {
 
                 text: "art_track"
                 color: Colours.palette.m3onSurfaceVariant
-                font.pointSize: Config.lock.sizes.mediaCoverSize * 0.4
+                font.pointSize: (root.isLarge ? Config.lock.sizes.mediaCoverSize : Config.lock.sizes.mediaCoverSizeSmall) * 0.4
             }
 
             Image {
@@ -114,11 +119,12 @@ RowLayout {
 
     ColumnLayout {
         Layout.alignment: Qt.AlignVCenter
-        Layout.bottomMargin: Config.lock.sizes.border / 2
-        Layout.rightMargin: Config.lock.sizes.border / 2
+        Layout.topMargin: root.isLarge ? 0 : Config.lock.sizes.border / 2
+        Layout.bottomMargin: root.isLarge ? Config.lock.sizes.border / 2 : 0
+        Layout.rightMargin: root.isLarge ? Config.lock.sizes.border / 2 : 0
         Layout.fillWidth: true
 
-        spacing: Appearance.spacing.small
+        spacing: root.isLarge ? Appearance.spacing.small : Appearance.spacing.small / 2
 
         StyledText {
             Layout.fillWidth: true
@@ -126,7 +132,7 @@ RowLayout {
             animate: true
             text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
             color: Colours.palette.m3primary
-            font.pointSize: Appearance.font.size.large
+            font.pointSize: root.isLarge ? Appearance.font.size.large : Appearance.font.size.larger
             elide: Text.ElideRight
         }
 
@@ -136,7 +142,7 @@ RowLayout {
             animate: true
             text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
             color: Colours.palette.m3outline
-            font.pointSize: Appearance.font.size.larger
+            font.pointSize: root.isLarge ? Appearance.font.size.larger : Appearance.font.size.normal
             elide: Text.ElideRight
         }
 
@@ -146,7 +152,7 @@ RowLayout {
             animate: true
             text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
             color: Colours.palette.m3secondary
-            font.pointSize: Appearance.font.size.larger
+            font.pointSize: root.isLarge ? Appearance.font.size.larger : Appearance.font.size.normal
             elide: Text.ElideRight
         }
 
@@ -160,7 +166,7 @@ RowLayout {
             Slider {
                 id: slider
 
-                Layout.rightMargin: Appearance.spacing.small
+                Layout.rightMargin: root.isLarge ? Appearance.spacing.small : 0
                 Layout.fillWidth: true
                 implicitHeight: Appearance.padding.normal * 3
 
@@ -225,6 +231,7 @@ RowLayout {
             Control {
                 icon: "skip_previous"
                 canUse: Players.active?.canGoPrevious ?? false
+                fontSize: root.isLarge ? Appearance.font.size.extraLarge : Appearance.font.size.large * 1.2
 
                 function onClicked(): void {
                     Players.active?.previous();
@@ -234,6 +241,7 @@ RowLayout {
             Control {
                 icon: Players.active?.isPlaying ? "pause" : "play_arrow"
                 canUse: Players.active?.canTogglePlaying ?? false
+                fontSize: root.isLarge ? Appearance.font.size.extraLarge : Appearance.font.size.large * 1.2
                 primary: true
 
                 function onClicked(): void {
@@ -244,6 +252,7 @@ RowLayout {
             Control {
                 icon: "skip_next"
                 canUse: Players.active?.canGoNext ?? false
+                fontSize: root.isLarge ? Appearance.font.size.extraLarge : Appearance.font.size.large * 1.2
 
                 function onClicked(): void {
                     Players.active?.next();
@@ -257,7 +266,7 @@ RowLayout {
 
         required property string icon
         required property bool canUse
-        property int fontSize: Appearance.font.size.extraLarge
+        required property int fontSize
         property int padding
         property bool fill: true
         property bool primary

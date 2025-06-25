@@ -12,6 +12,8 @@ Scope {
         WlSessionLock {
             id: lock
 
+            property bool unlocked
+
             locked: true
 
             onLockedChanged: {
