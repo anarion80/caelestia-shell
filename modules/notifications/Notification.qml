@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import "root:/utils"
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
@@ -181,34 +182,7 @@ StyledRect {
                     anchors.verticalCenterOffset: Appearance.font.size.large * 0.02
 
                     sourceComponent: MaterialIcon {
-                        text: {
-                            const summary = root.modelData.summary.toLowerCase();
-                            if (summary.includes("reboot"))
-                                return "restart_alt";
-                            if (summary.includes("recording"))
-                                return "screen_record";
-                            if (summary.includes("battery"))
-                                return "power";
-                            if (summary.includes("screenshot"))
-                                return "screenshot_monitor";
-                            if (summary.includes("welcome"))
-                                return "waving_hand";
-                            if (summary.includes("time") || summary.includes("a break"))
-                                return "schedule";
-                            if (summary.includes("installed"))
-                                return "download";
-                            if (summary.includes("update"))
-                                return "update";
-                            if (summary.includes("unable to"))
-                                return "deployed_code_alert";
-                            if (summary.includes("profile"))
-                                return "person";
-                            if (summary.includes("file"))
-                                return "folder_copy";
-                            if (root.modelData.urgency === NotificationUrgency.Critical)
-                                return "release_alert";
-                            return "chat";
-                        }
+                        text: Icons.getNotifIcon(root.modelData.summary.toLowerCase(), root.modelData.urgency)
 
                         color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3onSurface : Colours.palette.m3onTertiaryContainer
                         font.pointSize: Appearance.font.size.large

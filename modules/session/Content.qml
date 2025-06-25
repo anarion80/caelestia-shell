@@ -51,17 +51,17 @@ Column {
         KeyNavigation.down: hibernate
     }
 
-    // AnimatedImage {
-    //     width: SessionConfig.sizes.button
-    //     height: SessionConfig.sizes.button
-    //     sourceSize.width: width
-    //     sourceSize.height: height
-    //
-    //     playing: visible
-    //     asynchronous: true
-    //     speed: 0.7
-    //     source: "root:/assets/kurukuru.gif"
-    // }
+    AnimatedImage {
+        width: Config.session.sizes.button
+        height: Config.session.sizes.button
+        sourceSize.width: width
+        sourceSize.height: height
+
+        playing: visible
+        asynchronous: true
+        speed: 0.7
+        source: Config.paths.sessionGif
+    }
 
     SessionButton {
         id: hibernate
