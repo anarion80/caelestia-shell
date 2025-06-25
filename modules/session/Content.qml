@@ -22,7 +22,7 @@ Column {
         id: logout
 
         icon: "logout"
-        command: ["loginctl", "terminate-user", ""]
+        command: ["hyprland", "dispatch", "exit"]
 
         KeyNavigation.down: shutdown
 
