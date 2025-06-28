@@ -118,7 +118,7 @@ WrapperItem {
             Layout.fillHeight: true
 
             model: ScriptModel {
-                values: [...Notifs.popups].reverse()
+                values: [...Notifs.list].reverse()
             }
 
             orientation: Qt.Vertical

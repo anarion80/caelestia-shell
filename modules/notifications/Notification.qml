@@ -186,9 +186,6 @@ StyledRect {
 
                         color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : root.modelData.urgency === NotificationUrgency.Low ? Colours.palette.m3onSurface : Colours.palette.m3onTertiaryContainer
                         font.pointSize: Appearance.font.size.large
-                        font.variableAxes: ({
-                                opsz: Appearance.font.size.large
-                            })
                     }
                 }
             }

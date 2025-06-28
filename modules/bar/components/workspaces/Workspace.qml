@@ -49,9 +49,10 @@ Item {
 
         anchors.verticalCenter: indicator.verticalCenter
         anchors.left: indicator.right
+        anchors.leftMargin: -Config.bar.sizes.innerHeight / 10
 
         sourceComponent: Row {
-            spacing: Appearance.spacing.small
+            spacing: 0
 
             add: Transition {
                 Anim {
@@ -75,13 +76,14 @@ Item {
 
             Repeater {
                 model: ScriptModel {
-                    values: Hyprland.clients.filter(c => c.workspace?.id === root.ws)
+                    values: Hyprland.toplevels.values.filter(c => c.workspace?.id === root.ws)
                 }
 
                 MaterialIcon {
-                    required property Hyprland.Client modelData
+                    required property var modelData
 
-                    text: Icons.getAppCategoryIcon(modelData.wmClass, "terminal")
+                    grade: 0
+                    text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
                     color: Colours.palette.m3onSurfaceVariant
                 }
             }

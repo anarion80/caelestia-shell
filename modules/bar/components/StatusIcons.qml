@@ -35,7 +35,7 @@ Item {
 
         anchors.verticalCenter: network.verticalCenter
         anchors.left: network.right
-        anchors.leftMargin: Appearance.spacing.small
+        anchors.leftMargin: Appearance.spacing.smaller / 2
 
         animate: true
         text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
@@ -47,7 +47,9 @@ Item {
 
         anchors.verticalCenter: bluetooth.verticalCenter
         anchors.left: bluetooth.right
-        anchors.leftMargin: Appearance.spacing.small
+        anchors.leftMargin: Appearance.spacing.smaller / 2
+
+        spacing: Appearance.spacing.smaller / 2
 
         Repeater {
             id: repeater
@@ -72,7 +74,7 @@ Item {
 
         anchors.verticalCenter: devices.verticalCenter
         anchors.left: repeater.count > 0 ? devices.right : bluetooth.right
-        anchors.leftMargin: Appearance.spacing.small
+        anchors.leftMargin: Appearance.spacing.smaller / 2
 
         animate: true
         text: {

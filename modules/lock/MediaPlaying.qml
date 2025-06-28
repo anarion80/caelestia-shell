@@ -100,6 +100,7 @@ RowLayout {
             MaterialIcon {
                 anchors.centerIn: parent
 
+                grade: 200
                 text: "art_track"
                 color: Colours.palette.m3onSurfaceVariant
                 font.pointSize: (root.isLarge ? Config.lock.sizes.mediaCoverSize : Config.lock.sizes.mediaCoverSizeSmall) * 0.4

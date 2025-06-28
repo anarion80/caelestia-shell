@@ -61,7 +61,7 @@ Item {
             id: icon
 
             animate: true
-            text: Icons.getAppCategoryIcon(Hyprland.activeClient?.wmClass, "desktop_windows")
+            text: Icons.getAppCategoryIcon(Hyprland.activeToplevel?.lastIpcObject.class, "desktop_windows")
             color: root.colour
 
             anchors.verticalCenter: parent.verticalCenter
@@ -78,7 +78,7 @@ Item {
         TextMetrics {
             id: metrics
 
-            text: Hyprland.activeClient?.title ?? qsTr("Desktop")
+            text: Hyprland.activeToplevel?.title ?? qsTr("Desktop")
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             elide: Qt.ElideRight

@@ -97,9 +97,22 @@ Singleton {
         id: getWallsProc
 
         running: true
-        command: ["find", Config.paths.wallpaperDir, "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
+        command: ["find", Paths.expandTilde(Config.paths.wallpaperDir), "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
         stdout: StdioCollector {
             onStreamFinished: wallpapers.model = text.trim().split("\n").filter(w => root.extensions.includes(w.slice(w.lastIndexOf(".") + 1))).sort()
+        }
+    }
+
+    Process {
+        id: watchWallsProc
+
+        running: true
+        command: ["inotifywait", "-r", "-e", "close_write,moved_to,create", "-m", Paths.expandTilde(Config.paths.wallpaperDir)]
+        stdout: SplitParser {
+            onRead: data => {
+                if (root.extensions.includes(data.slice(data.lastIndexOf(".") + 1)))
+                    getWallsProc.running = true;
+            }
         }
     }
 
@@ -108,6 +121,8 @@ Singleton {
 
         function onWallpaperDirChanged(): void {
             getWallsProc.running = true;
+            watchWallsProc.running = false;
+            watchWallsProc.running = true;
         }
     }
 

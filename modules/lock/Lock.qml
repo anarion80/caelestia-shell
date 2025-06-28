@@ -45,5 +45,13 @@ Scope {
         function lock(): void {
             loader.activeAsync = true;
         }
+
+        function unlock(): void {
+            loader.item.locked = false;
+        }
+
+        function isLocked(): bool {
+            return loader.active;
+        }
     }
 }

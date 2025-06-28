@@ -25,6 +25,8 @@ Singleton {
     property real lastCpuIdle
     property real lastCpuTotal
 
+    property int refCount
+
     function formatKib(kib: real): var {
         const mib = 1024;
         const gib = 1024 ** 2;
@@ -52,9 +54,10 @@ Singleton {
     }
 
     Timer {
-        running: true
+        running: root.refCount > 0
         interval: 1000
         repeat: true
+        triggeredOnStart: true
         onTriggered: {
             stat.reload();
             meminfo.reload();
@@ -103,7 +106,6 @@ Singleton {
     Process {
         id: storage
 
-        running: true
         command: ["sh", "-c", "/bin/df | grep '^/dev/' | awk '{print $1, $3, $4}'"]
         stdout: StdioCollector {
             onStreamFinished: {
@@ -162,17 +164,13 @@ Singleton {
         running: true
         command: ["sh", "-c", "if ls /sys/class/drm/card*/device/gpu_busy_percent 2>/dev/null | grep -q .; then echo GENERIC; elif command -v nvidia-smi >/dev/null; then echo NVIDIA; else echo NONE; fi"]
         stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuType = text.trim();
-                gpuUsage.running = true;
-            }
+            onStreamFinished: root.gpuType = text.trim()
         }
     }
 
     Process {
         id: gpuUsage
 
-        running: true
         command: root.gpuType === "GENERIC" ? ["sh", "-c", "cat /sys/class/drm/card*/device/gpu_busy_percent"] : root.gpuType === "NVIDIA" ? ["nvidia-smi", "--query-gpu=utilization.gpu,temperature.gpu", "--format=csv,noheader,nounits"] : ["echo"]
         stdout: StdioCollector {
             onStreamFinished: {
@@ -244,7 +242,6 @@ Singleton {
     Process {
         id: sensors
 
-        running: true
         command: ["sensors"]
         environment: ({
                 LANG: "C",

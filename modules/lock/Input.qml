@@ -37,6 +37,7 @@ ColumnLayout {
 
                 text: "person"
                 fill: 1
+                grade: 200
                 font.pointSize: Config.lock.sizes.faceSize / 2
             }
 
