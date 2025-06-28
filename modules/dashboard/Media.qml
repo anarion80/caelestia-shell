@@ -15,7 +15,6 @@ import QtQuick.Layouts
 Item {
     id: root
 
-    required property bool shouldUpdate
     required property PersistentProperties visibilities
 
     property real playerProgress: {
@@ -41,7 +40,7 @@ Item {
     }
 
     Timer {
-        running: root.shouldUpdate && (Players.active?.isPlaying ?? false)
+        running: Players.active?.isPlaying ?? false
         interval: Config.dashboard.mediaUpdateInterval
         triggeredOnStart: true
         repeat: true
@@ -52,8 +51,7 @@ Item {
         target: Cava
 
         function onValuesChanged(): void {
-            if (root.shouldUpdate)
-                visualiser.requestPaint();
+            visualiser.requestPaint();
         }
     }
 
@@ -110,6 +108,10 @@ Item {
                 easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
+
+        Ref {
+            service: Cava
+        }
     }
 
     StyledClippingRect {
@@ -128,6 +130,7 @@ Item {
         MaterialIcon {
             anchors.centerIn: parent
 
+            grade: 200
             text: "art_track"
             color: Colours.palette.m3onSurfaceVariant
             font.pointSize: (parent.width * 0.4) || 1
@@ -522,9 +525,9 @@ Item {
             width: visualiser.width * 0.75
             height: visualiser.height * 0.75
 
-            playing: root.shouldUpdate && (Players.active?.isPlaying ?? false)
+            playing: Players.active?.isPlaying ?? false
             speed: BeatDetector.bpm / 300
-            source: Config.paths.mediaGif
+            source: Paths.expandTilde(Config.paths.mediaGif)
             asynchronous: true
             fillMode: AnimatedImage.PreserveAspectFit
         }
