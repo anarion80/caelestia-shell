@@ -36,7 +36,7 @@ MouseArea {
     property real sw: Math.abs(sx - ex)
     property real sh: Math.abs(sy - ey)
 
-    property list<var> clients: Hyprland.toplevels.values.filter(c => c.workspace.id === Hyprland.activeWsId).sort((a, b) => {
+    property list<var> clients: Hyprland.toplevels.values.filter(c => c.workspace?.id === Hyprland.activeWsId).sort((a, b) => {
         // Pinned first, then floating, then any other
         if (a.lastIpcObject.pinned === b.lastIpcObject.pinned)
             return a.lastIpcObject.floating === b.lastIpcObject.floating ? 0 : a.lastIpcObject.floating ? -1 : 1;
@@ -184,11 +184,18 @@ MouseArea {
     }
 
     StyledRect {
-        id: background
-
         anchors.fill: parent
         color: Colours.palette.m3secondaryContainer
-        visible: false
+        opacity: 0.3
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            maskSource: selectionWrapper
+            maskEnabled: true
+            maskInverted: true
+            maskSpreadAtMin: 1
+            maskThresholdMin: 0.5
+        }
     }
 
     Item {
@@ -207,17 +214,6 @@ MouseArea {
             implicitWidth: root.sw
             implicitHeight: root.sh
         }
-    }
-
-    MultiEffect {
-        anchors.fill: parent
-        source: background
-        maskSource: selectionWrapper
-        maskEnabled: true
-        maskInverted: true
-        maskSpreadAtMin: 1
-        maskThresholdMin: 0.5
-        opacity: 0.3
     }
 
     Rectangle {

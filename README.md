@@ -45,7 +45,6 @@ Dependencies:
 -   [`networkmanager`](https://networkmanager.dev)
 -   [`lm-sensors`](https://github.com/lm-sensors/lm-sensors)
 -   [`fish`](https://github.com/fish-shell/fish-shell)
--   [`curl`](https://github.com/curl/curl)
 -   [`aubio`](https://github.com/aubio/aubio)
 -   [`libpipewire`](https://pipewire.org)
 -   `glibc`
@@ -167,7 +166,8 @@ All configuration options are in `~/.config/caelestia/shell.json`.
     "dashboard": {
         "mediaUpdateInterval": 500,
         "visualiserBars": 45,
-        "weatherLocation": "10,10"
+        "weatherLocation": "10,10",
+        "useFahrenheit": false,
     },
     "launcher": {
         "actionPrefix": ">",
