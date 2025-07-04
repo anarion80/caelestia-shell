@@ -13,7 +13,7 @@ Row {
     MaterialIcon {
         id: icon
 
-        text: "calendar_month"
+        text: "schedule"
         color: root.colour
 
         anchors.verticalCenter: parent.verticalCenter
