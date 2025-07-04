@@ -1,0 +1,50 @@
+{
+    "bar": {
+        "workspaces": {
+            "activeIndicator": true,
+            "activeLabel": "󰮯 ",
+            "activeTrail": true,
+            "label": "  ",
+            "occupiedBg": true,
+            "occupiedLabel": "󰮯 ",
+            "rounded": true,
+            "showWindows": true,
+            "shown": 8
+        }
+    },
+    "border": {
+        "rounding": 17,
+        "thickness": 5
+    },
+    "dashboard": {
+        "mediaUpdateInterval": 500,
+        "visualiserBars": 45
+    },
+    "launcher": {
+        "actionPrefix": ">",
+        "enableDangerousActions": true,
+        "maxShown": 8,
+        "maxWallpapers": 9
+    },
+    "lock": {
+        "maxNotifs": 5
+    },
+    "notifs": {
+        "actionOnClick": false,
+        "clearThreshold": 0.3,
+        "defaultExpireTimeout": 5000,
+        "expandThreshold": 20,
+        "expire": true
+    },
+    "osd": {
+        "hideDelay": 2000
+    },
+    "paths": {
+        "mediaGif": "root:/assets/bongocat.gif",
+        "sessionGif": "root:/assets/kurukuru.gif",
+        "wallpaperDir": "~/Pictures/Wallpapers"
+    },
+    "session": {
+        "dragThreshold": 30
+    }
+}
