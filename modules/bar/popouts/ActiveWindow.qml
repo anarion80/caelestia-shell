@@ -13,7 +13,7 @@ Item {
     required property Item wrapper
 
     implicitWidth: child.implicitWidth
-    implicitHeight: Hyprland.activeClient ? child.implicitHeight : -Appearance.padding.large * 2
+    implicitHeight: Hyprland.activeToplevel ? child.implicitHeight : -Appearance.padding.large * 2
 
     Column {
         id: child

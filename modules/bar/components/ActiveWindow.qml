@@ -54,8 +54,7 @@ Item {
 
         clip: true
         implicitWidth: icon.implicitWidth + current.implicitWidth + current.anchors.leftMargin
-        // implicitWidth: 400 
-        implicitHeight: Math.max(icon.implicitHeight, current.implicitHeight)
+        implicitHeight: Math.max(icon.implicitWidth, current.implicitHeight)
 
         MaterialIcon {
             id: icon
@@ -82,7 +81,7 @@ Item {
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             elide: Qt.ElideRight
-            elideWidth: BarConfig.sizes.activeWindowWidth - icon.width
+            elideWidth: Config.bar.sizes.activeWindowWidth - icon.width
 
             onTextChanged: {
                 const next = child.current === text1 ? text2 : text1;
