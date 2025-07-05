@@ -61,6 +61,6 @@ Shape {
         invertBottomRounding: wrapper.x + wrapper.width + 1 >= root.width
 
         startX: wrapper.x - rounding * sideRounding
-        startY: 0
+        startY: wrapper.y
     }
 }
