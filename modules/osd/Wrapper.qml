@@ -30,9 +30,9 @@ Item {
             NumberAnimation {
                 target: root
                 property: "implicitWidth"
-                duration: Appearance.anim.durations.expressiveFastSpatial
+                duration: Appearance.anim.durations.normal
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
             }
         },
         Transition {

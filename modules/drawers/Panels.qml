@@ -27,8 +27,6 @@ Item {
     anchors.margins: Config.border.thickness
     anchors.leftMargin: bar.implicitWidth
 
-    Component.onCompleted: Visibilities.panels[screen] = this
-
     Osd.Wrapper {
         id: osd
 
@@ -43,6 +41,9 @@ Item {
 
     Notifications.Wrapper {
         id: notifications
+
+        visibilities: root.visibilities
+        panel: root
 
         anchors.top: parent.top
         anchors.right: parent.right
