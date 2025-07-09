@@ -16,13 +16,13 @@ Item {
     implicitWidth: child.implicitWidth
     implicitHeight: child.implicitHeight
 
-    MouseArea {
+    CustomMouseArea {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: child.left
 
-        onWheel: event => {
+        function onWheel(event: WheelEvent): void {
             if (event.angleDelta.y > 0)
                 Audio.setVolume(Audio.volume + 0.1);
             else if (event.angleDelta.y < 0)
@@ -30,20 +30,20 @@ Item {
         }
     }
 
-    // MouseArea {
-    //     anchors.top: parent.top
-    //     anchors.bottom: parent.bottom
-    //     anchors.left: child.right
-    //     anchors.right: parent.right
-    //
-    //     onWheel: event => {
-    //         const monitor = root.monitor;
-    //         if (event.angleDelta.y > 0)
-    //             monitor.setBrightness(monitor.brightness + 0.1);
-    //         else if (event.angleDelta.y < 0)
-    //             monitor.setBrightness(monitor.brightness - 0.1);
-    //     }
-    // }
+    CustomMouseArea {
+        anchors.top: child.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        function onWheel(event: WheelEvent): void {
+            const monitor = root.monitor;
+            if (event.angleDelta.y > 0)
+                monitor.setBrightness(monitor.brightness + 0.1);
+            else if (event.angleDelta.y < 0)
+                monitor.setBrightness(monitor.brightness - 0.1);
+        }
+    }
 
     Item {
         id: child

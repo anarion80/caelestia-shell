@@ -11,6 +11,7 @@ Item {
     id: root
 
     required property ShellScreen screen
+    required property PersistentProperties visibilities
     required property BarPopouts.Wrapper popouts
 
     function checkPopout(x: real): void {
@@ -95,14 +96,13 @@ Item {
             implicitWidth: workspacesInner.implicitWidth + Appearance.padding.small * 2
             implicitHeight: workspacesInner.implicitHeight + Appearance.padding.small * 2
 
-            MouseArea {
+            CustomMouseArea {
                 anchors.fill: parent
                 anchors.topMargin: -Config.border.thickness
                 anchors.bottomMargin: -Config.border.thickness
                 property int scrollAccumulatedY: 0
 
-                onWheel: event => {
-                    const { angleDelta } = event;
+                function onWheel(event: WheelEvent): void {
                     const activeWs = Hyprland.activeToplevel?.workspace?.name;
 
                     if (activeWs?.startsWith("special:")) {
@@ -200,6 +200,8 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: Appearance.padding.large
+
+            visibilities: root.visibilities
         }
     }
 }

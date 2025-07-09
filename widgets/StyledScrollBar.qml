@@ -21,29 +21,15 @@ ScrollBar {
         }
     }
 
-    MouseArea {
+    CustomMouseArea {
         z: -1
         anchors.fill: parent
-        property int scrollAccumulatedY: 0
 
-        onWheel: event => {
-            scrollAccumulatedY += event.angleDelta.y;
-
-            // Check for positive scroll (up)
-            if (scrollAccumulatedY >= 120) {
+        function onWheel(event: WheelEvent): void {
+            if (event.angleDelta.y > 0)
                 root.decrease();
-                scrollAccumulatedY = 0;
-            }
-            // Check for negative scroll (down)
-            else if (scrollAccumulatedY <= -120) {
+            else if (event.angleDelta < 0)
                 root.increase();
-                scrollAccumulatedY = 0;
-            }
-
-            // Reset accumulation if direction changes
-            if (Math.sign(event.angleDelta.y) !== Math.sign(scrollAccumulatedY)) {
-                scrollAccumulatedY = event.angleDelta.y;
-            }
         }
     }
 }

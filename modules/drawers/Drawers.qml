@@ -135,6 +135,7 @@ Variants {
                 id: bar
 
                 screen: scope.modelData
+                visibilities: visibilities
                 popouts: panels.popouts
             }
         }
