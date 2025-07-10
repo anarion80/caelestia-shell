@@ -1,7 +1,7 @@
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
-import "root:/modules/bar/popouts" as BarPopouts
+import "popouts" as BarPopouts
 import "components"
 import "components/workspaces"
 import Quickshell
@@ -98,36 +98,15 @@ Item {
 
             CustomMouseArea {
                 anchors.fill: parent
-                anchors.topMargin: -Config.border.thickness
-                anchors.bottomMargin: -Config.border.thickness
-                property int scrollAccumulatedY: 0
+                anchors.leftMargin: -Config.border.thickness
+                anchors.rightMargin: -Config.border.thickness
 
                 function onWheel(event: WheelEvent): void {
                     const activeWs = Hyprland.activeToplevel?.workspace?.name;
-
-                    if (activeWs?.startsWith("special:")) {
+                    if (activeWs?.startsWith("special:"))
                         Hyprland.dispatch(`togglespecialworkspace ${activeWs.slice(8)}`);
-                        return;
-                    }
-
-                    // Update accumulated scroll
-                    if (Math.sign(angleDelta.y) !== Math.sign(scrollAccumulatedY)) {
-                        scrollAccumulatedY = 0;
-                    }
-                    scrollAccumulatedY += angleDelta.y;
-
-                    // Check scroll threshold
-                    if (Math.abs(scrollAccumulatedY) >= 120) {
-                        const currentWs = Hyprland.activeWsId;
-                        const isScrollingUp = angleDelta.y > 0;
-
-                        const targetWs = isScrollingUp 
-                            ? (currentWs > 1 ? currentWs - 1 : Config.bar.workspaces.shown)
-                            : (currentWs < Config.bar.workspaces.shown ? currentWs + 1 : 1);
-
-                        Hyprland.dispatch(`workspace ${targetWs}`);
-                        scrollAccumulatedY = 0;
-                    }
+                    else if (event.angleDelta.y < 0 || Hyprland.activeWsId > 1)
+                        Hyprland.dispatch(`workspace r${event.angleDelta.y > 0 ? "-" : "+"}1`);
                 }
             }
 

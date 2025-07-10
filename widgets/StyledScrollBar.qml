@@ -28,7 +28,7 @@ ScrollBar {
         function onWheel(event: WheelEvent): void {
             if (event.angleDelta.y > 0)
                 root.decrease();
-            else if (event.angleDelta < 0)
+            else if (event.angleDelta.y < 0)
                 root.increase();
         }
     }
