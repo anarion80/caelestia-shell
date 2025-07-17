@@ -1,2 +1,9 @@
 /result
 /.qmlls.ini
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+.direnv/*
