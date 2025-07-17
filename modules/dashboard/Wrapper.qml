@@ -1,8 +1,8 @@
 pragma ComponentBehavior: Bound
 
-import "root:/services"
-import "root:/config"
-import "root:/utils"
+import qs.services
+import qs.config
+import qs.utils
 import Quickshell
 import QtQuick
 import QtQuick.Dialogs

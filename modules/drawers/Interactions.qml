@@ -1,7 +1,7 @@
-import "root:/services"
-import "root:/config"
-import "root:/modules/bar/popouts" as BarPopouts
-import "root:/modules/osd" as Osd
+import qs.services
+import qs.config
+import qs.modules.bar.popouts as BarPopouts
+import qs.modules.osd as Osd
 import Quickshell
 import QtQuick
 

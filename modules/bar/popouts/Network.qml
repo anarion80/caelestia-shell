@@ -1,7 +1,6 @@
-import "root:/widgets"
-import "root:/services"
-import "root:/config"
-import "root:/utils"
+import qs.widgets
+import qs.services
+import qs.config
 import QtQuick
 
 // Column {

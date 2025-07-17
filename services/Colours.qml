@@ -1,7 +1,7 @@
 pragma Singleton
 
-import "root:/config"
-import "root:/utils"
+import qs.config
+import qs.utils
 import Quickshell
 import Quickshell.Io
 import QtQuick

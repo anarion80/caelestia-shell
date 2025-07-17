@@ -1,8 +1,8 @@
 pragma Singleton
 
 import "root:/utils/scripts/fuzzysort.js" as Fuzzy
-import "root:/services"
-import "root:/config"
+import qs.services
+import qs.config
 import Quickshell
 import Quickshell.Io
 import QtQuick

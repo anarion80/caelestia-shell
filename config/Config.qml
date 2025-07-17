@@ -1,6 +1,6 @@
 pragma Singleton
 
-import "root:/utils"
+import qs.utils
 import Quickshell
 import Quickshell.Io
 
@@ -16,6 +16,7 @@ Singleton {
     property alias session: adapter.session
     property alias winfo: adapter.winfo
     property alias lock: adapter.lock
+    property alias services: adapter.services
     property alias paths: adapter.paths
 
     FileView {
@@ -36,6 +37,7 @@ Singleton {
             property JsonObject session: SessionConfig {}
             property JsonObject winfo: WInfoConfig {}
             property JsonObject lock: LockConfig {}
+            property JsonObject services: ServiceConfig {}
             property JsonObject paths: UserPaths {}
         }
     }

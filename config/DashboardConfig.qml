@@ -3,8 +3,6 @@ import Quickshell.Io
 JsonObject {
     property int mediaUpdateInterval: 500
     property int visualiserBars: 45
-    property string weatherLocation: "" // A lat,long pair, e.g. "37.8267,-122.4233"
-    property bool useFahrenheit: false
 
     property JsonObject sizes: JsonObject {
         readonly property int tabIndicatorHeight: 3

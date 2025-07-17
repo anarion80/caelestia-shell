@@ -22,7 +22,9 @@ Singleton {
     }
 
     function launch(entry: DesktopEntry): void {
-        if (entry.execString.startsWith("sh -c"))
+        if (entry.runInTerminal)
+            Quickshell.execDetached(["ghostty", "-e", entry.execString]);
+        else if (entry.execString.startsWith("sh -c"))
             Quickshell.execDetached(["sh", "-c", `gtk-launch ${entry.execString}`]);
         else
             Quickshell.execDetached(["sh", "-c", `gtk-launch '${entry.id}.desktop' || gtk-launch -- ${entry.execString}`]);
