@@ -19,4 +19,8 @@ Column {
     StyledText {
         text: qsTr("Frequency: %1 MHz").arg(Network.active?.frequency ?? 0)
     }
+
+    StyledText {
+        text: qsTr("BSSID: %1").arg(Network.active?.bssid ?? "None")
+    }
 }

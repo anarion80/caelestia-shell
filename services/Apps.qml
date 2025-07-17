@@ -23,10 +23,10 @@ Singleton {
 
     function launch(entry: DesktopEntry): void {
         if (entry.runInTerminal)
-            Quickshell.execDetached(["app2unit", "--", "foot", "fish", "-C", entry.execString]);
+            Quickshell.execDetached(["gtk-launch", "ghostty", "-e", entry.execString]);
         else if (entry.execString.startsWith("sh -c"))
-            Quickshell.execDetached(["sh", "-c", `app2unit -- ${entry.execString}`]);
+            Quickshell.execDetached(["sh", "-c", `gtk-launch ${entry.execString}`]);
         else
-            Quickshell.execDetached(["sh", "-c", `app2unit -- '${entry.id}.desktop' || app2unit -- ${entry.execString}`]);
+            Quickshell.execDetached(["sh", "-c", `gtk-launch '${entry.id}.desktop' || gtk-launch -- ${entry.execString}`]);
     }
 }
