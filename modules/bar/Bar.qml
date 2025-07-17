@@ -141,16 +141,48 @@ Item {
             id: tray
 
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: clock.left
+            anchors.right: mail.left
             anchors.rightMargin: Appearance.spacing.larger
         }
+        
+        StyledRect {
+            id: mail
 
-        Clock {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: clock.left
+            anchors.rightMargin: Appearance.spacing.normal
+
+            radius: Appearance.rounding.full
+            color: Colours.palette.m3surfaceContainer
+
+            implicitWidth: mailInner.implicitWidth + Appearance.padding.normal * 2
+
+            Mail {
+                id: mailInner
+
+                anchors.centerIn: parent
+            }
+        }
+
+        StyledRect {
             id: clock
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             anchors.right: statusIcons.left
             anchors.rightMargin: Appearance.spacing.normal
+
+            radius: Appearance.rounding.full
+            color: Colours.palette.m3surfaceContainer
+
+            implicitWidth: clockInner.implicitWidth + Appearance.padding.normal * 2
+
+            Clock {
+                id: clockInner
+
+                anchors.centerIn: parent
+            }
         }
 
         StyledRect {
