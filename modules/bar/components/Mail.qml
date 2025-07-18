@@ -11,11 +11,12 @@ Row {
     spacing: Appearance.spacing.small
     
     Ref {
-            service: Mail
-        }
+        service: Mail
+    }
 
     MaterialIcon {
         id: icon
+        animate: true
 
         text: "mail"
         color: root.colour
@@ -24,12 +25,12 @@ Row {
     }
 
     StyledText {
-        id: text
+        id: mailText
 
         anchors.verticalCenter: parent.verticalCenter
 
         verticalAlignment: StyledText.AlignVCenter
-        text: `${Math.ceil(Mail.unreadMail)}`
+        text: qsTr("%1").arg(Mail.unreadEmails.length ?? "N/A")
         font.pointSize: Appearance.font.size.smaller
         font.family: Appearance.font.family.mono
         color: root.colour

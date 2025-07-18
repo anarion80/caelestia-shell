@@ -7,7 +7,10 @@ import QtQuick
 Singleton {
     id: root
 
-    property string unreadMail
+    property list<string> unreadEmails: []
+    readonly property int unreadEmailsCount: unreadEmails.length ?? null
+    
+    reloadableId: "mailText"
 
     property int refCount
 
@@ -17,19 +20,25 @@ Singleton {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            checkMail.running = true;
+            getUnreadEmails.running = true;
         }
     }
 
     Process {
-        id: checkMail
-
+        id: getUnreadEmails
         running: true
-        command: ["sh", "-c", "notmuch count tag:unread"]
+        command: ["notmuch", "search", "--format=json", "--output=summary", "--limit=5", "tag:unread", "-tag:trash"]
+        environment: ({
+                LANG: "C",
+                LC_ALL: "C"
+            })
         stdout: StdioCollector {
             onStreamFinished: {
-                const temp = text.trim();
-                root.unreadMail = temp;
+                const json = JSON.parse(text);
+                const unreadEmails = json
+                  .filter(m => m && m.authors && m.subject)   // safety guard
+                  .map(m => `${m.authors}: ${m.subject}`)   
+                root.unreadEmails = unreadEmails;
             }
         }
     }
