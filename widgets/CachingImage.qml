@@ -1,4 +1,3 @@
-import qs.services
 import qs.utils
 import Quickshell.Io
 import QtQuick
@@ -11,7 +10,6 @@ Image {
     readonly property string cachePath: `${Paths.stringify(Paths.imagecache)}/${hash}@${width}x${height}.png`
 
     asynchronous: true
-    cache: false
     fillMode: Image.PreserveAspectCrop
     sourceSize.width: width
     sourceSize.height: height

@@ -6,7 +6,6 @@ import qs.config
 import qs.utils
 import Quickshell
 import Quickshell.Io
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -140,7 +139,7 @@ Item {
                 }
             }
 
-            IconImage {
+            CachingIconImage {
                 id: icon
 
                 anchors.horizontalCenter: parent.horizontalCenter
