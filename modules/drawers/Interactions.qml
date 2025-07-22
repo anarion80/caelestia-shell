@@ -53,12 +53,13 @@ MouseArea {
                 visibilities.osd = false;
                 osdHovered = false;
             }
-            if (!dashboardShortcutActive) {
+
+            if (!dashboardShortcutActive)
                 visibilities.dashboard = false;
-            }
-            if (!utilitiesShortcutActive) {
+
+            if (!utilitiesShortcutActive)
                 visibilities.utilities = false;
-            }
+
             popouts.hasCurrent = false;
 
             if (Config.bar.showOnHover)
@@ -71,18 +72,16 @@ MouseArea {
         const y = event.y;
 
         // Show bar in non-exclusive mode on hover
-        if (!visibilities.bar && Config.bar.showOnHover && x < bar.implicitHeight) {
+        if (!visibilities.bar && Config.bar.showOnHover && x < bar.implicitHeight)
             bar.isHovered = true;
-        }
 
         // Show/hide bar on drag
         if (pressed && dragStart.y < bar.implicitHeight) {
             const dragY = y - dragStart.y;
-            if (dragY > Config.bar.dragThreshold) {
+            if (dragY > Config.bar.dragThreshold)
                 visibilities.bar = true;
-            } else if (dragY < -Config.bar.dragThreshold) {
+            else if (dragY < -Config.bar.dragThreshold)
                 visibilities.bar = false;
-            }
         }
 
         // Show osd on hover

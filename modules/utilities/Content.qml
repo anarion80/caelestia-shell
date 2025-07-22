@@ -12,8 +12,8 @@ Item {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
 
-    implicitWidth: 300
-    implicitHeight: 100
+    // implicitWidth: 300
+    // implicitHeight: 100
 
     // Rectangle {
     //     anchors.fill: parent
