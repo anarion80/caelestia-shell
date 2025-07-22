@@ -27,7 +27,7 @@ Singleton {
     Process {
         id: getUnreadEmails
         running: true
-        command: ["notmuch", "search", "--format=json", "--output=summary", "--limit=5", "tag:unread", "-tag:trash"]
+        command: ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"]
         environment: ({
                 LANG: "C",
                 LC_ALL: "C"

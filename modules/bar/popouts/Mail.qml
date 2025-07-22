@@ -11,7 +11,7 @@ Column {
 
     Repeater {
         model: ScriptModel {
-            values: Mail.unreadEmails.filter(p => p)
+            values: Mail.unreadEmails.slice(0,5)
         }
 
         Row {
