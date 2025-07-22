@@ -26,6 +26,9 @@ Item {
         const n = statusIconsInner.network;
         const nx = statusIcons.x + statusIconsInner.x + n.x - spacing / 2;
 
+        const m = mailInner;
+        const mx = mail.x + mailInner.x - spacing / 2;
+
         const bls = statusIcons.x + statusIconsInner.x + statusIconsInner.bs - spacing / 2;
         const ble = statusIcons.x + statusIconsInner.x + statusIconsInner.be + spacing / 2;
 
@@ -54,6 +57,10 @@ Item {
         } else if (x >= bx && x <= bx + b.implicitWidth + spacing) {
             popouts.currentName = "battery";
             popouts.currentCenter = Qt.binding(() => statusIcons.x + statusIconsInner.x + b.x + b.implicitWidth / 2);
+            popouts.hasCurrent = true;
+        } else if (x >= mx && x <= mx + m.implicitWidth + spacing && Mail.unreadEmailsCount > 0) {
+            popouts.currentName = "mail";
+            popouts.currentCenter = Qt.binding(() => mail.x + mailInner.x + m.implicitWidth / 2);
             popouts.hasCurrent = true;
         } else {
             popouts.hasCurrent = false;
@@ -141,16 +148,58 @@ Item {
             id: tray
 
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: clock.left
+            anchors.right: mail.left
             anchors.rightMargin: Appearance.spacing.larger
         }
 
-        Clock {
+        StyledRect {
+            id: mail
+
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: clock.left
+            anchors.rightMargin: Appearance.spacing.normal
+
+            radius: Appearance.rounding.full
+            color: Colours.palette.m3surfaceContainer
+
+            implicitWidth: mailInner.implicitWidth + Appearance.padding.normal * 2
+
+            Mail {
+                id: mailInner
+
+                anchors.centerIn: parent
+            }
+        }
+
+        // Mail {
+        //     id: mail
+        //
+        //     anchors.top: parent.top
+        //     anchors.bottom: parent.bottom
+        //     anchors.right: clock.left
+        //     anchors.rightMargin: Appearance.spacing.normal
+        //
+        // }
+
+        StyledRect {
             id: clock
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             anchors.right: statusIcons.left
             anchors.rightMargin: Appearance.spacing.normal
+
+            radius: Appearance.rounding.full
+            color: Colours.palette.m3surfaceContainer
+
+            implicitWidth: clockInner.implicitWidth + Appearance.padding.normal * 2
+
+            Clock {
+                id: clockInner
+
+                anchors.centerIn: parent
+            }
         }
 
         StyledRect {

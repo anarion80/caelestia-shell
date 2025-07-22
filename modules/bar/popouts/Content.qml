@@ -34,6 +34,11 @@ Item {
         }
 
         Popout {
+            name: "mail"
+            source: "Mail.qml"
+        }
+
+        Popout {
             name: "network"
             source: "Network.qml"
         }
@@ -47,6 +52,7 @@ Item {
             name: "battery"
             source: "Battery.qml"
         }
+
 
         Repeater {
             model: ScriptModel {
