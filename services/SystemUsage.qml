@@ -12,9 +12,6 @@ Singleton {
     property string gpuType: "NONE"
     property real gpuPerc
     property real gpuTemp
-    property real gpuPstate
-    property real gpuPowerDraw
-    property real gpuFanSpeed
     property real memUsed
     property real memTotal
     readonly property real memPerc: memTotal > 0 ? memUsed / memTotal : 0
@@ -55,7 +52,7 @@ Singleton {
 
     Timer {
         running: root.refCount > 0
-        interval: 1000
+        interval: 3000
         repeat: true
         triggeredOnStart: true
         onTriggered: {
@@ -63,10 +60,6 @@ Singleton {
             meminfo.reload();
             storage.running = true;
             gpuUsage.running = true;
-            gpuTemp.running = true;
-            gpuPowerDraw.running = true;
-            gpuPstate.running = true;
-            gpuFanSpeed.running = true;
             sensors.running = true;
         }
     }
@@ -106,7 +99,7 @@ Singleton {
     Process {
         id: storage
 
-        command: ["sh", "-c", "/bin/df | grep '^/dev/' | awk '{print $1, $3, $4}'"]
+        command: ["sh", "-c", "df | grep '^/dev/' | awk '{print $1, $3, $4}'"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const deviceMap = new Map();
@@ -146,19 +139,6 @@ Singleton {
     }
 
     Process {
-        id: cpuTemp
-
-        running: true
-        command: ["sh", "-c", "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/*/temp1_input"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const temp = text.trim();
-                root.cpuTemp = temp / 1000;
-            }
-        }
-    }
-
-    Process {
         id: gpuTypeCheck
 
         running: true
@@ -190,55 +170,6 @@ Singleton {
         }
     }
 
-    Process {
-        id: gpuTemp
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuTemp = data;
-            }
-        }
-    }
-
-    Process {
-        id: gpuPowerDraw
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuPowerDraw = text.trim();
-            }
-        }
-    }
-
-    Process {
-        id: gpuFanSpeed
-
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuFanSpeed = text.trim();
-            }
-        }
-    }
-
-    Process {
-        id: gpuPstate
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=pstate --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuPstate = text.trim();
-            }
-        }
-    }
-    
     Process {
         id: sensors
 
@@ -282,8 +213,8 @@ Singleton {
                     }
                 }
 
-              root.gpuTemp = count > 0 ? sum / count : 0;
-          }
+                root.gpuTemp = count > 0 ? sum / count : 0;
+            }
         }
-      }
     }
+}
