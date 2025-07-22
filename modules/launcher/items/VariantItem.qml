@@ -1,3 +1,4 @@
+import "../services"
 import qs.widgets
 import qs.services
 import qs.config
@@ -6,7 +7,7 @@ import QtQuick
 Item {
     id: root
 
-    required property Actions.Action modelData
+    required property M3Variants.Variant modelData
     required property var list
 
     implicitHeight: Config.launcher.sizes.itemHeight
@@ -39,7 +40,7 @@ Item {
 
         Item {
             anchors.left: icon.right
-            anchors.leftMargin: Appearance.spacing.normal
+            anchors.leftMargin: Appearance.spacing.larger
             anchors.verticalCenter: icon.verticalCenter
 
             implicitWidth: parent.width - icon.width
@@ -55,7 +56,7 @@ Item {
             StyledText {
                 id: desc
 
-                text: root.modelData?.desc ?? ""
+                text: root.modelData?.description ?? ""
                 font.pointSize: Appearance.font.size.small
                 color: Colours.alpha(Colours.palette.m3outline, true)
 

@@ -8,7 +8,7 @@ Image {
 
     property string path
     property string hash
-    readonly property string cachePath: `${Paths.stringify(Paths.imagecache)}/${hash}@${width}x${height}.png`.slice(7)
+    readonly property string cachePath: `${Paths.stringify(Paths.imagecache)}/${hash}@${width}x${height}.png`
 
     asynchronous: true
     cache: false

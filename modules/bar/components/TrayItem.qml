@@ -19,16 +19,8 @@ MouseArea {
     onClicked: event => {
         if (event.button === Qt.LeftButton)
             modelData.activate();
-        else if (modelData.hasMenu)
-            menu.open();
-    }
-
-    // TODO custom menu
-    QsMenuAnchor {
-        id: menu
-
-        menu: root.modelData.menu
-        anchor.window: this.QsWindow.window
+        else
+            modelData.secondaryActivate();
     }
 
     IconImage {

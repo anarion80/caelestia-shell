@@ -7,14 +7,14 @@ import Quickshell
 import Quickshell.Bluetooth
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 
 ColumnLayout {
     id: root
 
-    spacing: Appearance.spacing.normal
+    spacing: Appearance.spacing.small / 2
 
     StyledText {
+        Layout.bottomMargin: Appearance.spacing.small
         text: qsTr("Bluetooth %1").arg(BluetoothAdapterState.toString(Bluetooth.defaultAdapter.state).toLowerCase())
     }
 
@@ -34,7 +34,7 @@ ColumnLayout {
             readonly property bool loading: device.modelData.state === BluetoothDeviceState.Connecting || device.modelData.state === BluetoothDeviceState.Disconnecting
 
             Layout.fillWidth: true
-            spacing: Appearance.spacing.small
+            spacing: Appearance.spacing.small / 2
 
             opacity: 0
             scale: 0.7
@@ -53,6 +53,7 @@ ColumnLayout {
             }
 
             MaterialIcon {
+                Layout.rightMargin: Appearance.spacing.small
                 text: Icons.getBluetoothIcon(device.modelData.icon)
             }
 
@@ -64,18 +65,15 @@ ColumnLayout {
             Item {
                 id: connectBtn
 
-                implicitWidth: loadingIndicator.implicitWidth - Appearance.padding.small * 2
-                implicitHeight: loadingIndicator.implicitHeight - Appearance.padding.small * 2
+                implicitWidth: implicitHeight
+                implicitHeight: connectIcon.implicitHeight + Appearance.padding.small * 2
 
-                BusyIndicator {
-                    id: loadingIndicator
-
+                StyledBusyIndicator {
                     anchors.centerIn: parent
 
-                    implicitWidth: Appearance.font.size.large * 2 + Appearance.padding.small * 2
-                    implicitHeight: Appearance.font.size.large * 2 + Appearance.padding.small * 2
+                    implicitWidth: implicitHeight
+                    implicitHeight: connectIcon.implicitHeight
 
-                    background: null
                     running: opacity > 0
                     opacity: device.loading ? 1 : 0
 
@@ -94,16 +92,16 @@ ColumnLayout {
                 }
 
                 MaterialIcon {
+                    id: connectIcon
+
                     anchors.centerIn: parent
                     animate: true
                     text: device.modelData.connected ? "link_off" : "link"
 
-                    font.pointSize: device.loading ? Appearance.font.size.normal : Appearance.font.size.larger
+                    opacity: device.loading ? 0 : 1
 
-                    Behavior on font.pointSize {
-                        Anim {
-                            duration: Appearance.anim.durations.small
-                        }
+                    Behavior on opacity {
+                        Anim {}
                     }
                 }
             }
