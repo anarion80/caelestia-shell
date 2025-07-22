@@ -5,5 +5,5 @@
 devenv.local.nix
 
 # direnv
-/.direnv
+/.direnv/
 .direnv/*
