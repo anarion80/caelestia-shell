@@ -8,7 +8,7 @@ ShapePath {
 
     required property Wrapper wrapper
     required property bool invertBottomRounding
-    readonly property real rounding: Config.border.rounding
+    readonly property real rounding: wrapper.isDetached ? Appearance.rounding.normal : Config.border.rounding
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
     property real ibr: invertBottomRounding ? -1 : 1

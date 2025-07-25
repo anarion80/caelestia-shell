@@ -8,7 +8,7 @@ JsonObject {
     property Sizes sizes: Sizes {}
 
     component Workspaces: JsonObject {
-        property int shown: 5
+        property int shown: 8
         property bool rounded: true
         property bool activeIndicator: true
         property bool occupiedBg: true

@@ -60,7 +60,8 @@ MouseArea {
             if (!utilitiesShortcutActive)
                 visibilities.utilities = false;
 
-            popouts.hasCurrent = false;
+            if (!popouts.currentName.startsWith("traymenu"))
+                popouts.hasCurrent = false;
 
             if (Config.bar.showOnHover)
                 bar.isHovered = false;
@@ -138,16 +139,8 @@ MouseArea {
         }
 
         // Show popouts on hover
-        const popout = panels.popouts;
-        if (y < bar.implicitHeight + popout.height) {
-            if (y < bar.implicitHeight)
-                // Handle like part of bar
-                bar.checkPopout(x);
-            else
-                // Keep on hover
-                popouts.hasCurrent = withinPanelWidth(popout, x, y);
-        } else
-            popouts.hasCurrent = false;
+        if (y < bar.implicitHeight)
+            bar.checkPopout(y);
     }
 
     // Monitor individual visibility changes
