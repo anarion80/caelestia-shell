@@ -11,6 +11,7 @@ Singleton {
     property alias bar: adapter.bar
     property alias border: adapter.border
     property alias dashboard: adapter.dashboard
+    property alias dcontent: adapter.dcontent
     property alias launcher: adapter.launcher
     property alias notifs: adapter.notifs
     property alias osd: adapter.osd
@@ -33,6 +34,7 @@ Singleton {
             property BarConfig bar: BarConfig {}
             property BorderConfig border: BorderConfig {}
             property DashboardConfig dashboard: DashboardConfig {}
+            property DContentConfig dcontent: DContentConfig {}
             property LauncherConfig launcher: LauncherConfig {}
             property NotifsConfig notifs: NotifsConfig {}
             property OsdConfig osd: OsdConfig {}
