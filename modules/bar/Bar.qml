@@ -17,37 +17,37 @@ ColumnLayout {
     required property BarPopouts.Wrapper popouts
     readonly property int vPadding: Appearance.padding.large
 
-    function checkPopout(y: real): void {
-        const ch = childAt(width / 2, y) as WrappedLoader;
+    function checkPopout(x: real): void {
+        const ch = childAt(height / 2, x) as WrappedLoader;
         if (!ch) {
             popouts.hasCurrent = false;
             return;
         }
 
         const id = ch.id;
-        const top = ch.y;
+        const left = ch.x;
         const item = ch.item;
-        const itemHeight = item.implicitHeight;
+        const itemWidth = item.implicitWidth;
 
         if (id === "statusIcons") {
             const items = item.items;
-            const icon = items.childAt(items.width / 2, mapToItem(items, 0, y).y);
+            const icon = items.childAt(items.height / 2, mapToItem(items, 0, x).x);
             if (icon) {
                 popouts.currentName = icon.name;
-                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, 0, icon.implicitHeight / 2).y);
+                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, 0, icon.implicitWidth / 2).x);
                 popouts.hasCurrent = true;
             }
         } else if (id === "tray") {
-            const index = Math.floor(((y - top) / itemHeight) * item.items.count);
+            const index = Math.floor(((x - left) / itemWidth) * item.items.count);
             const trayItem = item.items.itemAt(index);
             if (trayItem) {
                 popouts.currentName = `traymenu${index}`;
-                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitHeight / 2).y);
+                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitWidth / 2).y);
                 popouts.hasCurrent = true;
             }
         } else if (id === "activeWindow") {
             popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = item.mapToItem(root, 0, itemHeight / 2).y;
+            popouts.currentCenter = item.mapToItem(root, 0, itemWidth / 2).x;
             popouts.hasCurrent = true;
         }
     }
@@ -170,11 +170,11 @@ ColumnLayout {
             return null;
         }
 
-        Layout.alignment: Qt.AlignHCenter
+        Layout.alignment: Qt.AlignVCenter
 
         // Cursed ahh thing to add padding to first and last enabled components
-        Layout.topMargin: findFirstEnabled() === this ? root.vPadding : 0
-        Layout.bottomMargin: findLastEnabled() === this ? root.vPadding : 0
+        Layout.leftMargin: findFirstEnabled() === this ? root.hPadding : 0
+        Layout.rightMargin: findLastEnabled() === this ? root.hPadding : 0
 
         visible: enabled
         active: enabled

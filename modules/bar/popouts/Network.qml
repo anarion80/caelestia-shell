@@ -226,4 +226,8 @@ ColumnLayout {
         easing.type: Easing.BezierSpline
         easing.bezierCurve: Appearance.anim.curves.standard
     }
+
+    StyledText {
+        text: qsTr("BSSID: %1").arg(Network.active?.bssid ?? "None")
+    }
 }

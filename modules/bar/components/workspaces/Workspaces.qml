@@ -24,8 +24,8 @@ StyledClippingRect {
 
     property real blur: onSpecial ? 1 : 0
 
-    implicitWidth: Config.bar.sizes.innerWidth
-    implicitHeight: layout.implicitHeight + Appearance.padding.small * 2
+    implicitWidth: layout.implicitWidth + Appearance.padding.small * 2
+    implicitHeight: Config.bar.sizes.innerHeight
 
     color: Colours.tPalette.m3surfaceContainer
     radius: Appearance.rounding.full

@@ -51,7 +51,7 @@ JsonObject {
     component Workspaces: JsonObject {
         property int shown: 5
         property bool activeIndicator: true
-        property bool occupiedBg: false
+        property bool occupiedBg: true
         property bool showWindows: true
         property bool activeTrail: false
         property bool perMonitorWorkspaces: true
@@ -74,7 +74,7 @@ JsonObject {
     }
 
     component Sizes: JsonObject {
-        property int innerWidth: 40
+        property int innerHeight: 40
         property int windowPreviewSize: 400
         property int trayMenuWidth: 300
         property int batteryWidth: 250

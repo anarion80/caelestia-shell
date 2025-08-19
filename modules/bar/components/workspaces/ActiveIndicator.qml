@@ -36,9 +36,9 @@ StyledRect {
     }
 
     clip: true
-    y: offset + mask.y
-    implicitWidth: Config.bar.sizes.innerWidth - Appearance.padding.small * 2
-    implicitHeight: size
+    x: offset + mask.x
+    implicitWidth: size
+    implicitHeight: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
     radius: Appearance.rounding.full
     color: Colours.palette.m3primary
 
@@ -47,12 +47,12 @@ StyledRect {
         sourceColor: Colours.palette.m3onSurface
         colorizationColor: Colours.palette.m3onPrimary
 
-        x: 0
-        y: -parent.offset
+        x: -parent.offset
+        y: 0
         implicitWidth: root.mask.implicitWidth
         implicitHeight: root.mask.implicitHeight
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     Behavior on leading {

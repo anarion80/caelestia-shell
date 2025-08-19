@@ -16,14 +16,14 @@ ColumnLayout {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property int size: implicitHeight + (hasWindows ? Appearance.padding.small : 0)
+    readonly property int size: implicitWidth + (hasWindows ? Appearance.padding.small : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
     readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows
 
-    Layout.alignment: Qt.AlignHCenter
-    Layout.preferredHeight: size
+    Layout.alignment: Qt.AlignVCenter
+    Layout.preferredWidth: size
 
     spacing: 0
 
@@ -55,7 +55,7 @@ ColumnLayout {
         active: root.hasWindows
         asynchronous: true
 
-        sourceComponent: Column {
+        sourceComponent: Row {
             spacing: 0
 
             add: Transition {

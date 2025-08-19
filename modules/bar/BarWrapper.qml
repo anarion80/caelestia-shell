@@ -13,13 +13,13 @@ Item {
     required property BarPopouts.Wrapper popouts
 
     readonly property int padding: Math.max(Appearance.padding.smaller, Config.border.thickness)
-    readonly property int contentWidth: Config.bar.sizes.innerWidth + padding * 2
-    readonly property int exclusiveZone: Config.bar.persistent || visibilities.bar ? contentWidth : Config.border.thickness
+    readonly property int contentHeight: Config.bar.sizes.innerHeight + padding * 2
+    readonly property int exclusiveZone: Config.bar.persistent || visibilities.bar ? contentHeight : Config.border.thickness
     readonly property bool shouldBeVisible: Config.bar.persistent || visibilities.bar || isHovered
     property bool isHovered
 
-    function checkPopout(y: real): void {
-        content.item?.checkPopout(y);
+    function checkPopout(x: real): void {
+        content.item?.checkPopout(x);
     }
 
     function handleWheel(y: real, angleDelta: point): void {
@@ -27,14 +27,14 @@ Item {
     }
 
     visible: width > Config.border.thickness
-    implicitWidth: Config.border.thickness
+    implicitHeight: Config.border.thickness
 
     states: State {
         name: "visible"
         when: root.shouldBeVisible
 
         PropertyChanges {
-            root.implicitWidth: root.contentWidth
+            root.implicitHeight: root.contentHeight
         }
     }
 
@@ -45,7 +45,7 @@ Item {
 
             NumberAnimation {
                 target: root
-                property: "implicitWidth"
+                property: "implicitHeight"
                 duration: Appearance.anim.durations.expressiveDefaultSpatial
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
@@ -57,7 +57,7 @@ Item {
 
             NumberAnimation {
                 target: root
-                property: "implicitWidth"
+                property: "implicitHeight"
                 duration: Appearance.anim.durations.normal
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.emphasized
@@ -68,14 +68,14 @@ Item {
     Loader {
         id: content
 
+        anchors.left: parent.left
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
         anchors.right: parent.right
 
         active: root.shouldBeVisible || root.visible
 
         sourceComponent: Bar {
-            width: root.contentWidth
+            height: root.contentHeight
             screen: root.screen
             visibilities: root.visibilities
             popouts: root.popouts

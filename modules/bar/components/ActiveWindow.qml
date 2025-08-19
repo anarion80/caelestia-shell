@@ -22,13 +22,13 @@ Item {
     property Title current: text1
 
     clip: true
-    implicitWidth: Math.max(icon.implicitWidth, current.implicitHeight)
-    implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
+    implicitWidth: icon.implicitWidth + current.implicitHeight + current.anchors.leftMargin
+    implicitHeight: Math.max(icon.implicitHeight, current.implicitWidth)
 
     MaterialIcon {
         id: icon
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
 
         animate: true
         text: Icons.getAppCategoryIcon(Hyprland.activeToplevel?.lastIpcObject.class, "desktop_windows")
@@ -71,23 +71,23 @@ Item {
     component Title: StyledText {
         id: text
 
-        anchors.horizontalCenter: icon.horizontalCenter
-        anchors.top: icon.bottom
-        anchors.topMargin: Appearance.spacing.small
+        anchors.verticalCenter: icon.verticalCenter
+        anchors.left: icon.right
+        anchors.leftMargin: Appearance.spacing.small
 
         font.pointSize: metrics.font.pointSize
         font.family: metrics.font.family
         color: root.colour
         opacity: root.current === this ? 1 : 0
 
-        transform: Rotation {
-            angle: 90
-            origin.x: text.implicitHeight / 2
-            origin.y: text.implicitHeight / 2
-        }
+        // transform: Rotation {
+        //     angle: 90
+        //     origin.x: text.implicitHeight / 2
+        //     origin.y: text.implicitHeight / 2
+        // }
 
-        width: implicitHeight
-        height: implicitWidth
+        width: implicitWidth
+        height: implicitHeight
 
         Behavior on opacity {
             NumberAnimation {

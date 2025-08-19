@@ -18,7 +18,7 @@ StyledRect {
     color: Qt.alpha(Colours.tPalette.m3surfaceContainer, Config.bar.tray.background ? Colours.tPalette.m3surfaceContainer.a : 0)
     radius: Appearance.rounding.full
 
-    Column {
+    Row {
         id: layout
 
         anchors.centerIn: parent

@@ -18,7 +18,7 @@ Shape {
 
     anchors.fill: parent
     anchors.margins: Config.border.thickness
-    anchors.leftMargin: bar.implicitWidth
+    anchors.topMargin: bar.implicitHeight
     preferredRendererType: Shape.CurveRenderer
 
     Osd.Background {
@@ -31,14 +31,14 @@ Shape {
     Notifications.Background {
         wrapper: root.panels.notifications
 
-        startX: root.width
-        startY: 0
+        startX: root.width + 1
+        startY: -1
     }
 
     Session.Background {
         wrapper: root.panels.session
 
-        startX: root.width
+        startX: root.width + 1
         startY: (root.height - wrapper.height) / 2 - rounding
     }
 
@@ -46,22 +46,22 @@ Shape {
         wrapper: root.panels.launcher
 
         startX: (root.width - wrapper.width) / 2 - rounding
-        startY: root.height
+        startY: root.height + 1
     }
 
     Dashboard.Background {
         wrapper: root.panels.dashboard
 
         startX: (root.width - wrapper.width) / 2 - rounding
-        startY: 0
+        startY: -1
     }
 
     BarPopouts.Background {
         wrapper: root.panels.popouts
-        invertBottomRounding: wrapper.y + wrapper.height + 1 >= root.height
+        invertBottomRounding: wrapper.y + wrapper.width + 1 >= root.width
 
-        startX: wrapper.x
-        startY: wrapper.y - rounding * sideRounding
+        startX: wrapper.x - rounding * sideRounding
+        startY: wrapper.y - 1
     }
 
     Utilities.Background {

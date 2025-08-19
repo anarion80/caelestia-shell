@@ -20,8 +20,8 @@ StyledRect {
     radius: Appearance.rounding.full
 
     clip: true
-    implicitWidth: Config.bar.sizes.innerWidth
-    implicitHeight: iconColumn.implicitHeight + Appearance.padding.normal * 2
+    implicitWidth: iconColumn.implicitWidth + Appearance.padding.normal * 2
+    implicitHeight: Config.bar.sizes.innerHeight
 
     ColumnLayout {
         id: iconColumn

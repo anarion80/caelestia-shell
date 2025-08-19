@@ -27,7 +27,7 @@ Item {
 
     anchors.fill: parent
     anchors.margins: Config.border.thickness
-    anchors.leftMargin: bar.implicitWidth
+    anchors.topMargin: bar.implicitHeight
 
     Osd.Wrapper {
         id: osd
@@ -76,6 +76,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
+        // anchors.topMargin: -bar.implicitHeight + BorderConfig.thickness //move the dashboard above bar
     }
 
     BarPopouts.Wrapper {
@@ -83,17 +84,17 @@ Item {
 
         screen: root.screen
 
-        x: isDetached ? (root.width - nonAnimWidth) / 2 : 0
-        y: {
+        x: {
             if (isDetached)
-                return (root.height - nonAnimHeight) / 2;
+                return (root.width - nonAnimWidth) / 2;
 
-            const off = currentCenter - Config.border.thickness - nonAnimHeight / 2;
-            const diff = root.height - Math.floor(off + nonAnimHeight);
+            const off = currentCenter - Config.border.thickness - nonAnimWidth / 2;
+            const diff = root.width - Math.floor(off + nonAnimWidth);
             if (diff < 0)
                 return off + diff;
             return Math.max(off, 0);
         }
+        y: isDetached ? (root.height - nonAnimHeight) / 2 : 0
     }
 
     Utilities.Wrapper {

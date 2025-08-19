@@ -32,7 +32,7 @@ CustomMouseArea {
     }
 
     function inRightPanel(panel: Item, x: real, y: real): bool {
-        return x > bar.implicitWidth + panel.x && withinPanelHeight(panel, x, y);
+        return x > Config.border.thickness + panel.x && withinPanelHeight(panel, x, y);
     }
 
     function inTopPanel(panel: Item, x: real, y: real): bool {
@@ -83,15 +83,15 @@ CustomMouseArea {
         const y = event.y;
 
         // Show bar in non-exclusive mode on hover
-        if (!visibilities.bar && Config.bar.showOnHover && x < bar.implicitWidth)
+        if (!visibilities.bar && Config.bar.showOnHover && y < bar.implicitHeight)
             bar.isHovered = true;
 
         // Show/hide bar on drag
-        if (pressed && dragStart.x < bar.implicitWidth) {
-            const dragX = x - dragStart.x;
-            if (dragX > Config.bar.dragThreshold)
+        if (pressed && dragStart.y < bar.implicitHeight) {
+            const dragY = y - dragStart.y;
+            if (dragY > Config.bar.dragThreshold)
                 visibilities.bar = true;
-            else if (dragX < -Config.bar.dragThreshold)
+            else if (dragY < -Config.bar.dragThreshold)
                 visibilities.bar = false;
         }
 
@@ -113,7 +113,7 @@ CustomMouseArea {
             const dragX = x - dragStart.x;
             if (dragX < -Config.session.dragThreshold)
                 visibilities.session = true;
-            else if (dragX > Config.session.dragThreshold)
+            else if (dragY > Config.session.dragThreshold)
                 visibilities.session = false;
         }
 
@@ -158,8 +158,8 @@ CustomMouseArea {
         }
 
         // Show popouts on hover
-        if (x < bar.implicitWidth)
-            bar.checkPopout(y);
+        if (y < bar.implicitHeight)
+            bar.checkPopout(x);
     }
 
     // Monitor individual visibility changes

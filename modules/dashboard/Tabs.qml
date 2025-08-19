@@ -114,6 +114,8 @@ Item {
 
             cursorShape: Qt.PointingHandCursor
 
+            property int scrollAccumulatedY: 0
+
             onPressed: event => {
                 root.state.currentTab = tab.TabBar.index;
 
