@@ -73,7 +73,7 @@ MouseArea {
         const y = event.y;
 
         // Show bar in non-exclusive mode on hover
-        if (!visibilities.bar && Config.bar.showOnHover && x < bar.implicitHeight)
+        if (!visibilities.bar && Config.bar.showOnHover && y < bar.implicitHeight)
             bar.isHovered = true;
 
         // Show/hide bar on drag
@@ -140,7 +140,7 @@ MouseArea {
 
         // Show popouts on hover
         if (y < bar.implicitHeight)
-            bar.checkPopout(y);
+            bar.checkPopout(x);
     }
 
     // Monitor individual visibility changes
