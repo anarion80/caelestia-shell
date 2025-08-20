@@ -91,7 +91,6 @@ ColumnLayout {
             }
 
             MaterialIcon {
-                Layout.rightMargin: Appearance.spacing.small
                 text: Icons.getBluetoothIcon(device.modelData.icon)
             }
 

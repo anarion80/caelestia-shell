@@ -55,7 +55,7 @@ JsonObject {
     component Workspaces: JsonObject {
         property int shown: 5
         property bool activeIndicator: true
-        property bool occupiedBg: true
+        property bool occupiedBg: false
         property bool showWindows: true
         property bool activeTrail: false
         property bool perMonitorWorkspaces: true

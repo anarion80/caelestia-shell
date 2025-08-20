@@ -110,8 +110,8 @@ CustomMouseArea {
 
         // Show/hide session on drag
         if (pressed && inRightPanel(panels.session, dragStart.x, dragStart.y) && withinPanelHeight(panels.session, x, y)) {
-            const dragX = x - dragStart.x;
-            if (dragX < -Config.session.dragThreshold)
+            const dragY = y - dragStart.y;
+            if (dragY < -Config.session.dragThreshold)
                 visibilities.session = true;
             else if (dragY > Config.session.dragThreshold)
                 visibilities.session = false;

@@ -16,7 +16,6 @@ Column {
 
     DayOfWeekRow {
         id: days
-        locale: Qt.locale("en_GB")
 
         anchors.left: parent.left
         anchors.right: parent.right
@@ -34,7 +33,6 @@ Column {
 
     MonthGrid {
         id: grid
-        locale: Qt.locale("en_GB")
 
         anchors.left: parent.left
         anchors.right: parent.right
