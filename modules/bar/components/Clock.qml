@@ -25,7 +25,7 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
 
         verticalAlignment: StyledText.AlignVCenter
-        text: Time.format(Config.services.useTwelveHourClock ? "hh\nmm\nA" : "hh\nmm")
+        text: Time.format(Config.services.useTwelveHourClock ? "hh:mm A" : "hh:mm")
         font.pointSize: Appearance.font.size.smaller
         font.family: Appearance.font.family.mono
         color: root.colour

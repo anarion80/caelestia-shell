@@ -9,16 +9,16 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-ColumnLayout {
+RowLayout {
     id: root
 
     required property ShellScreen screen
     required property PersistentProperties visibilities
     required property BarPopouts.Wrapper popouts
-    readonly property int vPadding: Appearance.padding.large
+    readonly property int hPadding: Appearance.padding.large
 
     function checkPopout(x: real): void {
-        const ch = childAt(height / 2, x) as WrappedLoader;
+        const ch = childAt(x, height / 2) as WrappedLoader;
         if (!ch) {
             popouts.hasCurrent = false;
             return;
@@ -31,10 +31,10 @@ ColumnLayout {
 
         if (id === "statusIcons") {
             const items = item.items;
-            const icon = items.childAt(items.height / 2, mapToItem(items, 0, x).x);
+            const icon = items.childAt(mapToItem(items, x, 0).x, items.height / 2);
             if (icon) {
                 popouts.currentName = icon.name;
-                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, 0, icon.implicitWidth / 2).x);
+                popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, icon.implicitWidth / 2, 0).x);
                 popouts.hasCurrent = true;
             }
         } else if (id === "tray") {
@@ -42,18 +42,22 @@ ColumnLayout {
             const trayItem = item.items.itemAt(index);
             if (trayItem) {
                 popouts.currentName = `traymenu${index}`;
-                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitWidth / 2).y);
+                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
                 popouts.hasCurrent = true;
             }
         } else if (id === "activeWindow") {
             popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = item.mapToItem(root, 0, itemWidth / 2).x;
+            popouts.currentCenter = item.mapToItem(root, itemWidth / 2, 0).x;
+            popouts.hasCurrent = true;
+        } else if (id === "mail") {
+            popouts.currentName = id.toLowerCase();
+            popouts.currentCenter = item.mapToItem(root, itemWidth / 2, 0).x;
             popouts.hasCurrent = true;
         }
     }
 
     function handleWheel(y: real, angleDelta: point): void {
-        const ch = childAt(width / 2, y) as WrappedLoader;
+        const ch = childAt(x, height / 2) as WrappedLoader;
         if (ch?.id === "workspaces") {
             // Workspace scroll
             const mon = (Config.bar.workspaces.perMonitorWorkspaces ? Hyprland.monitorFor(screen) : Hyprland.focusedMonitor);
@@ -62,7 +66,7 @@ ColumnLayout {
                 Hyprland.dispatch(`togglespecialworkspace ${specialWs.slice(8)}`);
             else if (angleDelta.y < 0 || (Config.bar.workspaces.perMonitorWorkspaces ? mon.activeWorkspace?.id : Hyprland.activeWsId) > 1)
                 Hyprland.dispatch(`workspace r${angleDelta.y > 0 ? "-" : "+"}1`);
-        } else if (y < screen.height / 2) {
+        } else if (x < screen.width / 2) {
             // Volume scroll on top half
             if (angleDelta.y > 0)
                 Audio.incrementVolume();
@@ -91,7 +95,7 @@ ColumnLayout {
             DelegateChoice {
                 roleValue: "spacer"
                 delegate: WrappedLoader {
-                    Layout.fillHeight: enabled
+                    Layout.fillWidth: enabled
                 }
             }
             DelegateChoice {
@@ -121,6 +125,12 @@ ColumnLayout {
                 roleValue: "tray"
                 delegate: WrappedLoader {
                     sourceComponent: Tray {}
+                }
+            }
+            DelegateChoice {
+                roleValue: "mail"
+                delegate: WrappedLoader {
+                    sourceComponent: Mail {}
                 }
             }
             DelegateChoice {

@@ -13,17 +13,17 @@ Item {
     required property Brightness.Monitor monitor
     property color colour: Colours.palette.m3primary
 
-    readonly property int maxHeight: {
+    readonly property int maxWidth: {
         const otherModules = bar.children.filter(c => c.id && c.item !== this && c.id !== "spacer");
-        const otherHeight = otherModules.reduce((acc, curr) => acc + curr.height, 0);
+        const otherWidth = otherModules.reduce((acc, curr) => acc + curr.width, 0);
         // Length - 2 cause repeater counts as a child
-        return bar.height - otherHeight - bar.spacing * (bar.children.length - 1) - bar.vPadding * 2;
+        return bar.width - otherWidth - bar.spacing * (bar.children.length - 1) - bar.hPadding * 2;
     }
     property Title current: text1
 
     clip: true
-    implicitWidth: icon.implicitWidth + current.implicitHeight + current.anchors.leftMargin
-    implicitHeight: Math.max(icon.implicitHeight, current.implicitWidth)
+    implicitWidth: icon.implicitWidth + current.implicitWidth + current.anchors.leftMargin
+    implicitHeight: Math.max(icon.implicitWidth, current.implicitHeight)
 
     MaterialIcon {
         id: icon
@@ -50,7 +50,7 @@ Item {
         font.pointSize: Appearance.font.size.smaller
         font.family: Appearance.font.family.mono
         elide: Qt.ElideRight
-        elideWidth: root.maxHeight - icon.height
+        elideWidth: root.maxWidth - icon.width
 
         onTextChanged: {
             const next = root.current === text1 ? text2 : text1;
@@ -60,7 +60,7 @@ Item {
         onElideWidthChanged: root.current.text = elidedText
     }
 
-    Behavior on implicitHeight {
+    Behavior on implicitWidth {
         NumberAnimation {
             duration: Appearance.anim.durations.normal
             easing.type: Easing.BezierSpline

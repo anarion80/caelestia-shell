@@ -56,7 +56,7 @@ StyledClippingRect {
             }
         }
 
-        ColumnLayout {
+        RowLayout {
             id: layout
 
             anchors.centerIn: parent
@@ -76,7 +76,7 @@ StyledClippingRect {
         }
 
         Loader {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             active: Config.bar.workspaces.activeIndicator
             asynchronous: true
 

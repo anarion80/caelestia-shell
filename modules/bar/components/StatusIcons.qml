@@ -23,7 +23,7 @@ StyledRect {
     implicitWidth: iconColumn.implicitWidth + Appearance.padding.normal * 2
     implicitHeight: Config.bar.sizes.innerHeight
 
-    ColumnLayout {
+    RowLayout {
         id: iconColumn
 
         anchors.centerIn: parent
@@ -71,7 +71,7 @@ StyledRect {
             name: "bluetooth"
             active: Config.bar.status.showBluetooth
 
-            sourceComponent: ColumnLayout {
+            sourceComponent: RowLayout {
                 spacing: Appearance.spacing.smaller / 2
 
                 // Bluetooth icon

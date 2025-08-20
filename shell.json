@@ -1,118 +1,174 @@
 {
-    "bar": {
-        "sizes": {
-            "activeWindowWidth": 500,
-            "batteryWidth": 250,
-            "innerHeight": 30,
-            "trayMenuWidth": 300,
-            "windowPreviewSize": 400
-        },
-        "workspaces": {
-            "activeIndicator": true,
-            "activeLabel": "󰮯 ",
-            "activeTrail": true,
-            "label": "  ",
-            "occupiedBg": true,
-            "occupiedLabel": "󰮯 ",
-            "rounded": true,
-            "showWindows": true,
-            "shown": 8
-        }
+  "appearance": {
+    "anim": {
+      "durations": {
+        "scale": 1
+      }
     },
-    "border": {
-        "rounding": 12,
-        "thickness": 5
+    "font": {
+      "family": {
+        "material": "Material Symbols Rounded",
+        "mono": "CaskaydiaCove NF",
+        "sans": "Rubik"
+      },
+      "size": {
+        "scale": 1
+      }
     },
-    "dashboard": {
-        "mediaUpdateInterval": 500,
-        "sizes": {
-            "dateTimeWidth": 110,
-            "infoIconSize": 25,
-            "infoWidth": 200,
-            "mediaCoverArtSize": 150,
-            "mediaProgressSweep": 180,
-            "mediaProgressThickness": 8,
-            "mediaVisualiserSize": 80,
-            "mediaWidth": 200,
-            "resourceProgessThickness": 10,
-            "resourceSize": 200,
-            "tabIndicatorHeight": 3,
-            "tabIndicatorSpacing": 5,
-            "weatherWidth": 250
-        },
-        "visualiserBars": 45,
-        "weatherLocation": "49.999772, 19.915780"
+    "padding": {
+      "scale": 1
     },
-    "launcher": {
-        "actionPrefix": ">",
-        "enableDangerousActions": true,
-        "maxShown": 8,
-        "maxWallpapers": 9,
-        "sizes": {
-            "itemHeight": 57,
-            "itemWidth": 600,
-            "wallpaperHeight": 200,
-            "wallpaperWidth": 280
-        }
+    "rounding": {
+      "scale": 1
     },
-    "lock": {
-        "maxNotifs": 5,
-        "sizes": {
-            "border": 100,
-            "buttonsWidth": 500,
-            "buttonsWidthSmall": 300,
-            "clockHeight": 200,
-            "clockWidth": 800,
-            "faceSize": 100,
-            "inputHeight": 200,
-            "inputWidth": 600,
-            "largeScreenWidth": 2560,
-            "mediaCoverBorder": 3,
-            "mediaCoverSize": 150,
-            "mediaCoverSizeSmall": 120,
-            "mediaHeight": 170,
-            "mediaHeightSmall": 150,
-            "mediaWidth": 600,
-            "mediaWidthSmall": 450,
-            "smallScreenWidth": 1080,
-            "weatherHeight": 100,
-            "weatherWidth": 400
-        }
+    "spacing": {
+      "scale": 1
     },
-    "notifs": {
-        "actionOnClick": false,
-        "clearThreshold": 0.3,
-        "defaultExpireTimeout": 8000,
-        "expandThreshold": 20,
-        "expire": true,
-        "sizes": {
-            "badge": 20,
-            "image": 41,
-            "width": 400
-        }
-    },
-    "osd": {
-        "hideDelay": 2000,
-        "sizes": {
-            "sliderHeight": 150,
-            "sliderWidth": 30
-        }
-    },
-    "paths": {
-        "mediaGif": "root:/assets/bongocat.gif",
-        "sessionGif": "root:/assets/kurukuru.gif",
-        "wallpaperDir": "/home/anarion/Pictures/Wallpapers"
-    },
-    "session": {
-        "dragThreshold": 30,
-        "sizes": {
-            "button": 80
-        }
-    },
-    "winfo": {
-        "sizes": {
-            "detailsWidth": 500,
-            "heightMult": 0.7
-        }
+    "transparency": {
+      "enabled": false,
+      "base": 0.85,
+      "layers": 0.4
     }
+  },
+  "general": {
+    "apps": {
+      "terminal": ["ghostty"],
+      "audio": ["pavucontrol"]
+    }
+  },
+  "background": {
+    "desktopClock": {
+      "enabled": false
+    },
+    "enabled": true
+  },
+  "bar": {
+    "dragThreshold": 20,
+    "entries": [
+      {
+        "id": "logo",
+        "enabled": true
+      },
+      {
+        "id": "workspaces",
+        "enabled": true
+      },
+      {
+        "id": "activeWindow",
+        "enabled": true
+      },
+      {
+        "id": "spacer",
+        "enabled": true
+      },
+      {
+        "id": "tray",
+        "enabled": true
+      },
+      {
+        "id": "mail",
+        "enabled": true
+      },
+      {
+        "id": "clock",
+        "enabled": true
+      },
+      {
+        "id": "statusIcons",
+        "enabled": true
+      },
+      {
+        "id": "power",
+        "enabled": true
+      }
+    ],
+    "persistent": true,
+    "showOnHover": true,
+    "status": {
+      "showAudio": false,
+      "showBattery": true,
+      "showBluetooth": true,
+      "showKbLayout": false,
+      "showNetwork": true
+    },
+    "tray": {
+      "background": false,
+      "recolour": false
+    },
+    "sizes": {
+      "innerHeight": 30
+    },
+    "workspaces": {
+      "activeIndicator": true,
+      "activeLabel": "󰮯",
+      "activeTrail": true,
+      "label": "  ",
+      "occupiedBg": true,
+      "occupiedLabel": "󰮯",
+      "perMonitorWorkspaces": true,
+      "showWindows": true,
+      "shown": 8
+    }
+  },
+  "border": {
+    "rounding": 12,
+    "thickness": 5
+  },
+  "dashboard": {
+    "enabled": true,
+    "dragThreshold": 50,
+    "mediaUpdateInterval": 500,
+    "showOnHover": true,
+    "visualiserBars": 45
+  },
+  "launcher": {
+    "actionPrefix": ">",
+    "dragThreshold": 50,
+    "vimKeybinds": false,
+    "enableDangerousActions": false,
+    "maxShown": 8,
+    "maxWallpapers": 9,
+    "useFuzzy": {
+      "apps": false,
+      "actions": false,
+      "schemes": false,
+      "variants": false,
+      "wallpapers": false
+    }
+  },
+  "lock": {
+    "recolourLogo": false
+  },
+  "notifs": {
+    "actionOnClick": false,
+    "clearThreshold": 0.3,
+    "defaultExpireTimeout": 5000,
+    "expandThreshold": 20,
+    "expire": false
+  },
+  "osd": {
+    "hideDelay": 2000
+  },
+  "paths": {
+    "mediaGif": "root:/assets/bongocat.gif",
+    "sessionGif": "root:/assets/kurukuru.gif",
+    "wallpaperDir": "~/Pictures/Wallpapers"
+  },
+  "services": {
+    "audioIncrement": 0.1,
+    "weatherLocation": "10,10",
+    "useFahrenheit": false,
+    "useTwelveHourClock": false,
+    "smartScheme": true
+  },
+  "session": {
+    "dragThreshold": 30,
+    "vimKeybinds": false,
+    "commands": {
+      "logout": ["loginctl", "terminate-user", ""],
+      "shutdown": ["systemctl", "poweroff"],
+      "hibernate": ["systemctl", "hibernate"],
+      "reboot": ["systemctl", "reboot"]
+    }
+  }
 }

@@ -69,11 +69,11 @@ Item {
                 }
             }
 
-            Behavior on y {
+            Behavior on x {
                 Anim {}
             }
 
-            Behavior on implicitHeight {
+            Behavior on implicitWidth {
                 Anim {}
             }
         }

@@ -24,7 +24,7 @@ Shape {
     Osd.Background {
         wrapper: root.panels.osd
 
-        startX: root.width - root.panels.session.width
+        startX: root.width - root.panels.session.width + 1
         startY: (root.height - wrapper.height) / 2 - rounding
     }
 
@@ -58,7 +58,7 @@ Shape {
 
     BarPopouts.Background {
         wrapper: root.panels.popouts
-        invertBottomRounding: wrapper.y + wrapper.width + 1 >= root.width
+        invertBottomRounding: wrapper.x + wrapper.width + 1 >= root.width
 
         startX: wrapper.x - rounding * sideRounding
         startY: wrapper.y - 1

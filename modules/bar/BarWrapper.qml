@@ -22,11 +22,11 @@ Item {
         content.item?.checkPopout(x);
     }
 
-    function handleWheel(y: real, angleDelta: point): void {
-        content.item?.handleWheel(y, angleDelta);
+    function handleWheel(x: real, angleDelta: point): void {
+        content.item?.handleWheel(x, angleDelta);
     }
 
-    visible: width > Config.border.thickness
+    visible: height > Config.border.thickness
     implicitHeight: Config.border.thickness
 
     states: State {
@@ -69,7 +69,7 @@ Item {
         id: content
 
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.right: parent.right
 
         active: root.shouldBeVisible || root.visible

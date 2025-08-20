@@ -6,7 +6,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-ColumnLayout {
+RowLayout {
     id: root
 
     required property int index
@@ -30,8 +30,8 @@ ColumnLayout {
     StyledText {
         id: indicator
 
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-        Layout.preferredHeight: Config.bar.sizes.innerWidth - Appearance.padding.small * 2
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+        Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
 
         animate: true
         text: {
@@ -41,15 +41,15 @@ ColumnLayout {
             return root.activeWsId === root.ws ? activeLabel : root.isOccupied ? occupiedLabel : label;
         }
         color: Config.bar.workspaces.occupiedBg || root.isOccupied || root.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
-        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignHCenter
     }
 
     Loader {
         id: windows
 
-        Layout.alignment: Qt.AlignHCenter
-        Layout.fillHeight: true
-        Layout.topMargin: -Config.bar.sizes.innerWidth / 10
+        Layout.alignment: Qt.AlignVCenter
+        Layout.fillWidth: true
+        Layout.leftMargin: -Config.bar.sizes.innerHeight / 10
 
         visible: active
         active: root.hasWindows
@@ -94,7 +94,7 @@ ColumnLayout {
         }
     }
 
-    Behavior on Layout.preferredHeight {
+    Behavior on Layout.preferredWidth {
         Anim {}
     }
 

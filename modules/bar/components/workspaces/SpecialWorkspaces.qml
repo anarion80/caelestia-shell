@@ -37,7 +37,7 @@ Item {
             radius: Appearance.rounding.full
 
             gradient: Gradient {
-                orientation: Gradient.Vertical
+                orientation: Gradient.Horizontal
 
                 GradientStop {
                     position: 0
@@ -64,8 +64,8 @@ Item {
             anchors.right: parent.right
 
             radius: Appearance.rounding.full
-            implicitHeight: parent.height / 2
-            opacity: view.contentY > 0 ? 0 : 1
+            implicitWidth: parent.width / 2
+            opacity: view.contentX > 0 ? 0 : 1
 
             Behavior on opacity {
                 Anim {}
@@ -78,8 +78,8 @@ Item {
             anchors.right: parent.right
 
             radius: Appearance.rounding.full
-            implicitHeight: parent.height / 2
-            opacity: view.contentY < view.contentHeight - parent.height + Appearance.padding.small ? 0 : 1
+            implicitWidth: parent.width / 2
+            opacity: view.contentX < view.contentWidth - parent.width + Appearance.padding.small ? 0 : 1
 
             Behavior on opacity {
                 Anim {}
@@ -107,15 +107,15 @@ Item {
 
         highlightFollowsCurrentItem: false
         highlight: Item {
-            y: view.currentItem?.y ?? 0
-            implicitHeight: view.currentItem?.size ?? 0
+            x: view.currentItem?.x ?? 0
+            implicitWidth: view.currentItem?.size ?? 0
 
-            Behavior on y {
+            Behavior on x {
                 Anim {}
             }
         }
 
-        delegate: ColumnLayout {
+        delegate: RowLayout {
             id: ws
 
             required property HyprlandWorkspace modelData
@@ -168,7 +168,7 @@ Item {
                 id: label
 
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.preferredHeight: Config.bar.sizes.innerWidth - Appearance.padding.small * 2
+                Layout.preferredHeight: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
 
                 asynchronous: true
                 sourceComponent: ws.icon.length === 1 ? letterComp : iconComp

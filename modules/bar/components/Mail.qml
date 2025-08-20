@@ -1,22 +1,35 @@
-import qs.widgets
+import qs.components
+import qs.components.misc
 import qs.services
 import qs.config
-import QtQuick
 import Quickshell
+import QtQuick
 
 Item {
     id: root
 
-    implicitWidth: row.implicitWidth
-    implicitHeight: implicitHeight
-    property color colour: Colours.palette.m3tertiary
+    implicitWidth: icon.implicitHeight + mailText.implicitHeight + Appearance.padding.small * 2
+    implicitHeight: icon.implicitHeight + mailText.implicitHeight
+
+    StateLayer {
+        // Cursed workaround to make the height larger than the parent
+        anchors.fill: undefined
+        anchors.centerIn: parent
+        implicitWidth: root.implicitWidth + Appearance.padding.small * 2
+        implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
+
+        radius: Appearance.rounding.full
+
+        function onClicked(): void {
+            Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
+        }
+    }
 
     Row {
         id: row
 
         spacing: Appearance.spacing.small
         anchors.verticalCenter: parent.verticalCenter
-
 
         Ref {
             service: Mail
@@ -27,7 +40,7 @@ Item {
             animate: true
 
             text: "mail"
-            color: root.colour
+            color: Colours.palette.m3tertiary
 
             anchors.verticalCenter: parent.verticalCenter
 
@@ -42,23 +55,7 @@ Item {
             text: qsTr("%1").arg(Mail.unreadEmails.length ?? "N/A")
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
-            color: root.colour
-          }
-    }
-
-    StateLayer {
-        anchors.fill: undefined
-        anchors.centerIn: root
-        anchors.horizontalCenterOffset: 1
-
-        implicitWidth: implicitHeight
-        implicitHeight: root.implicitWidth + Appearance.padding.small * 2
-
-        radius: Appearance.rounding.full
-        hoverEnabled: false
-
-        function onClicked(): void {
-            Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
+            color: Colours.palette.m3tertiary
         }
     }
 }
