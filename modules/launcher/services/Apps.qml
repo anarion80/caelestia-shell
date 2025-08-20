@@ -13,12 +13,12 @@ Searcher {
     function launch(entry: DesktopEntry): void {
         if (entry.runInTerminal)
             Quickshell.execDetached({
-                command: ["ghostty", "-e", `${Quickshell.configDir}/assets/wrap_term_launch.sh`, ...entry.command],
+                command: ["app2unit", "--", ...Config.general.apps.terminal, `${Quickshell.shellDir}/assets/wrap_term_launch.sh`, ...entry.command],
                 workingDirectory: entry.workingDirectory
             });
         else
             Quickshell.execDetached({
-                command: ["sh", "-c", `gtk-launch '${entry.id}.desktop' || gtk-launch -- ${entry.execString}`],
+                command: ["app2unit", "--", ...entry.command],
                 workingDirectory: entry.workingDirectory
             });
     }
