@@ -37,8 +37,8 @@ MouseArea {
     property real sh: Math.abs(sy - ey)
 
     property list<var> clients: {
-        const ws = Hyprland.activeToplevel?.workspace?.id ?? Hyprland.activeWsId;
-        return Hyprland.toplevels.values.filter(c => c.workspace?.id === ws).sort((a, b) => {
+        const ws = Hypr.activeToplevel?.workspace?.id ?? Hypr.activeWsId;
+        return Hypr.toplevels.values.filter(c => c.workspace?.id === ws).sort((a, b) => {
             // Pinned first, then fullscreen, then floating, then any other
             const ac = a.lastIpcObject;
             const bc = b.lastIpcObject;
@@ -140,17 +140,17 @@ MouseArea {
                 to: 0
                 duration: Appearance.anim.durations.large
             }
-            Anim {
+            ExAnim {
                 target: root
                 properties: "rsx,rsy"
                 to: 0
             }
-            Anim {
+            ExAnim {
                 target: root
                 property: "sw"
                 to: root.screen.width
             }
-            Anim {
+            ExAnim {
                 target: root
                 property: "sh"
                 to: root.screen.height
@@ -164,7 +164,7 @@ MouseArea {
     }
 
     Connections {
-        target: Hyprland
+        target: Hypr
 
         function onActiveWsIdChanged(): void {
             root.checkClientRects(root.mouseX, root.mouseY);
@@ -243,11 +243,7 @@ MouseArea {
         implicitHeight: selectionRect.implicitHeight + root.realBorderWidth * 2
 
         Behavior on border.color {
-            ColorAnimation {
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
-            }
+            CAnim {}
         }
     }
 
@@ -260,30 +256,29 @@ MouseArea {
     Behavior on rsx {
         enabled: !root.pressed
 
-        Anim {}
+        ExAnim {}
     }
 
     Behavior on rsy {
         enabled: !root.pressed
 
-        Anim {}
+        ExAnim {}
     }
 
     Behavior on sw {
         enabled: !root.pressed
 
-        Anim {}
+        ExAnim {}
     }
 
     Behavior on sh {
         enabled: !root.pressed
 
-        Anim {}
+        ExAnim {}
     }
 
-    component Anim: NumberAnimation {
+    component ExAnim: Anim {
         duration: Appearance.anim.durations.expressiveDefaultSpatial
-        easing.type: Easing.BezierSpline
         easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
     }
 }

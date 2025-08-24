@@ -203,11 +203,7 @@ Item {
                                     opacity: root.session.bt.editingDeviceName ? 1 : 0
 
                                     Behavior on border.color {
-                                        ColorAnimation {
-                                            duration: Appearance.anim.durations.normal
-                                            easing.type: Easing.BezierSpline
-                                            easing.bezierCurve: Appearance.anim.curves.standard
-                                        }
+                                        CAnim {}
                                     }
 
                                     Behavior on opacity {
@@ -655,11 +651,5 @@ Item {
 
             cLayer: 2
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }

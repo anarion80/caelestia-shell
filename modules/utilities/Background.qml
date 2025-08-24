@@ -1,3 +1,4 @@
+import qs.components
 import qs.services
 import qs.config
 import QtQuick
@@ -48,10 +49,6 @@ ShapePath {
     }
 
     Behavior on fillColor {
-        ColorAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
-        }
+        CAnim {}
     }
 }

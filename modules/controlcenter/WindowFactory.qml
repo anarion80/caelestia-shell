@@ -1,7 +1,7 @@
 pragma Singleton
 
+import qs.components
 import qs.services
-import qs.config
 import Quickshell
 import QtQuick
 
@@ -53,11 +53,7 @@ Singleton {
             }
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.standard
-                }
+                CAnim {}
             }
         }
     }

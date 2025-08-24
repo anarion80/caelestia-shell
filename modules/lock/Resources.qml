@@ -5,7 +5,6 @@ import qs.services
 import qs.config
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Shapes
 
 GridLayout {
     id: root
@@ -86,17 +85,9 @@ GridLayout {
         }
 
         Behavior on value {
-            NumberAnimation {
+            Anim {
                 duration: Appearance.anim.durations.large
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
-    }
-
-    component Anim: ColorAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }

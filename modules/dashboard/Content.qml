@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import qs.components
 import qs.config
 import Quickshell
 import Quickshell.Widgets
@@ -101,27 +102,21 @@ Item {
             }
 
             Behavior on contentX {
-                NumberAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.standard
-                }
+                Anim {}
             }
         }
     }
 
     Behavior on implicitWidth {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.large
-            easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }
 
     Behavior on implicitHeight {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.large
-            easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }

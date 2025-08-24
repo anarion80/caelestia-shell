@@ -1,6 +1,7 @@
 pragma Singleton
 
 import qs.components.misc
+import qs.config
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
@@ -9,8 +10,13 @@ Singleton {
     id: root
 
     readonly property list<MprisPlayer> list: Mpris.players.values
-    readonly property MprisPlayer active: manualActive ?? list.find(p => p.identity === "Spotify") ?? list[0] ?? null
+    readonly property MprisPlayer active: manualActive ?? list.find(p => getIdentity(p) === Config.services.defaultPlayer) ?? list[0] ?? null
     property MprisPlayer manualActive
+
+    function getIdentity(player: MprisPlayer): string {
+        const alias = Config.services.playerAliases.find(a => a.from === player.identity);
+        return alias?.to ?? player.identity;
+    }
 
     CustomShortcut {
         name: "mediaToggle"
@@ -57,7 +63,7 @@ Singleton {
         }
 
         function list(): string {
-            return root.list.map(p => p.identity).join("\n");
+            return root.list.map(p => root.getIdentity(p)).join("\n");
         }
 
         function play(): void {

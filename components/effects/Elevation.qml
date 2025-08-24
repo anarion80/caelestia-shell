@@ -1,5 +1,5 @@
+import ".."
 import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Effects
 
@@ -13,10 +13,6 @@ RectangularShadow {
     offset.y: dp / 2
 
     Behavior on dp {
-        NumberAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
-        }
+        Anim {}
     }
 }

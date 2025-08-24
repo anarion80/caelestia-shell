@@ -60,27 +60,17 @@ TextField {
         }
 
         Behavior on opacity {
-            NumberAnimation {
+            Anim {
                 duration: Appearance.anim.durations.small
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
     }
 
     Behavior on color {
-        ColorAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
-        }
+        CAnim {}
     }
 
     Behavior on placeholderTextColor {
-        ColorAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
-        }
+        CAnim {}
     }
 }

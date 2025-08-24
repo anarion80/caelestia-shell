@@ -42,7 +42,7 @@ ColumnLayout {
             anchors.centerIn: parent
             asynchronous: true
             active: opacity > 0
-            opacity: root.lock.animating || Notifs.list.length > 0 ? 0 : 1
+            opacity: Notifs.list.length > 0 ? 0 : 1
 
             sourceComponent: ColumnLayout {
                 spacing: Appearance.spacing.large
@@ -51,7 +51,7 @@ ColumnLayout {
                     asynchronous: true
                     source: `file://${Quickshell.shellDir}/assets/dino.png`
                     fillMode: Image.PreserveAspectFit
-                    sourceSize.width: root.lock.animating ? 0 : clipRect.width * 0.8
+                    sourceSize.width: clipRect.width * 0.8
 
                     layer.enabled: true
                     layer.effect: Colouriser {
@@ -84,7 +84,7 @@ ColumnLayout {
             clip: true
 
             model: ScriptModel {
-                values: root.lock.animating ? [] : [...new Set(Notifs.list.map(notif => notif.appName))].reverse()
+                values: [...new Set(Notifs.list.map(notif => notif.appName))].reverse()
             }
 
             delegate: NotifGroup {}
@@ -139,11 +139,5 @@ ColumnLayout {
                 }
             }
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }

@@ -134,12 +134,9 @@ Item {
         }
 
         transitions: Transition {
-            NumberAnimation {
+            Anim {
                 target: img
                 properties: "opacity,scale"
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
     }

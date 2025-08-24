@@ -224,11 +224,7 @@ Item {
                 font.pointSize: Appearance.font.size.large
 
                 Behavior on fill {
-                    NumberAnimation {
-                        duration: Appearance.anim.durations.normal
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Appearance.anim.curves.standard
-                    }
+                    Anim {}
                 }
             }
 
@@ -242,11 +238,5 @@ Item {
                 color: tab.current ? Colours.palette.m3primary : Colours.palette.m3onSurfaceVariant
             }
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }
