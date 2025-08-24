@@ -18,10 +18,8 @@ Item {
     implicitWidth: Config.dashboard.sizes.mediaWidth
 
     Behavior on playerProgress {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.large
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
         }
     }
 
@@ -52,11 +50,7 @@ Item {
             }
 
             Behavior on strokeColor {
-                ColorAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.standard
-                }
+                CAnim {}
             }
         }
 
@@ -76,11 +70,7 @@ Item {
             }
 
             Behavior on strokeColor {
-                ColorAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: Appearance.anim.curves.standard
-                }
+                CAnim {}
             }
         }
     }

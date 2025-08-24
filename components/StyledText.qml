@@ -20,11 +20,7 @@ Text {
     font.pointSize: Appearance.font.size.smaller
 
     Behavior on color {
-        ColorAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
-        }
+        CAnim {}
     }
 
     Behavior on text {

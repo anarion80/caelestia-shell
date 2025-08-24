@@ -1,3 +1,4 @@
+import qs.components
 import qs.config
 import Quickshell
 import QtQuick
@@ -25,11 +26,9 @@ Item {
             from: ""
             to: "visible"
 
-            NumberAnimation {
+            Anim {
                 target: root
                 property: "implicitWidth"
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
             }
         },
@@ -37,11 +36,9 @@ Item {
             from: "visible"
             to: ""
 
-            NumberAnimation {
+            Anim {
                 target: root
                 property: "implicitWidth"
-                duration: root.visibilities.osd ? Appearance.anim.durations.normal : Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: root.visibilities.osd ? Appearance.anim.curves.expressiveDefaultSpatial : Appearance.anim.curves.emphasized
             }
         }

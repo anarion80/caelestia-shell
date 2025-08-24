@@ -29,9 +29,7 @@ StyledRect {
     Component.onCompleted: x = 0
 
     Behavior on x {
-        NumberAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
+        Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasizedDecel
         }
     }
@@ -483,11 +481,5 @@ StyledRect {
                 return (inner.width - actions.spacing * (numActions - 1)) / numActions - Appearance.padding.normal * 2;
             }
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }

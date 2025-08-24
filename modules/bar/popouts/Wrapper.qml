@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import qs.components
 import qs.services
 import qs.config
 import qs.modules.windowinfo
@@ -89,7 +90,7 @@ Item {
 
         sourceComponent: WindowInfo {
             screen: root.screen
-            client: Hyprland.activeToplevel
+            client: Hypr.activeToplevel
         }
     }
 
@@ -170,7 +171,6 @@ Item {
                     }
                     Anim {
                         property: "opacity"
-                        easing.bezierCurve: Appearance.anim.curves.standard
                     }
                 }
             },
@@ -181,7 +181,6 @@ Item {
                 SequentialAnimation {
                     Anim {
                         property: "opacity"
-                        easing.bezierCurve: Appearance.anim.curves.standard
                     }
                     PropertyAction {
                         property: "active"
@@ -189,11 +188,5 @@ Item {
                 }
             }
         ]
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.emphasized
     }
 }

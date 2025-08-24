@@ -14,7 +14,6 @@ WlSessionLockSurface {
     required property Pam pam
 
     readonly property alias unlocking: unlockAnim.running
-    readonly property bool animating: initAnim.running || unlockAnim.running
 
     color: "transparent"
 
@@ -44,7 +43,7 @@ WlSessionLockSurface {
             }
             Anim {
                 target: content
-                property: "centerScale"
+                property: "scale"
                 to: 0
                 duration: Appearance.anim.durations.expressiveDefaultSpatial
                 easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
@@ -132,7 +131,7 @@ WlSessionLockSurface {
                 }
                 Anim {
                     target: content
-                    property: "centerScale"
+                    property: "scale"
                     to: 1
                     duration: Appearance.anim.durations.expressiveDefaultSpatial
                     easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
@@ -219,14 +218,13 @@ WlSessionLockSurface {
         Content {
             id: content
 
+            anchors.centerIn: parent
+            width: (root.screen?.height ?? 0) * Config.lock.sizes.heightMult * Config.lock.sizes.ratio - Appearance.padding.large * 2
+            height: (root.screen?.height ?? 0) * Config.lock.sizes.heightMult - Appearance.padding.large * 2
+
             lock: root
             opacity: 0
+            scale: 0
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 }

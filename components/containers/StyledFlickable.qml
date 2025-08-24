@@ -1,4 +1,4 @@
-import qs.config
+import ".."
 import QtQuick
 
 Flickable {
@@ -7,11 +7,8 @@ Flickable {
     maximumFlickVelocity: 3000
 
     rebound: Transition {
-        NumberAnimation {
+        Anim {
             properties: "x,y"
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
         }
     }
 }

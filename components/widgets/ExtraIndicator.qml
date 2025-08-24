@@ -37,17 +37,14 @@ StyledRect {
     }
 
     Behavior on opacity {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.expressiveFastSpatial
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
         }
     }
 
     Behavior on scale {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.expressiveFastSpatial
-            easing.type: Easing.BezierSpline
             easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
         }
     }

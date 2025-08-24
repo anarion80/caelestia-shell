@@ -31,6 +31,10 @@ CustomMouseArea {
         return x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
 
+    function inLeftPanel(panel: Item, x: real, y: real): bool {
+        return x < bar.implicitWidth + panel.x + panel.width && withinPanelHeight(panel, x, y);
+    }
+
     function inRightPanel(panel: Item, x: real, y: real): bool {
         return x > bar.implicitWidth + panel.x && withinPanelHeight(panel, x, y);
     }
@@ -160,6 +164,8 @@ CustomMouseArea {
         // Show popouts on hover
         if (x < bar.implicitWidth)
             bar.checkPopout(y);
+        else if (!popouts.currentName.startsWith("traymenu") && !inLeftPanel(panels.popouts, x, y))
+            popouts.hasCurrent = false;
     }
 
     // Monitor individual visibility changes

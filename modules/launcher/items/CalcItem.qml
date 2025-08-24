@@ -130,11 +130,7 @@ Item {
                 opacity: stateLayer.containsMouse ? 1 : 0
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.anim.durations.normal
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Appearance.anim.curves.standard
-                    }
+                    Anim {}
                 }
             }
 
@@ -151,9 +147,7 @@ Item {
             }
 
             Behavior on implicitWidth {
-                NumberAnimation {
-                    duration: Appearance.anim.durations.normal
-                    easing.type: Easing.BezierSpline
+                Anim {
                     easing.bezierCurve: Appearance.anim.curves.emphasized
                 }
             }

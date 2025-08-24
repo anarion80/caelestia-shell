@@ -80,25 +80,23 @@ Slider {
 
                 Behavior on moving {
                     SequentialAnimation {
-                        NumberAnimation {
+                        Anim {
                             target: icon
                             property: "scale"
                             from: 1
                             to: 0
                             duration: Appearance.anim.durations.normal / 2
-                            easing.type: Easing.BezierSpline
                             easing.bezierCurve: Appearance.anim.curves.standardAccel
                         }
                         ScriptAction {
                             script: icon.update()
                         }
-                        NumberAnimation {
+                        Anim {
                             target: icon
                             property: "scale"
                             from: 0
                             to: 1
                             duration: Appearance.anim.durations.normal / 2
-                            easing.type: Easing.BezierSpline
                             easing.bezierCurve: Appearance.anim.curves.standardDecel
                         }
                     }
@@ -128,10 +126,8 @@ Slider {
     }
 
     Behavior on value {
-        NumberAnimation {
+        Anim {
             duration: Appearance.anim.durations.large
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
         }
     }
 }

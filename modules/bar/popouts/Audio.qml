@@ -101,11 +101,7 @@ Item {
                 onMoved: Audio.setVolume(value)
 
                 Behavior on value {
-                    NumberAnimation {
-                        duration: Appearance.anim.durations.normal
-                        easing.type: Easing.BezierSpline
-                        easing.bezierCurve: Appearance.anim.curves.standard
-                    }
+                    Anim {}
                 }
             }
         }

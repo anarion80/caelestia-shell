@@ -48,7 +48,7 @@ StyledRect {
 
             sourceComponent: StyledText {
                 animate: true
-                text: Hyprland.kbLayout
+                text: Hypr.kbLayout
                 color: root.colour
                 font.family: Appearance.font.family.mono
             }
@@ -111,11 +111,13 @@ StyledRect {
                             Anim {
                                 from: 1
                                 to: 0
+                                duration: Appearance.anim.durations.large
                                 easing.bezierCurve: Appearance.anim.curves.standardAccel
                             }
                             Anim {
                                 from: 0
                                 to: 1
+                                duration: Appearance.anim.durations.large
                                 easing.bezierCurve: Appearance.anim.curves.standardDecel
                             }
                         }
@@ -156,7 +158,10 @@ StyledRect {
     }
 
     Behavior on implicitHeight {
-        Anim {}
+        Anim {
+            duration: Appearance.anim.durations.large
+            easing.bezierCurve: Appearance.anim.curves.emphasized
+        }
     }
 
     component WrappedLoader: Loader {
@@ -165,11 +170,5 @@ StyledRect {
         Layout.alignment: Qt.AlignHCenter
         asynchronous: true
         visible: active
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.large
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.emphasized
     }
 }

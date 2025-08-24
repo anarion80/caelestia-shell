@@ -11,7 +11,12 @@ StyledRect {
     required property Repeater workspaces
     required property Item mask
 
-    readonly property int currentWsIdx: (activeWsId - 1) % Config.bar.workspaces.shown
+    readonly property int currentWsIdx: {
+        let i = activeWsId - 1;
+        while (i < 0)
+            i += Config.bar.workspaces.shown;
+        return i % Config.bar.workspaces.shown;
+    }
 
     property real leading: workspaces.itemAt(currentWsIdx)?.y ?? 0
     property real trailing: workspaces.itemAt(currentWsIdx)?.y ?? 0
@@ -58,13 +63,13 @@ StyledRect {
     Behavior on leading {
         enabled: Config.bar.workspaces.activeTrail
 
-        Anim {}
+        EAnim {}
     }
 
     Behavior on trailing {
         enabled: Config.bar.workspaces.activeTrail
 
-        Anim {
+        EAnim {
             duration: Appearance.anim.durations.normal * 2
         }
     }
@@ -72,24 +77,22 @@ StyledRect {
     Behavior on currentSize {
         enabled: Config.bar.workspaces.activeTrail
 
-        Anim {}
+        EAnim {}
     }
 
     Behavior on offset {
         enabled: !Config.bar.workspaces.activeTrail
 
-        Anim {}
+        EAnim {}
     }
 
     Behavior on size {
         enabled: !Config.bar.workspaces.activeTrail
 
-        Anim {}
+        EAnim {}
     }
 
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
+    component EAnim: Anim {
         easing.bezierCurve: Appearance.anim.curves.emphasized
     }
 }

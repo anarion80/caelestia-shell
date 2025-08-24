@@ -25,29 +25,22 @@ StyledRect {
         spacing: Appearance.spacing.small
 
         add: Transition {
-            NumberAnimation {
+            Anim {
                 properties: "scale"
                 from: 0
                 to: 1
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.standardDecel
             }
         }
 
         move: Transition {
-            NumberAnimation {
+            Anim {
                 properties: "scale"
                 to: 1
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.standardDecel
             }
-            NumberAnimation {
+            Anim {
                 properties: "x,y"
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
 
@@ -61,17 +54,13 @@ StyledRect {
     }
 
     Behavior on implicitWidth {
-        NumberAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
+        Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }
 
     Behavior on implicitHeight {
-        NumberAnimation {
-            duration: Appearance.anim.durations.normal
-            easing.type: Easing.BezierSpline
+        Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }

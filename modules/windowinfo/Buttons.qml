@@ -78,7 +78,7 @@ ColumnLayout {
 
                 Button {
                     required property int index
-                    readonly property int wsId: Math.floor((Hyprland.activeWsId - 1) / 10) * 10 + index + 1
+                    readonly property int wsId: Math.floor((Hypr.activeWsId - 1) / 10) * 10 + index + 1
                     readonly property bool isCurrent: root.client?.workspace.id === wsId
 
                     color: isCurrent ? Colours.tPalette.m3surfaceContainerHighest : Colours.palette.m3tertiaryContainer
@@ -87,18 +87,14 @@ ColumnLayout {
                     disabled: isCurrent
 
                     function onClicked(): void {
-                        Hyprland.dispatch(`movetoworkspace ${wsId},address:0x${root.client?.address}`);
+                        Hypr.dispatch(`movetoworkspace ${wsId},address:0x${root.client?.address}`);
                     }
                 }
             }
         }
 
         Behavior on Layout.preferredHeight {
-            NumberAnimation {
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
-            }
+            Anim {}
         }
     }
 
@@ -116,7 +112,7 @@ ColumnLayout {
             text: root.client?.lastIpcObject.floating ? qsTr("Tile") : qsTr("Float")
 
             function onClicked(): void {
-                Hyprland.dispatch(`togglefloating address:0x${root.client?.address}`);
+                Hypr.dispatch(`togglefloating address:0x${root.client?.address}`);
             }
         }
 
@@ -133,7 +129,7 @@ ColumnLayout {
                 text: root.client?.lastIpcObject.pinned ? qsTr("Unpin") : qsTr("Pin")
 
                 function onClicked(): void {
-                    Hyprland.dispatch(`pin address:0x${root.client?.address}`);
+                    Hypr.dispatch(`pin address:0x${root.client?.address}`);
                 }
             }
         }
@@ -144,7 +140,7 @@ ColumnLayout {
             text: qsTr("Kill")
 
             function onClicked(): void {
-                Hyprland.dispatch(`killwindow address:0x${root.client?.address}`);
+                Hypr.dispatch(`killwindow address:0x${root.client?.address}`);
             }
         }
     }

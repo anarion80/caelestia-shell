@@ -1,3 +1,4 @@
+import qs.components
 import qs.services
 import qs.config
 import Quickshell
@@ -27,11 +28,9 @@ Item {
             from: ""
             to: "visible"
 
-            NumberAnimation {
+            Anim {
                 target: root
                 property: "implicitWidth"
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
             }
         },
@@ -39,11 +38,9 @@ Item {
             from: "visible"
             to: ""
 
-            NumberAnimation {
+            Anim {
                 target: root
                 property: "implicitWidth"
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.anim.curves.emphasized
             }
         }

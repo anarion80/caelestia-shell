@@ -48,8 +48,15 @@ Item {
 
             required property var modelData
 
-            readonly property Workspace start: root.workspaces.itemAt((modelData.start - 1) % Config.bar.workspaces.shown) ?? null
-            readonly property Workspace end: root.workspaces.itemAt((modelData.end - 1) % Config.bar.workspaces.shown) ?? null
+            readonly property Workspace start: root.workspaces.itemAt(getWsIdx(modelData.start)) ?? null
+            readonly property Workspace end: root.workspaces.itemAt(getWsIdx(modelData.end)) ?? null
+
+            function getWsIdx(ws: int): int {
+                let i = ws - 1;
+                while (i < 0)
+                    i += Config.bar.workspaces.shown;
+                return i % Config.bar.workspaces.shown;
+            }
 
             anchors.horizontalCenter: root.horizontalCenter
 
@@ -77,12 +84,6 @@ Item {
                 Anim {}
             }
         }
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.normal
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.standard
     }
 
     component Pill: QtObject {

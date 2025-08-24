@@ -22,10 +22,10 @@ StackView {
         handle: root.trayItem
     }
 
-    pushEnter: Anim {}
-    pushExit: Anim {}
-    popEnter: Anim {}
-    popExit: Anim {}
+    pushEnter: NoAnim {}
+    pushExit: NoAnim {}
+    popEnter: NoAnim {}
+    popExit: NoAnim {}
 
     HyprlandFocusGrab {
         active: true
@@ -33,7 +33,7 @@ StackView {
         onCleared: root.popouts.hasCurrent = false
     }
 
-    component Anim: Transition {
+    component NoAnim: Transition {
         NumberAnimation {
             duration: 0
         }
@@ -58,19 +58,11 @@ StackView {
         StackView.onRemoved: destroy()
 
         Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
-            }
+            Anim {}
         }
 
         Behavior on scale {
-            NumberAnimation {
-                duration: Appearance.anim.durations.normal
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
-            }
+            Anim {}
         }
 
         QsMenuOpener {
