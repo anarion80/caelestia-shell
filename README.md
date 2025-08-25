@@ -316,6 +316,7 @@ All configuration options are in `~/.config/caelestia/shell.json`.
     "services": {
         "audioIncrement": 0.1,
         "defaultPlayer": "Spotify",
+        "gpuType": "",
         "playerAliases": [{
             "com.github.th_ch.youtube_music": "YT Music"
         }],
