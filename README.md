@@ -145,7 +145,8 @@ git pull
 
 ## Configuring
 
-All configuration options are in `~/.config/caelestia/shell.json`.
+All configuration options should be put in `~/.config/caelestia/shell.json`. This file is *not* created by
+default, you must create it manually.
 
 > [!NOTE]
 > The example configuration only includes recommended configuration options. For more advanced customisation
@@ -320,7 +321,7 @@ All configuration options are in `~/.config/caelestia/shell.json`.
         "playerAliases": [{
             "com.github.th_ch.youtube_music": "YT Music"
         }],
-        "weatherLocation": "10,10",
+        "weatherLocation": "",
         "useFahrenheit": false,
         "useTwelveHourClock": false,
         "smartScheme": true
