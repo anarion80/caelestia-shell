@@ -145,7 +145,8 @@ git pull
 
 ## Configuring
 
-All configuration options are in `~/.config/caelestia/shell.json`.
+All configuration options should be put in `~/.config/caelestia/shell.json`. This file is *not* created by
+default, you must create it manually.
 
 > [!NOTE]
 > The example configuration only includes recommended configuration options. For more advanced customisation
@@ -197,7 +198,13 @@ All configuration options are in `~/.config/caelestia/shell.json`.
         "desktopClock": {
             "enabled": false
         },
-        "enabled": true
+        "enabled": true,
+        "visualiser": {
+            "enabled": true,
+            "autoHide": true,
+            "rounding": 1,
+            "spacing": 1
+        }
     },
     "bar": {
         "dragThreshold": 20,
@@ -276,8 +283,7 @@ All configuration options are in `~/.config/caelestia/shell.json`.
         "enabled": true,
         "dragThreshold": 50,
         "mediaUpdateInterval": 500,
-        "showOnHover": true,
-        "visualiserBars": 45
+        "showOnHover": true
     },
     "launcher": {
         "actionPrefix": ">",
@@ -316,13 +322,15 @@ All configuration options are in `~/.config/caelestia/shell.json`.
     "services": {
         "audioIncrement": 0.1,
         "defaultPlayer": "Spotify",
+        "gpuType": "",
         "playerAliases": [{
             "com.github.th_ch.youtube_music": "YT Music"
         }],
-        "weatherLocation": "10,10",
+        "weatherLocation": "",
         "useFahrenheit": false,
         "useTwelveHourClock": false,
-        "smartScheme": true
+        "smartScheme": true,
+        "visualiserBars": 45
     },
     "session": {
         "dragThreshold": 30,

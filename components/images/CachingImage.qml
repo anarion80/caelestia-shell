@@ -1,4 +1,5 @@
 import qs.utils
+import Caelestia
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -8,7 +9,7 @@ Image {
 
     property string path
     property string hash
-    readonly property string cachePath: `${Paths.stringify(Paths.imagecache)}/${hash}@${effectiveWidth}x${effectiveHeight}.png`
+    readonly property url cachePath: `${Paths.imagecache}/${hash}@${effectiveWidth}x${effectiveHeight}.png`
 
     readonly property real effectiveScale: QsWindow.window?.devicePixelRatio ?? 1
     readonly property int effectiveWidth: Math.ceil(width * effectiveScale)
@@ -31,8 +32,7 @@ Image {
             source = path;
         else if (source == path && status === Image.Ready) {
             Paths.mkdir(Paths.imagecache);
-            const grabPath = cachePath;
-            grabToImage(res => res.saveToFile(grabPath));
+            CUtils.saveItem(this, cachePath);
         }
     }
 
