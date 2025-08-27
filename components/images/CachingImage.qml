@@ -30,10 +30,8 @@ Image {
     onStatusChanged: {
         if (source == cachePath && status === Image.Error)
             source = path;
-        else if (source == path && status === Image.Ready) {
-            Paths.mkdir(Paths.imagecache);
+        else if (source == path && status === Image.Ready)
             CUtils.saveItem(this, cachePath);
-        }
     }
 
     Process {

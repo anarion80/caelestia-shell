@@ -52,24 +52,35 @@ Dependencies:
 -   `gcc-libs`
 -   [`material-symbols`](https://fonts.google.com/icons)
 -   [`caskaydia-cove-nerd`](https://www.nerdfonts.com/font-downloads)
--   [`grim`](https://gitlab.freedesktop.org/emersion/grim)
 -   [`swappy`](https://github.com/jtheoof/swappy)
 -   [`libqalculate`](https://github.com/Qalculate/libqalculate)
+-   [`bash`](https://www.gnu.org/software/bash)
+-   `qt6-base`
+-   `qt6-declarative`
+
+Build dependencies:
+
+-   [`cmake`](https://cmake.org)
+-   [`ninja`](https://github.com/ninja-build/ninja)
 
 To install the shell manually, install all dependencies and clone this repo to `$XDG_CONFIG_HOME/quickshell/caelestia`.
-Then compile the beat detector and install it to `/usr/lib/caelestia/beat_detector`.
+Then simply build and install using `cmake`.
 
 ```sh
 cd $XDG_CONFIG_HOME/quickshell
 git clone https://github.com/caelestia-dots/shell.git caelestia
-g++ -std=c++17 -Wall -Wextra -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/usr/include/aubio -o beat_detector caelestia/assets/beat_detector.cpp -lpipewire-0.3 -laubio
-sudo mv beat_detector /usr/lib/caelestia/beat_detector
+
+cd caelestia
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+sudo cmake --install build
 ```
 
 > [!TIP]
-> The beat detector can actually be installed anywhere. However, if it is not installed to the default
-> location of `/usr/lib/caelestia/beat_detector`, you must set the environment variable `CAELESTIA_BD_PATH`
-> to wherever you have installed the beat detector.
+> You can customise the installation location via the `cmake` flags `INSTALL_LIBDIR`, `INSTALL_QMLDIR` and
+> `INSTALL_QSCONFDIR` for the libraries (the beat detector), QML plugin and Quickshell config directories
+> respectively. If changing the library directory, remember to set the `CAELESTIA_LIB_DIR` environment
+> variable to the custom directory when launching the shell.
 
 ## Usage
 
@@ -145,7 +156,7 @@ git pull
 
 ## Configuring
 
-All configuration options should be put in `~/.config/caelestia/shell.json`. This file is *not* created by
+All configuration options should be put in `~/.config/caelestia/shell.json`. This file is _not_ created by
 default, you must create it manually.
 
 > [!NOTE]
@@ -177,7 +188,7 @@ default, you must create it manually.
             "scale": 1
         },
         "rounding": {
-        	"scale": 1
+            "scale": 1
         },
         "spacing": {
             "scale": 1
@@ -207,48 +218,51 @@ default, you must create it manually.
         }
     },
     "bar": {
+        "clock": {
+            "showIcon": true
+        },
         "dragThreshold": 20,
         "entries": [
-        	{
-   	            "id": "logo",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "workspaces",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "spacer",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "activeWindow",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "spacer",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "tray",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "clock",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "statusIcons",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "power",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "idleInhibitor",
-   	            "enabled": false
-   	        }
+            {
+                "id": "logo",
+                "enabled": true
+            },
+            {
+                "id": "workspaces",
+                "enabled": true
+            },
+            {
+                "id": "spacer",
+                "enabled": true
+            },
+            {
+                "id": "activeWindow",
+                "enabled": true
+            },
+            {
+                "id": "spacer",
+                "enabled": true
+            },
+            {
+                "id": "tray",
+                "enabled": true
+            },
+            {
+                "id": "clock",
+                "enabled": true
+            },
+            {
+                "id": "statusIcons",
+                "enabled": true
+            },
+            {
+                "id": "power",
+                "enabled": true
+            },
+            {
+                "id": "idleInhibitor",
+                "enabled": false
+            }
         ],
         "persistent": true,
         "showOnHover": true,
@@ -312,6 +326,9 @@ default, you must create it manually.
         "expire": false
     },
     "osd": {
+        "enabled": true,
+        "enableBrightness": true,
+        "enableMicrophone": false,
         "hideDelay": 2000
     },
     "paths": {
@@ -323,9 +340,11 @@ default, you must create it manually.
         "audioIncrement": 0.1,
         "defaultPlayer": "Spotify",
         "gpuType": "",
-        "playerAliases": [{
-            "com.github.th_ch.youtube_music": "YT Music"
-        }],
+        "playerAliases": [
+            {
+                "com.github.th_ch.youtube_music": "YT Music"
+            }
+        ],
         "weatherLocation": "",
         "useFahrenheit": false,
         "useTwelveHourClock": false,

@@ -184,6 +184,12 @@ Singleton {
         return "volume_mute";
     }
 
+    function getMicVolumeIcon(volume: real, isMuted: bool): string {
+        if (!isMuted && volume > 0)
+            return "mic";
+        return "mic_off";
+    }
+
     function getSpecialWsIcon(name: string): string {
         name = name.toLowerCase().slice("special:".length);
         if (name === "special")

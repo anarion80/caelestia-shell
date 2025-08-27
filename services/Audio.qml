@@ -29,6 +29,9 @@ Singleton {
     readonly property bool muted: !!sink?.audio?.muted
     readonly property real volume: sink?.audio?.volume ?? 0
 
+    readonly property bool sourceMuted: !!source?.audio?.muted
+    readonly property real sourceVolume: source?.audio?.volume ?? 0
+
     function setVolume(newVolume: real): void {
         if (sink?.ready && sink?.audio) {
             sink.audio.muted = false;
@@ -42,6 +45,21 @@ Singleton {
 
     function decrementVolume(amount: real): void {
         setVolume(volume - (amount || Config.services.audioIncrement));
+    }
+
+    function setSourceVolume(newVolume: real): void {
+        if (source?.ready && source?.audio) {
+            source.audio.muted = false;
+            source.audio.volume = Math.max(0, Math.min(1, newVolume));
+        }
+    }
+
+    function incrementSourceVolume(amount: real): void {
+        setSourceVolume(sourceVolume + (amount || Config.services.audioIncrement));
+    }
+
+    function decrementSourceVolume(amount: real): void {
+        setSourceVolume(sourceVolume - (amount || Config.services.audioIncrement));
     }
 
     function setAudioSink(newSink: PwNode): void {

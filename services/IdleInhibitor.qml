@@ -6,17 +6,24 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property bool enabled: false
+    property alias enabled: props.enabled
+
+    PersistentProperties {
+        id: props
+
+        property bool enabled
+
+        reloadableId: "idleInhibitor"
+    }
 
     Process {
-        id: idleInhibitProc
         running: root.enabled
-        command: [Quickshell.env("CAELESTIA_II_PATH") || "/usr/lib/caelestia/inhibit_idle"] 
+        command: ["systemd-inhibit", "--what=idle", "--who=caelestia-shell", "--why=Idle inhibitor active", "--mode=block", "sleep", "inf"]
     }
 
     IpcHandler {
         target: "idleInhibitor"
-        
+
         function isEnabled(): bool {
             return root.enabled;
         }
@@ -24,7 +31,7 @@ Singleton {
         function toggle(): void {
             root.enabled = !root.enabled;
         }
-        
+
         function enable(): void {
             root.enabled = true;
         }

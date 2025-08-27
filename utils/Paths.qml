@@ -15,6 +15,7 @@ Singleton {
     readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}/caelestia`
 
     readonly property url imagecache: `${cache}/imagecache`
+    readonly property string libdir: Quickshell.env("CAELESTIA_LIB_DIR") || "/usr/lib/caelestia"
 
     function stringify(path: url): string {
         let str = path.toString();
@@ -35,13 +36,5 @@ Singleton {
 
     function strip(path: url): string {
         return stringify(path).replace("file://", "");
-    }
-
-    function mkdir(path: url): void {
-        Quickshell.execDetached(["mkdir", "-p", strip(path)]);
-    }
-
-    function copy(from: url, to: url): void {
-        Quickshell.execDetached(["cp", strip(from), strip(to)]);
     }
 }
