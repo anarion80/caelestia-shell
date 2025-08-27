@@ -10,7 +10,7 @@ JsonObject {
     }
 
     component Visualiser: JsonObject {
-        property bool enabled: true
+        property bool enabled: false
         property bool autoHide: true
         property real rounding: 1
         property real spacing: 1

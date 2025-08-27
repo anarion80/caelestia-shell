@@ -3,6 +3,7 @@ qt_add_qml_module(caelestia
     VERSION 0.1
     SOURCES
         cutils.hpp cutils.cpp
+        cachingimagemanager.hpp cachingimagemanager.cpp
 )
 
 qt_query_qml_module(caelestia

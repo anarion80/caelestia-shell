@@ -211,7 +211,7 @@ default, you must create it manually.
         },
         "enabled": true,
         "visualiser": {
-            "enabled": true,
+            "enabled": false,
             "autoHide": true,
             "rounding": 1,
             "spacing": 1

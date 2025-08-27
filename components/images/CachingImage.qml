@@ -1,44 +1,29 @@
 import qs.utils
 import Caelestia
-import Quickshell
-import Quickshell.Io
 import QtQuick
 
 Image {
     id: root
 
-    property string path
-    property string hash
-    readonly property url cachePath: `${Paths.imagecache}/${hash}@${effectiveWidth}x${effectiveHeight}.png`
+    property alias path: manager.path
 
-    readonly property real effectiveScale: QsWindow.window?.devicePixelRatio ?? 1
-    readonly property int effectiveWidth: Math.ceil(width * effectiveScale)
-    readonly property int effectiveHeight: Math.ceil(height * effectiveScale)
+    property int sourceWidth
+    property int sourceHeight
 
     asynchronous: true
     fillMode: Image.PreserveAspectCrop
-    sourceSize.width: effectiveWidth
-    sourceSize.height: effectiveHeight
-
-    onPathChanged: shaProc.exec(["sha256sum", Paths.strip(path)])
-
-    onCachePathChanged: {
-        if (hash)
-            source = cachePath;
-    }
+    sourceSize.width: sourceWidth
+    sourceSize.height: sourceHeight
 
     onStatusChanged: {
-        if (source == cachePath && status === Image.Error)
-            source = path;
-        else if (source == path && status === Image.Ready)
-            CUtils.saveItem(this, cachePath);
+        if (!manager.usingCache && status === Image.Ready)
+            CUtils.saveItem(this, manager.cachePath);
     }
 
-    Process {
-        id: shaProc
+    CachingImageManager {
+        id: manager
 
-        stdout: StdioCollector {
-            onStreamFinished: root.hash = text.split(" ")[0]
-        }
+        item: root
+        cacheDir: Paths.imagecache
     }
 }
