@@ -42,14 +42,17 @@
     });
 
     devShells = forAllSystems (pkgs: {
-      default = let
-        shell = self.packages.${pkgs.system}.caelestia-shell;
-      in
-        pkgs.mkShellNoCC {
-          inputsFrom = [shell];
-          packages = with pkgs; [material-symbols rubik nerd-fonts.caskaydia-cove];
-          CAELESTIA_LIB_DIR = "${shell}/lib";
-        };
+      default = pkgs.mkShell {
+        inputsFrom = [self.packages.${pkgs.system}.caelestia-shell];
+        packages = with pkgs; [material-symbols rubik nerd-fonts.caskaydia-cove];
+        shellHook = ''
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build
+          export CAELESTIA_LIB_DIR="$PWD/build/assets/cpp";
+          export QML2_IMPORT_PATH="$PWD/build/qml";
+        '';
+        CAELESTIA_XKB_RULES_PATH = "${pkgs.xkeyboard-config}/share/xkeyboard-config-2/rules/base.lst";
+      };
     });
 
     homeManagerModules.default = import ./nix/hm-module.nix self;
