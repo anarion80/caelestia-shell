@@ -31,7 +31,7 @@ Item {
             implicitWidth: Config.osd.sizes.sliderWidth
             implicitHeight: Config.osd.sizes.sliderHeight
 
-            onWheel: event => {
+            function onWheel(event: WheelEvent) {
                 if (event.angleDelta.y > 0)
                     Audio.incrementVolume();
                 else if (event.angleDelta.y < 0)
@@ -55,7 +55,7 @@ Item {
                 implicitWidth: Config.osd.sizes.sliderWidth
                 implicitHeight: Config.osd.sizes.sliderHeight
 
-                onWheel: event => {
+                function onWheel(event: WheelEvent) {
                     if (event.angleDelta.y > 0)
                         Audio.incrementSourceVolume();
                     else if (event.angleDelta.y < 0)
@@ -80,7 +80,7 @@ Item {
                 implicitWidth: Config.osd.sizes.sliderWidth
                 implicitHeight: Config.osd.sizes.sliderHeight
 
-                onWheel: event => {
+                function onWheel(event: WheelEvent) {
                     const monitor = root.monitor;
                     if (!monitor)
                         return;

@@ -213,124 +213,198 @@ ColumnLayout {
         }
     }
 
-    StyledText {
-        id: message
-
-        readonly property Pam pam: root.lock.pam
-        readonly property string msg: {
-            if (pam.fprintState === "error")
-                return qsTr("ERROR: %1").arg(pam.fprint.message);
-            if (pam.state === "error")
-                return qsTr("ERROR: %1").arg(pam.passwd.message);
-
-            if (pam.lockMessage)
-                return pam.lockMessage;
-
-            if (pam.state === "max" && pam.fprintState === "max")
-                return qsTr("Maximum password and fingerprint attempts reached.");
-            if (pam.state === "max") {
-                if (pam.fprint.available)
-                    return qsTr("Maximum password attempts reached. Please use fingerprint.");
-                return qsTr("Maximum password attempts reached.");
-            }
-            if (pam.fprintState === "max")
-                return qsTr("Maximum fingerprint attempts reached. Please use password.");
-
-            if (pam.state === "fail") {
-                if (pam.fprint.available)
-                    return qsTr("Incorrect password. Please try again or use fingerprint.");
-                return qsTr("Incorrect password. Please try again.");
-            }
-            if (pam.fprintState === "fail")
-                return qsTr("Fingerprint not recognized (%1/%2). Please try again or use password.").arg(pam.fprint.tries).arg(Config.lock.maxFprintTries);
-
-            return "";
-        }
-
+    Item {
         Layout.fillWidth: true
         Layout.topMargin: -Appearance.spacing.large
 
-        scale: 0.7
-        opacity: 0
-        color: Colours.palette.m3error
+        implicitHeight: Math.max(message.implicitHeight, stateMessage.implicitHeight)
 
-        font.pointSize: Appearance.font.size.small
-        font.family: Appearance.font.family.mono
-        horizontalAlignment: Qt.AlignHCenter
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        Behavior on implicitHeight {
+            Anim {}
+        }
 
-        onMsgChanged: {
-            if (msg) {
-                if (opacity > 0) {
-                    animate = true;
-                    text = msg;
-                    animate = false;
+        StyledText {
+            id: stateMessage
 
+            readonly property string msg: {
+                if (Hypr.kbLayout !== Hypr.defaultKbLayout) {
+                    if (Hypr.capsLock && Hypr.numLock)
+                        return qsTr("Caps lock and Num lock are ON.\nKeyboard layout: %1").arg(Hypr.kbLayoutFull);
+                    if (Hypr.capsLock)
+                        return qsTr("Caps lock is ON. Kb layout: %1").arg(Hypr.kbLayoutFull);
+                    if (Hypr.numLock)
+                        return qsTr("Num lock is ON. Kb layout: %1").arg(Hypr.kbLayoutFull);
+                    return qsTr("Keyboard layout: %1").arg(Hypr.kbLayoutFull);
+                }
+
+                if (Hypr.capsLock && Hypr.numLock)
+                    return qsTr("Caps lock and Num lock are ON.");
+                if (Hypr.capsLock)
+                    return qsTr("Caps lock is ON.");
+                if (Hypr.numLock)
+                    return qsTr("Num lock is ON.");
+
+                return "";
+            }
+
+            property bool shouldBeVisible
+
+            onMsgChanged: {
+                if (msg) {
+                    if (opacity > 0) {
+                        animate = true;
+                        text = msg;
+                        animate = false;
+                    } else {
+                        text = msg;
+                    }
+                    shouldBeVisible = true;
+                } else {
+                    shouldBeVisible = false;
+                }
+            }
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            scale: shouldBeVisible && !message.msg ? 1 : 0.7
+            opacity: shouldBeVisible && !message.msg ? 1 : 0
+            color: Colours.palette.m3onSurfaceVariant
+            animateProp: "opacity"
+
+            font.family: Appearance.font.family.mono
+            horizontalAlignment: Qt.AlignHCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            lineHeight: 1.2
+
+            Behavior on scale {
+                Anim {}
+            }
+
+            Behavior on opacity {
+                Anim {}
+            }
+        }
+
+        StyledText {
+            id: message
+
+            readonly property Pam pam: root.lock.pam
+            readonly property string msg: {
+                if (pam.fprintState === "error")
+                    return qsTr("ERROR: %1").arg(pam.fprint.message);
+                if (pam.state === "error")
+                    return qsTr("ERROR: %1").arg(pam.passwd.message);
+
+                if (pam.lockMessage)
+                    return pam.lockMessage;
+
+                if (pam.state === "max" && pam.fprintState === "max")
+                    return qsTr("Maximum password and fingerprint attempts reached.");
+                if (pam.state === "max") {
+                    if (pam.fprint.available)
+                        return qsTr("Maximum password attempts reached. Please use fingerprint.");
+                    return qsTr("Maximum password attempts reached.");
+                }
+                if (pam.fprintState === "max")
+                    return qsTr("Maximum fingerprint attempts reached. Please use password.");
+
+                if (pam.state === "fail") {
+                    if (pam.fprint.available)
+                        return qsTr("Incorrect password. Please try again or use fingerprint.");
+                    return qsTr("Incorrect password. Please try again.");
+                }
+                if (pam.fprintState === "fail")
+                    return qsTr("Fingerprint not recognized (%1/%2). Please try again or use password.").arg(pam.fprint.tries).arg(Config.lock.maxFprintTries);
+
+                return "";
+            }
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            scale: 0.7
+            opacity: 0
+            color: Colours.palette.m3error
+
+            font.pointSize: Appearance.font.size.small
+            font.family: Appearance.font.family.mono
+            horizontalAlignment: Qt.AlignHCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+            onMsgChanged: {
+                if (msg) {
+                    if (opacity > 0) {
+                        animate = true;
+                        text = msg;
+                        animate = false;
+
+                        exitAnim.stop();
+                        if (scale < 1)
+                            appearAnim.restart();
+                        else
+                            flashAnim.restart();
+                    } else {
+                        text = msg;
+                        exitAnim.stop();
+                        appearAnim.restart();
+                    }
+                } else {
+                    appearAnim.stop();
+                    flashAnim.stop();
+                    exitAnim.start();
+                }
+            }
+
+            Connections {
+                target: root.lock.pam
+
+                function onFlashMsg(): void {
                     exitAnim.stop();
-                    if (scale < 1)
+                    if (message.scale < 1)
                         appearAnim.restart();
                     else
                         flashAnim.restart();
-                } else {
-                    text = msg;
-                    exitAnim.stop();
-                    appearAnim.restart();
                 }
-            } else {
-                appearAnim.stop();
-                flashAnim.stop();
-                exitAnim.start();
             }
-        }
 
-        Connections {
-            target: root.lock.pam
+            Anim {
+                id: appearAnim
 
-            function onFlashMsg(): void {
-                exitAnim.stop();
-                if (message.scale < 1)
-                    appearAnim.restart();
-                else
-                    flashAnim.restart();
-            }
-        }
-
-        Anim {
-            id: appearAnim
-
-            target: message
-            properties: "scale,opacity"
-            to: 1
-            onFinished: flashAnim.restart()
-        }
-
-        SequentialAnimation {
-            id: flashAnim
-
-            loops: 2
-
-            FlashAnim {
-                to: 0.3
-            }
-            FlashAnim {
+                target: message
+                properties: "scale,opacity"
                 to: 1
+                onFinished: flashAnim.restart()
             }
-        }
 
-        ParallelAnimation {
-            id: exitAnim
+            SequentialAnimation {
+                id: flashAnim
 
-            Anim {
-                target: message
-                property: "scale"
-                to: 0.7
-                duration: Appearance.anim.durations.large
+                loops: 2
+
+                FlashAnim {
+                    to: 0.3
+                }
+                FlashAnim {
+                    to: 1
+                }
             }
-            Anim {
-                target: message
-                property: "opacity"
-                to: 0
-                duration: Appearance.anim.durations.large
+
+            ParallelAnimation {
+                id: exitAnim
+
+                Anim {
+                    target: message
+                    property: "scale"
+                    to: 0.7
+                    duration: Appearance.anim.durations.large
+                }
+                Anim {
+                    target: message
+                    property: "opacity"
+                    to: 0
+                    duration: Appearance.anim.durations.large
+                }
             }
         }
     }
