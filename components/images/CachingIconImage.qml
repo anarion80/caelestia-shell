@@ -1,31 +1,42 @@
+pragma ComponentBehavior: Bound
+
+import qs.utils
+import Quickshell.Widgets
 import QtQuick
 
 Item {
-    property alias asynchronous: image.asynchronous
-    property alias status: image.status
-    property alias mipmap: image.mipmap
-    property alias backer: image
+    id: root
 
-    property real implicitSize
+    readonly property int status: loader.item?.status ?? Image.Null
     readonly property real actualSize: Math.min(width, height)
-
+    property real implicitSize
     property url source
-
-    onSourceChanged: {
-        if (source?.toString().startsWith("image://icon/"))
-            // Directly skip the path prop and treat like a normal Image component
-            image.source = source;
-        else if (source)
-            image.path = source;
-    }
 
     implicitWidth: implicitSize
     implicitHeight: implicitSize
 
-    CachingImage {
-        id: image
+    Loader {
+        id: loader
 
         anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
+        sourceComponent: root.source ? root.source.toString().startsWith("image://icon/") ? iconImage : cachingImage : null
+    }
+
+    Component {
+        id: cachingImage
+
+        CachingImage {
+            path: Paths.strip(root.source)
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+    Component {
+        id: iconImage
+
+        IconImage {
+            source: root.source
+            asynchronous: true
+        }
     }
 }

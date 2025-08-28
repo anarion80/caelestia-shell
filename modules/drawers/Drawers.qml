@@ -139,6 +139,8 @@ Variants {
                     screen: scope.modelData
                     visibilities: visibilities
                     popouts: panels.popouts
+
+                    Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
                 }
             }
         }

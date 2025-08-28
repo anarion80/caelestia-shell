@@ -1,9 +1,10 @@
 .direnv
 /result
 /.qmlls.ini
+build/
 # Devenv
 .devenv*
-devenv.local.nix
 
+devenv.local.nix
 # direnv
 .direnv

@@ -7,6 +7,7 @@ JsonObject {
     property Workspaces workspaces: Workspaces {}
     property Tray tray: Tray {}
     property Status status: Status {}
+    property Clock clock: Clock {}
     property Sizes sizes: Sizes {}
 
     property list<var> entries: [
@@ -79,6 +80,10 @@ JsonObject {
         property bool showNetwork: true
         property bool showBluetooth: true
         property bool showBattery: true
+    }
+
+    component Clock: JsonObject {
+        property bool showIcon: true
     }
 
     component Sizes: JsonObject {

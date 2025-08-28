@@ -33,7 +33,7 @@ Item {
 
         clip: root.visibilities.session
         screen: root.screen
-        visibility: root.visibilities.osd
+        visibilities: root.visibilities
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right

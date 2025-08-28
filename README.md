@@ -32,6 +32,37 @@ https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
 The shell is available from the AUR as `caelestia-shell-git`. You can install it with an AUR helper
 like [`yay`](https://github.com/Jguer/yay) or manually downloading the PKGBUILD and running `makepkg -si`.
 
+### Nix
+
+You can run the shell directly via `nix run`:
+
+```sh
+nix run github:caelestia-dots/shell
+```
+
+Or add it to your system configuration:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+}
+```
+
+The package is available as `caelestia-shell.packages.<system>.default`, which can be added to your
+`environment.systemPackages`, `users.users.<username>.packages`, `home.packages` if using home-manager,
+or a devshell. The shell can then be run via `caelestia-shell`.
+
+> [!TIP]
+> The default package does not have the CLI enabled by default, which is required for full funcionality.
+> To enable the CLI, use the `with-cli` package.
+
 ### Manual installation
 
 Dependencies:
@@ -52,24 +83,45 @@ Dependencies:
 -   `gcc-libs`
 -   [`material-symbols`](https://fonts.google.com/icons)
 -   [`caskaydia-cove-nerd`](https://www.nerdfonts.com/font-downloads)
--   [`grim`](https://gitlab.freedesktop.org/emersion/grim)
 -   [`swappy`](https://github.com/jtheoof/swappy)
 -   [`libqalculate`](https://github.com/Qalculate/libqalculate)
+-   [`bash`](https://www.gnu.org/software/bash)
+-   `qt6-base`
+-   `qt6-declarative`
+
+Build dependencies:
+
+-   [`cmake`](https://cmake.org)
+-   [`ninja`](https://github.com/ninja-build/ninja)
 
 To install the shell manually, install all dependencies and clone this repo to `$XDG_CONFIG_HOME/quickshell/caelestia`.
-Then compile the beat detector and install it to `/usr/lib/caelestia/beat_detector`.
+Then simply build and install using `cmake`.
 
 ```sh
 cd $XDG_CONFIG_HOME/quickshell
 git clone https://github.com/caelestia-dots/shell.git caelestia
-g++ -std=c++17 -Wall -Wextra -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/usr/include/aubio -o beat_detector caelestia/assets/beat_detector.cpp -lpipewire-0.3 -laubio
-sudo mv beat_detector /usr/lib/caelestia/beat_detector
+
+cd caelestia
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
+cmake --build build
+sudo cmake --install build
 ```
 
 > [!TIP]
-> The beat detector can actually be installed anywhere. However, if it is not installed to the default
-> location of `/usr/lib/caelestia/beat_detector`, you must set the environment variable `CAELESTIA_BD_PATH`
-> to wherever you have installed the beat detector.
+> You can customise the installation location via the `cmake` flags `INSTALL_LIBDIR`, `INSTALL_QMLDIR` and
+> `INSTALL_QSCONFDIR` for the libraries (the beat detector), QML plugin and Quickshell config directories
+> respectively. If changing the library directory, remember to set the `CAELESTIA_LIB_DIR` environment
+> variable to the custom directory when launching the shell.
+>
+> e.g. installing to `~/.config/quickshell/caelestia` for easy local changes:
+>
+> ```sh
+> mkdir -p ~/.config/quickshell/caelestia
+> cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DINSTALL_QSCONFDIR=~/.config/quickshell/caelestia
+> cmake --build build
+> sudo cmake --install build
+> sudo chown -R $USER ~/.config/quickshell/caelestia
+> ```
 
 ## Usage
 
@@ -145,8 +197,26 @@ git pull
 
 ## Configuring
 
-All configuration options should be put in `~/.config/caelestia/shell.json`. This file is *not* created by
+All configuration options should be put in `~/.config/caelestia/shell.json`. This file is _not_ created by
 default, you must create it manually.
+
+For NixOS users, a home manager module is also available.
+
+<details><summary><code>home.nix</code></summary>
+
+```nix
+programs.caelestia = {
+  enable = true;
+  settings = {
+    bar.status = {
+      showBattery = false;
+    };
+    paths.wallpaperDir = "~/Images";
+  };
+};
+```
+
+</details>
 
 > [!NOTE]
 > The example configuration only includes recommended configuration options. For more advanced customisation
@@ -177,7 +247,7 @@ default, you must create it manually.
             "scale": 1
         },
         "rounding": {
-        	"scale": 1
+            "scale": 1
         },
         "spacing": {
             "scale": 1
@@ -198,51 +268,60 @@ default, you must create it manually.
         "desktopClock": {
             "enabled": false
         },
-        "enabled": true
+        "enabled": true,
+        "visualiser": {
+            "enabled": false,
+            "autoHide": true,
+            "rounding": 1,
+            "spacing": 1
+        }
     },
     "bar": {
+        "clock": {
+            "showIcon": true
+        },
         "dragThreshold": 20,
         "entries": [
-        	{
-   	            "id": "logo",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "workspaces",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "spacer",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "activeWindow",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "spacer",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "tray",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "clock",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "statusIcons",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "power",
-   	            "enabled": true
-   	        },
-   	        {
-   	            "id": "idleInhibitor",
-   	            "enabled": false
-   	        }
+            {
+                "id": "logo",
+                "enabled": true
+            },
+            {
+                "id": "workspaces",
+                "enabled": true
+            },
+            {
+                "id": "spacer",
+                "enabled": true
+            },
+            {
+                "id": "activeWindow",
+                "enabled": true
+            },
+            {
+                "id": "spacer",
+                "enabled": true
+            },
+            {
+                "id": "tray",
+                "enabled": true
+            },
+            {
+                "id": "clock",
+                "enabled": true
+            },
+            {
+                "id": "statusIcons",
+                "enabled": true
+            },
+            {
+                "id": "power",
+                "enabled": true
+            },
+            {
+                "id": "idleInhibitor",
+                "enabled": false
+            }
         ],
         "persistent": true,
         "showOnHover": true,
@@ -277,8 +356,7 @@ default, you must create it manually.
         "enabled": true,
         "dragThreshold": 50,
         "mediaUpdateInterval": 500,
-        "showOnHover": true,
-        "visualiserBars": 45
+        "showOnHover": true
     },
     "launcher": {
         "actionPrefix": ">",
@@ -307,6 +385,9 @@ default, you must create it manually.
         "expire": false
     },
     "osd": {
+        "enabled": true,
+        "enableBrightness": true,
+        "enableMicrophone": false,
         "hideDelay": 2000
     },
     "paths": {
@@ -318,13 +399,16 @@ default, you must create it manually.
         "audioIncrement": 0.1,
         "defaultPlayer": "Spotify",
         "gpuType": "",
-        "playerAliases": [{
-            "com.github.th_ch.youtube_music": "YT Music"
-        }],
+        "playerAliases": [
+            {
+                "com.github.th_ch.youtube_music": "YT Music"
+            }
+        ],
         "weatherLocation": "",
         "useFahrenheit": false,
         "useTwelveHourClock": false,
-        "smartScheme": true
+        "smartScheme": true,
+        "visualiserBars": 45
     },
     "session": {
         "dragThreshold": 30,

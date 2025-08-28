@@ -1,5 +1,6 @@
 pragma Singleton
 
+import qs.components.misc
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
@@ -11,13 +12,19 @@ Singleton {
     readonly property var toplevels: Hyprland.toplevels
     readonly property var workspaces: Hyprland.workspaces
     readonly property var monitors: Hyprland.monitors
-    readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel
+
+    readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel?.wayland?.activated ? Hyprland.activeToplevel : null
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
     readonly property HyprlandMonitor focusedMonitor: Hyprland.focusedMonitor
     readonly property int activeWsId: focusedWorkspace?.id ?? 1
+
+    property var keyboard
+    readonly property bool capsLock: keyboard?.capsLock ?? false
+    readonly property bool numLock: keyboard?.numLock ?? false
+    readonly property string defaultKbLayout: keyboard?.layout.split(",")[0] ?? "??"
+    readonly property string kbLayoutFull: keyboard?.active_keymap ?? "Unknown"
     readonly property string kbLayout: kbMap.get(kbLayoutFull) ?? "??"
-    property string kbLayoutFull: "?"
-    property var kbMap: new Map()
+    readonly property var kbMap: new Map()
 
     function dispatch(request: string): void {
         Hyprland.dispatch(request);
@@ -35,8 +42,10 @@ Singleton {
             if (n.endsWith("v2"))
                 return;
 
-            if (n === "activelayout") {
-                root.kbLayoutFull = event.parse(2)[1];
+            if (n === "configreloaded") {
+                setDynamicConfsProc.running = true;
+            } else if (n === "activelayout") {
+                devicesProc.running = true;
             } else if (["workspace", "moveworkspace", "activespecial", "focusedmon"].includes(n)) {
                 Hyprland.refreshWorkspaces();
                 Hyprland.refreshMonitors();
@@ -71,10 +80,34 @@ Singleton {
     }
 
     Process {
+        id: devicesProc
+
         running: true
         command: ["hyprctl", "-j", "devices"]
         stdout: StdioCollector {
-            onStreamFinished: root.kbLayoutFull = JSON.parse(text).keyboards.find(k => k.main).active_keymap
+            onStreamFinished: root.keyboard = JSON.parse(text).keyboards.find(k => k.main)
         }
+    }
+
+    Process {
+        id: setDynamicConfsProc
+
+        running: true
+        command: ["hyprctl", "--batch", "keyword bindln ,Caps_Lock,global,caelestia:reloadDevices;keyword bindln ,Num_Lock,global,caelestia:reloadDevices"]
+    }
+
+    IpcHandler {
+        target: "hypr"
+
+        function reloadDevices(): void {
+            devicesProc.running = true;
+        }
+    }
+
+    CustomShortcut {
+        name: "reloadDevices"
+        description: "Reload devices"
+        onPressed: devicesProc.running = true
+        onReleased: devicesProc.running = true
     }
 }

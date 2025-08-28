@@ -30,7 +30,6 @@
 
     packages = forAllSystems (pkgs: rec {
       caelestia-shell = pkgs.callPackage ./nix {
-        rev = self.rev or self.dirtyRev;
         quickshell = inputs.quickshell.packages.${pkgs.system}.default.override {
           withX11 = false;
           withI3 = false;
@@ -49,8 +48,7 @@
         pkgs.mkShellNoCC {
           inputsFrom = [shell];
           packages = with pkgs; [material-symbols rubik nerd-fonts.caskaydia-cove];
-          CAELESTIA_BD_PATH = "${shell}/bin/beat_detector";
-          CAELESTIA_II_PATH = "${shell}/bin/inhibit_idle";
+          CAELESTIA_LIB_DIR = "${shell}/lib";
         };
     });
 

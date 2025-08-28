@@ -79,7 +79,7 @@ Item {
         id: visualiserBars
 
         model: Array.from({
-            length: Config.dashboard.visualiserBars
+            length: Config.services.visualiserBars
         }, (_, i) => i)
 
         ShapePath {
@@ -88,13 +88,13 @@ Item {
             required property int modelData
             readonly property int value: Math.max(1, Math.min(100, Cava.values[modelData]))
 
-            readonly property real angle: modelData * 2 * Math.PI / Config.dashboard.visualiserBars
+            readonly property real angle: modelData * 2 * Math.PI / Config.services.visualiserBars
             readonly property real magnitude: value / 100 * Config.dashboard.sizes.mediaVisualiserSize
             readonly property real cos: Math.cos(angle)
             readonly property real sin: Math.sin(angle)
 
             capStyle: Appearance.rounding.scale === 0 ? ShapePath.SquareCap : ShapePath.RoundCap
-            strokeWidth: 360 / Config.dashboard.visualiserBars - Appearance.spacing.small / 4
+            strokeWidth: 360 / Config.services.visualiserBars - Appearance.spacing.small / 4
             strokeColor: Colours.palette.m3primary
 
             startX: visualiser.centerX + (visualiser.innerX + strokeWidth / 2) * cos

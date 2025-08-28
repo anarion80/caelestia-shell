@@ -8,7 +8,7 @@ Item {
     id: root
 
     required property ShellScreen screen
-    required property bool visibility
+    required property var visibilities
 
     visible: width > 0
     implicitWidth: 0
@@ -16,7 +16,7 @@ Item {
 
     states: State {
         name: "visible"
-        when: root.visibility && Config.osd.enabled
+        when: root.visibilities.osd && Config.osd.enabled
 
         PropertyChanges {
             root.implicitWidth: content.implicitWidth
@@ -50,5 +50,6 @@ Item {
         id: content
 
         monitor: Brightness.getMonitorForScreen(root.screen)
+        visibilities: root.visibilities
     }
 }
