@@ -30,6 +30,7 @@
 
     packages = forAllSystems (pkgs: rec {
       caelestia-shell = pkgs.callPackage ./nix {
+        rev = self.rev or self.dirtyRev;
         quickshell = inputs.quickshell.packages.${pkgs.system}.default.override {
           withX11 = false;
           withI3 = false;
@@ -45,10 +46,17 @@
       default = let
         shell = self.packages.${pkgs.system}.caelestia-shell;
       in
-        pkgs.mkShellNoCC {
-          inputsFrom = [shell];
+        pkgs.mkShell {
+          inputsFrom = [shell shell.plugin shell.assets];
           packages = with pkgs; [material-symbols rubik nerd-fonts.caskaydia-cove];
-          CAELESTIA_LIB_DIR = "${shell}/lib";
+
+          CAELESTIA_XKB_RULES_PATH = "${pkgs.xkeyboard-config}/share/xkeyboard-config-2/rules/base.lst";
+          shellHook = ''
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+            cmake --build build
+            export CAELESTIA_LIB_DIR="$PWD/build/lib";
+            export QML2_IMPORT_PATH="$PWD/build/qml";
+          '';
         };
     });
 
