@@ -23,14 +23,18 @@ https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
 > This repo is for the desktop shell of the caelestia dots. If you want installation instructions
 > for the entire dots, head to [the main repo](https://github.com/caelestia-dots/caelestia) instead.
 
-### Package manager
+### Arch linux
 
 > [!NOTE]
 > If you want to make your own changes/tweaks to the shell do NOT edit the files installed by the AUR
 > package. Instead, follow the instructions in the [manual installation section](#manual-installation).
 
-The shell is available from the AUR as `caelestia-shell-git`. You can install it with an AUR helper
+The shell is available from the AUR as `caelestia-shell`. You can install it with an AUR helper
 like [`yay`](https://github.com/Jguer/yay) or manually downloading the PKGBUILD and running `makepkg -si`.
+
+A package following the latest commit also exists as `caelestia-shell-git`. This is bleeding edge
+and likely to be unstable/have bugs. Regular users are recommended to use the stable package
+(`caelestia-shell`).
 
 ### Nix
 
@@ -62,6 +66,8 @@ or a devshell. The shell can then be run via `caelestia-shell`.
 > [!TIP]
 > The default package does not have the CLI enabled by default, which is required for full funcionality.
 > To enable the CLI, use the `with-cli` package.
+
+For home-manager, you can also use the Caelestia's home manager module (explained in [configuring](https://github.com/caelestia-dots/shell?tab=readme-ov-file#configuring)) that installs and configures the shell and the CLI.
 
 ### Manual installation
 
@@ -207,14 +213,23 @@ For NixOS users, a home manager module is also available.
 ```nix
 programs.caelestia = {
   enable = true;
+  systemd.enable = false; # if you prefer starting from your compositor
   settings = {
     bar.status = {
       showBattery = false;
     };
     paths.wallpaperDir = "~/Images";
   };
+  cli = {
+    enable = true; # Also add caelestia-cli to path
+    settings = {
+      theme.enableGtk = false;
+    };
+  };
 };
 ```
+
+The module automatically adds Caelestia shell to the path with **full functionality**. The CLI is not required, however you have the option to enable and configure it.
 
 </details>
 
@@ -372,7 +387,8 @@ programs.caelestia = {
             "schemes": false,
             "variants": false,
             "wallpapers": false
-        }
+        },
+        "showOnHover": false
     },
     "lock": {
         "recolourLogo": false
@@ -400,9 +416,7 @@ programs.caelestia = {
         "defaultPlayer": "Spotify",
         "gpuType": "",
         "playerAliases": [
-            {
-                "com.github.th_ch.youtube_music": "YT Music"
-            }
+            { "from": "com.github.th_ch.youtube_music", "to": "YT Music" }
         ],
         "weatherLocation": "",
         "useFahrenheit": false,
@@ -480,7 +494,7 @@ which helped me a lot with learning how to use Quickshell.
 
 Finally another thank you to all the configs I took inspiration from (only one for now):
 
--   [Axenide/Ax-Shell](https://github.com/Axenide/Ax-Shell)
+- [Axenide/Ax-Shell](https://github.com/Axenide/Ax-Shell)
 
 ## Stonks 📈
 

@@ -16,11 +16,6 @@ Image {
     sourceSize.width: sourceWidth
     sourceSize.height: sourceHeight
 
-    onStatusChanged: {
-        if (!manager.usingCache && status === Image.Ready)
-            CUtils.saveItem(this, manager.cachePath);
-    }
-
     Connections {
         target: QsWindow.window
 

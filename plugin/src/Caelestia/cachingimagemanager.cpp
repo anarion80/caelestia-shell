@@ -6,6 +6,8 @@
 #include <QCryptographicHash>
 #include <QThreadPool>
 #include <QFile>
+#include <QDir>
+#include <QPainter>
 
 qreal CachingImageManager::effectiveScale() const {
     if (m_item->window()) {
@@ -91,18 +93,28 @@ void CachingImageManager::updateSource() {
 }
 
 void CachingImageManager::updateSource(const QString& path) {
-    if (path.isEmpty()) {
+    if (path.isEmpty() || path == m_shaPath) {
+        // Path is empty or already calculating sha for path
         return;
     }
+
+    m_shaPath = path;
 
     QThreadPool::globalInstance()->start([path, this] {
         const QString sha = sha256sum(path);
 
         QMetaObject::invokeMethod(this, [path, sha, this]() {
-            const QString filename = QString("%1@%2x%3.png")
-                .arg(sha)
-                .arg(effectiveWidth())
-                .arg(effectiveHeight());
+            if (m_path != path) {
+                // Path has changed, ignore
+                return;
+            }
+
+            int width = effectiveWidth();
+            int height = effectiveHeight();
+            const QString fillMode = m_item->property("fillMode").toString();
+            const QString filename = QString("%1@%2x%3-%4.png")
+                .arg(sha).arg(width).arg(height)
+                .arg(fillMode == "PreserveAspectCrop" ? "crop" : fillMode == "PreserveAspectFit" ? "fit" : "stretch");
 
             const QUrl cache = m_cacheDir.resolved(QUrl(filename));
             if (m_cachePath == cache) {
@@ -123,10 +135,13 @@ void CachingImageManager::updateSource(const QString& path) {
                 m_item->setProperty("source", cache);
             } else {
                 m_item->setProperty("source", QUrl::fromLocalFile(path));
+                createCache(path, cache.toLocalFile(), fillMode, QSize(width, height));
             }
 
-            m_usingCache = cacheExists;
-            emit usingCacheChanged();
+            // Clear current running sha if same
+            if (m_shaPath == path) {
+                m_shaPath = QString();
+            }
         }, Qt::QueuedConnection);
     });
 }
@@ -135,8 +150,41 @@ QUrl CachingImageManager::cachePath() const {
     return m_cachePath;
 }
 
-bool CachingImageManager::usingCache() const {
-    return m_usingCache;
+void CachingImageManager::createCache(const QString& path, const QString& cache, const QString& fillMode, const QSize& size) const {
+    QThreadPool::globalInstance()->start([path, cache, fillMode, size] {
+        QImage image(path);
+
+        if (image.isNull()) {
+            qWarning() << "CachingImageManager::createCache: failed to read" << path;
+            return;
+        }
+
+        image.convertTo(QImage::Format_ARGB32);
+
+        if (fillMode == "PreserveAspectCrop") {
+            image = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        } else if (fillMode == "PreserveAspectFit") {
+            image = image.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        } else {
+            image = image.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+
+        if (fillMode == "PreserveAspectCrop" || fillMode == "PreserveAspectFit") {
+            QImage canvas(size, QImage::Format_ARGB32);
+            canvas.fill(Qt::transparent);
+
+            QPainter painter(&canvas);
+            painter.drawImage((size.width() - image.width()) / 2, (size.height() - image.height()) / 2, image);
+            painter.end();
+
+            image = canvas;
+        }
+
+        const QString parent = QFileInfo(cache).absolutePath();
+        if (!QDir().mkpath(parent) || !image.save(cache)) {
+            qWarning() << "CachingImageManager::createCache: failed to save to" << cache;
+        }
+    });
 }
 
 QString CachingImageManager::sha256sum(const QString& path) const {
