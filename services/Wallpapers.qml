@@ -2,6 +2,7 @@ pragma Singleton
 
 import qs.config
 import qs.utils
+import Caelestia
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -39,7 +40,7 @@ Searcher {
 
     reloadableId: "wallpapers"
 
-    list: wallpapers.instances
+    list: wallpapers.entries
     useFuzzy: Config.launcher.useFuzzy.wallpapers
     extraOpts: useFuzzy ? ({}) : ({
             forward: false
@@ -71,6 +72,13 @@ Searcher {
         }
     }
 
+    FileSystemModel {
+        id: wallpapers
+
+        path: Paths.expandTilde(Paths.wallsdir)
+        filter: FileSystemModel.Images
+    }
+
     Process {
         id: getPreviewColoursProc
 
@@ -81,50 +89,5 @@ Searcher {
                 Colours.showPreview = true;
             }
         }
-    }
-
-    Process {
-        id: getWallsProc
-
-        running: true
-        command: ["find", "-L", Paths.expandTilde(Config.paths.wallpaperDir), "-type", "d", "-path", '*/.*', "-prune", "-o", "-not", "-name", '.*', "-type", "f", "-print"]
-        stdout: StdioCollector {
-            onStreamFinished: wallpapers.model = text.trim().split("\n").filter(w => Images.isValidImageByName(w)).sort()
-        }
-    }
-
-    Process {
-        id: watchWallsProc
-
-        running: true
-        command: ["inotifywait", "-r", "-e", "close_write,moved_to,create", "-m", Paths.expandTilde(Config.paths.wallpaperDir)]
-        stdout: SplitParser {
-            onRead: data => {
-                if (Images.isValidImageByName(data))
-                    getWallsProc.running = true;
-            }
-        }
-    }
-
-    Connections {
-        target: Config.paths
-
-        function onWallpaperDirChanged(): void {
-            getWallsProc.running = true;
-            watchWallsProc.running = false;
-            watchWallsProc.running = true;
-        }
-    }
-
-    Variants {
-        id: wallpapers
-
-        Wallpaper {}
-    }
-
-    component Wallpaper: QtObject {
-        required property string modelData
-        readonly property string path: modelData
-        readonly property string name: path.slice(Paths.expandTilde(Config.paths.wallpaperDir).length + 1, path.lastIndexOf("."))
     }
 }
