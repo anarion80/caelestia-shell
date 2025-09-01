@@ -4,6 +4,7 @@ qt_add_qml_module(caelestia
     SOURCES
         cutils.hpp cutils.cpp
         cachingimagemanager.hpp cachingimagemanager.cpp
+        filesystemmodel.hpp filesystemmodel.cpp
 )
 
 qt_query_qml_module(caelestia
@@ -23,4 +24,4 @@ install(TARGETS "${module_plugin_target}" LIBRARY DESTINATION "${module_dir}" RU
 install(FILES "${module_qmldir}" DESTINATION "${module_dir}")
 install(FILES "${module_typeinfo}" DESTINATION "${module_dir}")
 
-target_link_libraries(caelestia PRIVATE Qt::Core Qt::Qml)
+target_link_libraries(caelestia PRIVATE Qt::Core Qt::Qml Qt::Gui)
