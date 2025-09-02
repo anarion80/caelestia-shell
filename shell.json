@@ -147,7 +147,8 @@
     "expire": false
   },
   "osd": {
-    "hideDelay": 2000
+    "hideDelay": 2000,
+    "enableBrightness": false
   },
   "paths": {
     "mediaGif": "root:/assets/bongocat.gif",
