@@ -223,6 +223,7 @@ programs.caelestia = {
     };
     paths.wallpaperDir = "~/Images";
   };
+  environment = [];
   cli = {
     enable = true; # Also add caelestia-cli to path
     settings = {

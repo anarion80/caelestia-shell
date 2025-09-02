@@ -36,8 +36,8 @@ LazyLoader {
         property list<string> filters: loader.filters
 
         readonly property bool selectionValid: {
-            const item = folderContents.currentItem;
-            return item && !item.fileIsDir && (filters.includes("*") || filters.includes(item.fileSuffix));
+            const file = folderContents.currentItem?.modelData;
+            return (file && !file.isDir && (filters.includes("*") || filters.includes(file.suffix))) ?? false;
         }
 
         function accepted(path: string): void {
