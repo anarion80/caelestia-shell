@@ -61,7 +61,7 @@ Item {
         Rectangle {
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             radius: Appearance.rounding.full
             implicitWidth: parent.width / 2
@@ -73,9 +73,9 @@ Item {
         }
 
         Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
+            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             radius: Appearance.rounding.full
             implicitWidth: parent.width / 2
@@ -93,6 +93,7 @@ Item {
         anchors.fill: parent
         spacing: Appearance.spacing.normal
         interactive: false
+        orientation: ListView.Horizontal
 
         currentIndex: model.values.findIndex(w => w.name === root.activeSpecial)
         onCurrentIndexChanged: currentIndex = Qt.binding(() => model.values.findIndex(w => w.name === root.activeSpecial))
@@ -102,7 +103,7 @@ Item {
         }
 
         preferredHighlightBegin: 0
-        preferredHighlightEnd: height
+        preferredHighlightEnd: width
         highlightRangeMode: ListView.StrictlyEnforceRange
 
         highlightFollowsCurrentItem: false
@@ -119,13 +120,13 @@ Item {
             id: ws
 
             required property HyprlandWorkspace modelData
-            readonly property int size: label.Layout.preferredHeight + (hasWindows ? windows.implicitHeight + Appearance.padding.small : 0)
+            readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Appearance.padding.small : 0)
             property int wsId
             property string icon
             property bool hasWindows
 
-            anchors.left: view.contentItem.left
-            anchors.right: view.contentItem.right
+            anchors.top: view.contentItem.top
+            anchors.bottom: view.contentItem.bottom
 
             spacing: 0
 
@@ -167,8 +168,8 @@ Item {
             Loader {
                 id: label
 
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.preferredHeight: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft 
+                Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
 
                 asynchronous: true
                 sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
@@ -179,7 +180,7 @@ Item {
                     MaterialIcon {
                         fill: 1
                         text: ws.icon
-                        verticalAlignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
                     }
                 }
 
@@ -188,7 +189,7 @@ Item {
 
                     StyledText {
                         text: ws.icon
-                        verticalAlignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
                     }
                 }
             }
@@ -196,15 +197,15 @@ Item {
             Loader {
                 id: windows
 
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillHeight: true
-                Layout.preferredHeight: implicitHeight
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: implicitWidth
 
                 visible: active
                 active: ws.hasWindows
                 asynchronous: true
 
-                sourceComponent: Column {
+                sourceComponent: Row {
                     spacing: 0
 
                     add: Transition {
@@ -242,7 +243,7 @@ Item {
                     }
                 }
 
-                Behavior on Layout.preferredHeight {
+                Behavior on Layout.preferredWidth {
                     Anim {}
                 }
             }
@@ -302,11 +303,11 @@ Item {
             StyledClippingRect {
                 id: indicator
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
-                y: (view.currentItem?.y ?? 0) - view.contentY
-                implicitHeight: view.currentItem?.size ?? 0
+                x: (view.currentItem?.x ?? 0) - view.contentX
+                implicitWidth: view.currentItem?.size ?? 0
 
                 color: Colours.palette.m3tertiary
                 radius: Appearance.rounding.full
@@ -316,21 +317,21 @@ Item {
                     sourceColor: Colours.palette.m3onSurface
                     colorizationColor: Colours.palette.m3onTertiary
 
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
 
-                    x: 0
-                    y: -indicator.y
+                    x: -indicator.x
+                    y: 0
                     implicitWidth: view.width
                     implicitHeight: view.height
                 }
 
-                Behavior on y {
+                Behavior on x {
                     Anim {
                         easing.bezierCurve: Appearance.anim.curves.emphasized
                     }
                 }
 
-                Behavior on implicitHeight {
+                Behavior on implicitWidth {
                     Anim {
                         easing.bezierCurve: Appearance.anim.curves.emphasized
                     }
@@ -340,19 +341,19 @@ Item {
     }
 
     MouseArea {
-        property real startY
+        property real startX
 
         anchors.fill: view
 
         drag.target: view.contentItem
-        drag.axis: Drag.YAxis
-        drag.maximumY: 0
-        drag.minimumY: Math.min(0, view.height - view.contentHeight - Appearance.padding.small)
+        drag.axis: Drag.XAxis
+        drag.maximumX: 0
+        drag.minimumX: Math.min(0, view.width - view.contentWidth - Appearance.padding.small)
 
-        onPressed: event => startY = event.y
+        onPressed: event => startX = event.x
 
         onClicked: event => {
-            if (Math.abs(event.y - startY) > drag.threshold)
+            if (Math.abs(event.x - startX) > drag.threshold)
                 return;
 
             const ws = view.itemAt(event.x, event.y);
