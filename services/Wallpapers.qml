@@ -38,8 +38,6 @@ Searcher {
             Colours.showPreview = false;
     }
 
-    reloadableId: "wallpapers"
-
     list: wallpapers.entries
     useFuzzy: Config.launcher.useFuzzy.wallpapers
     extraOpts: useFuzzy ? ({}) : ({
@@ -75,6 +73,7 @@ Searcher {
     FileSystemModel {
         id: wallpapers
 
+        recursive: true
         path: Paths.expandTilde(Paths.wallsdir)
         filter: FileSystemModel.Images
     }

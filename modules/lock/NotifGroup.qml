@@ -79,7 +79,7 @@ StyledRect {
                 id: materialIconComp
 
                 MaterialIcon {
-                    text: Icons.getNotifIcon(root.notifs[0].summary, root.urgency)
+                    text: Icons.getNotifIcon(root.notifs[0]?.summary, root.urgency)
                     color: root.urgency === "critical" ? Colours.palette.m3onError : root.urgency === "low" ? Colours.palette.m3onSurface : Colours.palette.m3onSecondaryContainer
                     font.pointSize: Appearance.font.size.large
                 }
@@ -142,7 +142,7 @@ StyledRect {
 
                 StyledText {
                     animate: true
-                    text: root.notifs[0].timeStr
+                    text: root.notifs[0]?.timeStr ?? ""
                     color: Colours.palette.m3outline
                     font.pointSize: Appearance.font.size.small
                 }

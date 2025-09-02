@@ -52,7 +52,7 @@ StyledRect {
                 disabled: !root.dialog.selectionValid
 
                 function onClicked(): void {
-                    root.dialog.accepted(root.folder.currentItem.filePath);
+                    root.dialog.accepted(root.folder.currentItem.modelData.path);
                 }
             }
 

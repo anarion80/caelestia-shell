@@ -79,7 +79,7 @@ Item {
             anchors.rightMargin: Appearance.padding.larger - Appearance.padding.small
             anchors.bottomMargin: Appearance.padding.normal - Appearance.padding.small
 
-            text: qsTr(`"%1" selected`).arg(root.currentItem?.fileName)
+            text: qsTr(`"%1" selected`).arg(root.currentItem?.modelData.name)
         }
     }
 
