@@ -356,6 +356,8 @@ void FileSystemModel::applyChanges(const QSet<QString>& removedPaths, const QSet
         }
         endInsertRows();
     }
+
+    emit entriesChanged();
 }
 
 bool FileSystemModel::compareEntries(const FileSystemEntry* a, const FileSystemEntry* b) {
