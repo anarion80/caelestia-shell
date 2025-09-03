@@ -31,6 +31,8 @@ public:
     Q_INVOKABLE void getAverageLuminance(const QString& path, QJSValue callback);
     Q_INVOKABLE void getAverageLuminance(const QString& path, int rescaleSize, QJSValue callback);
 
+    Q_INVOKABLE QString toLocalFile(const QUrl& url) const;
+
 private:
     QColor findDominantColour(const QImage& image, int rescaleSize) const;
     qreal findAverageLuminance(const QImage& image, int rescaleSize) const;

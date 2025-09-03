@@ -349,7 +349,8 @@ The module automatically adds Caelestia shell to the path with **full functional
             "showBattery": true,
             "showBluetooth": true,
             "showKbLayout": false,
-            "showNetwork": true
+            "showNetwork": true,
+            "showLockStatus": true
         },
         "tray": {
             "background": false,

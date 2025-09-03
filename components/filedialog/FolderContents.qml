@@ -49,8 +49,11 @@ Item {
 
     Loader {
         anchors.centerIn: parent
-        active: view.count === 0
+
+        opacity: view.count === 0 ? 1 : 0
+        active: opacity > 0
         asynchronous: true
+
         sourceComponent: ColumnLayout {
             MaterialIcon {
                 Layout.alignment: Qt.AlignHCenter
@@ -66,6 +69,10 @@ Item {
                 font.pointSize: Appearance.font.size.large
                 font.weight: 500
             }
+        }
+
+        Behavior on opacity {
+            Anim {}
         }
     }
 
@@ -97,7 +104,7 @@ Item {
         model: FileSystemModel {
             path: {
                 if (root.dialog.cwd[0] === "Home")
-                    return `${Paths.strip(Paths.home)}/${root.dialog.cwd.slice(1).join("/")}`;
+                    return `${Paths.home}/${root.dialog.cwd.slice(1).join("/")}`;
                 else
                     return root.dialog.cwd.join("/");
             }
@@ -141,21 +148,17 @@ Item {
                 anchors.topMargin: Appearance.padding.normal
 
                 implicitSize: Sizes.itemWidth - Appearance.padding.normal * 2
-                source: {
+
+                Component.onCompleted: {
                     const file = item.modelData;
-                    if (!file)
-                        return Quickshell.iconPath("application-x-zerosize");
-
                     if (file.isImage)
-                        return Qt.resolvedUrl(file.path);
-
-                    if (!file.isDir)
-                        return Quickshell.iconPath(file.mimeType.replace("/", "-"), "application-x-zerosize");
-
-                    if (root.dialog.cwd.length === 1 && ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Templates", "Videos"].includes(file.name))
-                        return Quickshell.iconPath(`folder-${file.name.toLowerCase()}`);
-
-                    return Quickshell.iconPath("inode-directory");
+                        source = Qt.resolvedUrl(file.path);
+                    else if (!file.isDir)
+                        source = Quickshell.iconPath(file.mimeType.replace("/", "-"), "application-x-zerosize");
+                    else if (root.dialog.cwd.length === 1 && ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Templates", "Videos"].includes(file.name))
+                        source = Quickshell.iconPath(`folder-${file.name.toLowerCase()}`);
+                    else
+                        source = Quickshell.iconPath("inode-directory");
                 }
             }
 
@@ -169,9 +172,10 @@ Item {
                 anchors.margins: Appearance.padding.normal
 
                 horizontalAlignment: Text.AlignHCenter
-                text: item.modelData?.name ?? ""
                 elide: item.GridView.isCurrentItem ? Text.ElideNone : Text.ElideRight
                 wrapMode: item.GridView.isCurrentItem ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
+
+                Component.onCompleted: text = item.modelData.name
             }
 
             Behavior on implicitHeight {
@@ -179,12 +183,37 @@ Item {
             }
         }
 
-        populate: Transition {
+        add: Transition {
+            Anim {
+                properties: "opacity,scale"
+                from: 0
+                to: 1
+                duration: Appearance.anim.durations.expressiveDefaultSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            }
+        }
+
+        remove: Transition {
+            Anim {
+                property: "opacity"
+                to: 0
+            }
             Anim {
                 property: "scale"
-                from: 0.7
+                to: 0.5
+            }
+        }
+
+        displaced: Transition {
+            Anim {
+                properties: "opacity,scale"
                 to: 1
                 easing.bezierCurve: Appearance.anim.curves.standardDecel
+            }
+            Anim {
+                properties: "x,y"
+                duration: Appearance.anim.durations.expressiveDefaultSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
             }
         }
     }

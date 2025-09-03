@@ -61,7 +61,7 @@ Column {
     //     playing: visible
     //     asynchronous: true
     //     speed: 0.7
-    //     source: Config.paths.sessionGif
+    //     source: Paths.absolutePath(Config.paths.sessionGif)
     // }
 
     SessionButton {

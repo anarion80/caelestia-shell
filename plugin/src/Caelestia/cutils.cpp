@@ -337,3 +337,12 @@ qreal CUtils::findAverageLuminance(const QImage& image, int rescaleSize) const {
 
     return count == 0 ? 0.0 : totalLuminance / count;
 }
+
+QString CUtils::toLocalFile(const QUrl& url) const {
+    if (!url.isLocalFile()) {
+        qWarning() << "CUtils::toLocalFile: given url is not a local file" << url;
+        return QString();
+    }
+
+    return url.toLocalFile();
+}

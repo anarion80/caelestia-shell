@@ -32,7 +32,6 @@ Item {
         }
 
         StyledText {
-            Layout.topMargin: -(font.pointSize * 0.1)
             Layout.alignment: Qt.AlignHCenter
             text: "•••"
             color: Colours.palette.m3primary
@@ -59,23 +58,11 @@ Item {
 
             sourceComponent: StyledText {
                 text: root.timeComponents[2] ?? ""
-                color: Colours.palette.m3secondary
+                color: Colours.palette.m3primary
                 font.pointSize: Appearance.font.size.large
                 font.family: Appearance.font.family.clock
                 font.weight: 600
             }
-        }
-
-        StyledText {
-            Layout.topMargin: Appearance.spacing.normal
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
-            text: Time.format("ddd, d")
-            color: Colours.palette.m3tertiary
-            font.pointSize: Appearance.font.size.normal
-            font.family: Appearance.font.family.clock
-            font.weight: 500
-            elide: Text.ElideRight
         }
     }
 }

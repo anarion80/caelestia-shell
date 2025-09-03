@@ -79,7 +79,14 @@ Item {
             anchors.rightMargin: Appearance.padding.larger - Appearance.padding.small
             anchors.bottomMargin: Appearance.padding.normal - Appearance.padding.small
 
-            text: qsTr(`"%1" selected`).arg(root.currentItem?.modelData.name)
+            Connections {
+                target: root
+
+                function onCurrentItemChanged(): void {
+                    if (root.currentItem)
+                        content.text = qsTr(`"%1" selected`).arg(root.currentItem.modelData.name);
+                }
+            }
         }
     }
 

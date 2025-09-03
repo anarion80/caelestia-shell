@@ -63,6 +63,11 @@ Item {
             source: "KbLayout.qml"
         }
 
+        Popout {
+            name: "lockstatus"
+            source: "LockStatus.qml"
+        }
+
         Repeater {
             model: ScriptModel {
                 values: [...SystemTray.items.values]
@@ -112,7 +117,6 @@ Item {
         opacity: 0
         scale: 0.8
         active: false
-        asynchronous: true
 
         states: State {
             name: "active"

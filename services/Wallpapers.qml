@@ -10,7 +10,7 @@ import QtQuick
 Searcher {
     id: root
 
-    readonly property string currentNamePath: Paths.strip(`${Paths.state}/wallpaper/path.txt`)
+    readonly property string currentNamePath: `${Paths.state}/wallpaper/path.txt`
     readonly property list<string> smartArg: Config.services.smartScheme ? [] : ["--no-smart"]
 
     property bool showPreview: false
@@ -74,7 +74,7 @@ Searcher {
         id: wallpapers
 
         recursive: true
-        path: Paths.expandTilde(Paths.wallsdir)
+        path: Paths.wallsdir
         filter: FileSystemModel.Images
     }
 
