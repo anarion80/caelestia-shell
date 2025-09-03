@@ -209,7 +209,7 @@ Item {
 
         playing: Players.active?.isPlaying ?? false
         speed: BeatDetector.bpm / 300
-        source: Paths.expandTilde(Config.paths.mediaGif)
+        source: Paths.absolutePath(Config.paths.mediaGif)
         asynchronous: true
         fillMode: AnimatedImage.PreserveAspectFit
     }

@@ -105,7 +105,7 @@ ColumnLayout {
             id: pfp
 
             anchors.fill: parent
-            path: `${Paths.stringify(Paths.home)}/.face`
+            path: `${Paths.home}/.face`
         }
     }
 

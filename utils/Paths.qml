@@ -1,42 +1,34 @@
 pragma Singleton
 
 import qs.config
+import Caelestia
 import Quickshell
-import Qt.labs.platform
 
 Singleton {
     id: root
 
-    readonly property url home: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-    readonly property url pictures: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+    readonly property string home: Quickshell.env("HOME")
+    readonly property string pictures: Quickshell.env("XDG_PICTURES_DIR") || `${home}/Pictures`
 
-    readonly property url data: `${StandardPaths.standardLocations(StandardPaths.GenericDataLocation)[0]}/caelestia`
-    readonly property url state: `${StandardPaths.standardLocations(StandardPaths.GenericStateLocation)[0]}/caelestia`
-    readonly property url cache: `${StandardPaths.standardLocations(StandardPaths.GenericCacheLocation)[0]}/caelestia`
-    readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}/caelestia`
+    readonly property string data: `${Quickshell.env("XDG_DATA_HOME") || `${home}/.local/share`}/caelestia`
+    readonly property string state: `${Quickshell.env("XDG_STATE_HOME") || `${home}/.local/state`}/caelestia`
+    readonly property string cache: `${Quickshell.env("XDG_CACHE_HOME") || `${home}/.cache`}/caelestia`
+    readonly property string config: `${Quickshell.env("XDG_CONFIG_HOME") || `${home}/.config`}/caelestia`
 
-    readonly property url imagecache: `${cache}/imagecache`
-    readonly property string wallsdir: Quickshell.env("CAELESTIA_WALLPAPERS_DIR") || Config.paths.wallpaperDir
+    readonly property string imagecache: `${cache}/imagecache`
+    readonly property string wallsdir: Quickshell.env("CAELESTIA_WALLPAPERS_DIR") || absolutePath(Config.paths.wallpaperDir)
     readonly property string libdir: Quickshell.env("CAELESTIA_LIB_DIR") || "/usr/lib/caelestia"
 
-    function stringify(path: url): string {
-        let str = path.toString();
-        if (str.startsWith("root:/"))
-            str = `file://${Quickshell.shellDir}/${str.slice(6)}`;
-        else if (str.startsWith("/"))
-            str = `file://${str}`;
-        return new URL(str).pathname;
+    function toLocalFile(path: url): string {
+        path = Qt.resolvedUrl(path);
+        return path.toString() ? CUtils.toLocalFile(path) : "";
     }
 
-    function expandTilde(path: string): string {
-        return strip(path.replace("~", stringify(root.home)));
+    function absolutePath(path: string): string {
+        return toLocalFile(path.replace("~", home));
     }
 
     function shortenHome(path: string): string {
-        return path.replace(strip(root.home), "~");
-    }
-
-    function strip(path: url): string {
-        return stringify(path).replace("file://", "");
+        return path.replace(home, "~");
     }
 }

@@ -26,7 +26,7 @@ Item {
         id: cachingImage
 
         CachingImage {
-            path: Paths.strip(root.source)
+            path: Paths.toLocalFile(root.source)
             fillMode: Image.PreserveAspectFit
         }
     }
