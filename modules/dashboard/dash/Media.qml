@@ -1,5 +1,4 @@
 import qs.components
-import qs.components.misc
 import qs.services
 import qs.config
 import qs.utils
@@ -34,7 +33,7 @@ Item {
     }
 
     ServiceRef {
-        service: BeatTracker
+        service: Audio.beatTracker
     }
 
     Shape {
@@ -214,7 +213,7 @@ Item {
         anchors.margins: Appearance.padding.large * 2
 
         playing: Players.active?.isPlaying ?? false
-        speed: BeatTracker.bpm / 300
+        speed: Audio.beatTracker.bpm / 300
         source: Paths.absolutePath(Config.paths.mediaGif)
         asynchronous: true
         fillMode: AnimatedImage.PreserveAspectFit

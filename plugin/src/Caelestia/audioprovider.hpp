@@ -1,7 +1,7 @@
 #pragma once
 
+#include "audiocollector.hpp"
 #include "service.hpp"
-#include <cstdint>
 #include <qqmlintegration.h>
 #include <qtimer.h>
 
@@ -11,14 +11,15 @@ class AudioProcessor : public QObject {
     Q_OBJECT
 
 public:
-    explicit AudioProcessor(QObject* parent = nullptr);
+    explicit AudioProcessor(AudioCollector* collector, QObject* parent = nullptr);
     ~AudioProcessor();
 
     void init();
 
 protected:
-    uint32_t m_sampleRate;
-    uint32_t m_chunkSize;
+    AudioCollector* m_collector;
+
+    Q_INVOKABLE virtual void setCollector(AudioCollector* collector);
 
 private:
     QTimer* m_timer;
@@ -32,11 +33,20 @@ private:
 class AudioProvider : public Service {
     Q_OBJECT
 
+    Q_PROPERTY(AudioCollector* collector READ collector WRITE setCollector NOTIFY collectorChanged)
+
 public:
     explicit AudioProvider(QObject* parent = nullptr);
     ~AudioProvider();
 
+    AudioCollector* collector() const;
+    void setCollector(AudioCollector* collector);
+
+signals:
+    void collectorChanged();
+
 protected:
+    AudioCollector* m_collector;
     AudioProcessor* m_processor;
 
     void init();

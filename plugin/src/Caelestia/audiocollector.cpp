@@ -3,9 +3,9 @@
 #include "service.hpp"
 #include <algorithm>
 #include <cstdint>
-#include <mutex>
 #include <pipewire/pipewire.h>
 #include <qdebug.h>
+#include <qmutex.h>
 #include <spa/param/audio/format-utils.h>
 #include <spa/param/latency-utils.h>
 #include <stop_token>
@@ -25,6 +25,7 @@ PipeWireWorker::PipeWireWorker(std::stop_token token, AudioCollector* collector)
     m_loop = pw_main_loop_new(nullptr);
     if (!m_loop) {
         qWarning() << "PipeWireWorker::init: failed to create PipeWire main loop";
+        pw_deinit();
         return;
     }
 
@@ -66,10 +67,17 @@ PipeWireWorker::PipeWireWorker(std::stop_token token, AudioCollector* collector)
 
     m_stream = pw_stream_new_simple(pw_main_loop_get_loop(m_loop), "caelestia-shell", props, &events, this);
 
-    pw_stream_connect(m_stream, PW_DIRECTION_INPUT, PW_ID_ANY,
+    const int success = pw_stream_connect(m_stream, PW_DIRECTION_INPUT, collector->nodeId(),
         static_cast<pw_stream_flags>(
             PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS | PW_STREAM_FLAG_RT_PROCESS),
         params, 1);
+    if (success < 0) {
+        qWarning() << "PipeWireWorker::init: failed to connect stream";
+        pw_stream_destroy(m_stream);
+        pw_main_loop_destroy(m_loop);
+        pw_deinit();
+        return;
+    }
 
     pw_main_loop_run(m_loop);
 
@@ -155,25 +163,18 @@ unsigned int PipeWireWorker::nextPowerOf2(unsigned int n) {
     return n;
 }
 
-AudioCollector::AudioCollector(uint32_t sampleRate, uint32_t chunkSize, QObject* parent)
+AudioCollector::AudioCollector(QObject* parent)
     : Service(parent)
-    , m_buffer1(chunkSize)
-    , m_buffer2(chunkSize)
+    , m_sampleRate(44100)
+    , m_chunkSize(512)
+    , m_nodeId(PW_ID_ANY)
+    , m_buffer1(m_chunkSize)
+    , m_buffer2(m_chunkSize)
     , m_readBuffer(&m_buffer1)
-    , m_writeBuffer(&m_buffer2)
-    , m_sampleRate(sampleRate)
-    , m_chunkSize(chunkSize) {}
+    , m_writeBuffer(&m_buffer2) {}
 
 AudioCollector::~AudioCollector() {
     stop();
-}
-
-AudioCollector* AudioCollector::instance() {
-    std::lock_guard<std::mutex> lock(s_mutex);
-    if (s_instance == nullptr) {
-        s_instance = new AudioCollector();
-    }
-    return s_instance;
 }
 
 uint32_t AudioCollector::sampleRate() const {
@@ -182,6 +183,29 @@ uint32_t AudioCollector::sampleRate() const {
 
 uint32_t AudioCollector::chunkSize() const {
     return m_chunkSize;
+}
+
+uint32_t AudioCollector::nodeId() {
+    QMutexLocker locker(&m_nodeIdMutex);
+    return m_nodeId;
+}
+
+void AudioCollector::setNodeId(uint32_t nodeId) {
+    {
+        QMutexLocker locker(&m_nodeIdMutex);
+
+        if (nodeId == m_nodeId) {
+            return;
+        }
+
+        m_nodeId = nodeId;
+    }
+    emit nodeIdChanged();
+
+    if (m_thread.joinable()) {
+        stop();
+        start();
+    }
 }
 
 void AudioCollector::clearBuffer() {
