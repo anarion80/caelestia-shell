@@ -49,7 +49,7 @@ ColumnLayout {
 
                 Image {
                     asynchronous: true
-                    source: `file://${Quickshell.shellDir}/assets/dino.png`
+                    source: Qt.resolvedUrl(`${Quickshell.shellDir}/assets/dino.png`)
                     fillMode: Image.PreserveAspectFit
                     sourceSize.width: clipRect.width * 0.8
 

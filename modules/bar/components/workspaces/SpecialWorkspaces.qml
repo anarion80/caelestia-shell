@@ -22,7 +22,7 @@ Item {
         required property Item source
         readonly property Item maskSource: mask
 
-        fragmentShader: `file://${Quickshell.shellDir}/assets/shaders/opacitymask.frag.qsb`
+        fragmentShader: Qt.resolvedUrl(`${Quickshell.shellDir}/assets/shaders/opacitymask.frag.qsb`)
     }
 
     Item {

@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.components.effects
 import qs.services
 import qs.config
+import qs.utils
 import Quickshell.Services.SystemTray
 import QtQuick
 
@@ -26,14 +27,7 @@ MouseArea {
         id: icon
 
         anchors.fill: parent
-        source: {
-            let icon = root.modelData.icon;
-            if (icon.includes("?path=")) {
-                const [name, path] = icon.split("?path=");
-                icon = `file://${path}/${name.slice(name.lastIndexOf("/") + 1)}`;
-            }
-            return icon;
-        }
+        source: Icons.getTrayIcon(root.modelData.id, root.modelData.icon)
         colour: Colours.palette.m3secondary
         layer.enabled: Config.bar.tray.recolour
     }

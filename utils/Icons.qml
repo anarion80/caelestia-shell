@@ -1,5 +1,6 @@
 pragma Singleton
 
+import qs.config
 import Quickshell
 import Quickshell.Services.Notifications
 
@@ -204,5 +205,17 @@ Singleton {
         if (name === "sysmon")
             return "monitor_heart";
         return name[0].toUpperCase();
+    }
+
+    function getTrayIcon(id: string, icon: string): string {
+        for (const sub of Config.bar.tray.iconSubs)
+            if (sub.id === id)
+                return sub.image ? Qt.resolvedUrl(sub.image) : Quickshell.iconPath(sub.icon);
+
+        if (icon.includes("?path=")) {
+            const [name, path] = icon.split("?path=");
+            icon = Qt.resolvedUrl(`${path}/${name.slice(name.lastIndexOf("/") + 1)}`);
+        }
+        return icon;
     }
 }
