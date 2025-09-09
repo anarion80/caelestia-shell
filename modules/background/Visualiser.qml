@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
 import qs.components
-import qs.components.misc
 import qs.services
 import qs.config
+import Caelestia
 import Quickshell
 import Quickshell.Widgets
 import QtQuick
@@ -15,8 +15,8 @@ Item {
     required property ShellScreen screen
     required property Wallpaper wallpaper
 
-    Ref {
-        service: Cava
+    ServiceRef {
+        service: Cava.provider
     }
 
     MultiEffect {
@@ -65,7 +65,7 @@ Item {
             id: bar
 
             required property int modelData
-            property real value: Math.max(1, Math.min(100, Cava.values[side.isRight ? modelData : side.count - modelData - 1])) / 100
+            property real value: Math.max(0, Math.min(1, Cava.values[side.isRight ? modelData : side.count - modelData - 1]))
 
             clip: true
 

@@ -1,8 +1,8 @@
 import qs.components
 import qs.services
 import qs.config
+import Caelestia
 import Quickshell
-import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
 
@@ -13,7 +13,7 @@ Item {
     readonly property string math: list.search.text.slice(`${Config.launcher.actionPrefix}calc `.length)
 
     function onClicked(): void {
-        Quickshell.execDetached(["sh", "-c", `qalc -t -m 100 '${root.math}' | wl-copy`]);
+        Quickshell.execDetached(["wl-copy", Qalculator.eval(math, false)]);
         root.list.visibilities.launcher = false;
     }
 
@@ -22,34 +22,11 @@ Item {
     anchors.left: parent?.left
     anchors.right: parent?.right
 
-    onMathChanged: {
-        if (math) {
-            qalcProc.command = ["qalc", "-m", "100", math];
-            qalcProc.running = true;
-        }
-    }
-
     StateLayer {
         radius: Appearance.rounding.full
 
         function onClicked(): void {
             root.onClicked();
-        }
-    }
-
-    Binding {
-        id: binding
-
-        when: root.math.length > 0
-        target: metrics
-        property: "text"
-    }
-
-    Process {
-        id: qalcProc
-
-        stdout: StdioCollector {
-            onStreamFinished: binding.value = text.trim()
         }
     }
 
@@ -71,28 +48,18 @@ Item {
             id: result
 
             color: {
-                if (metrics.text.includes("error: "))
+                if (text.includes("error: ") || text.includes("warning: "))
                     return Colours.palette.m3error;
                 if (!root.math)
                     return Colours.palette.m3onSurfaceVariant;
                 return Colours.palette.m3onSurface;
             }
 
-            text: metrics.elidedText
-            font.pointSize: Appearance.font.size.normal
+            text: root.math.length > 0 ? Qalculator.eval(root.math) : qsTr("Type an expression to calculate")
+            elide: Text.ElideLeft
 
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
-
-            TextMetrics {
-                id: metrics
-
-                text: qsTr("Type an expression to calculate")
-                font.family: result.font.family
-                font.pointSize: result.font.pointSize
-                elide: Text.ElideRight
-                elideWidth: result.width
-            }
         }
 
         StyledRect {

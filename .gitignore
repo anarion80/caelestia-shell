@@ -2,3 +2,4 @@
 /result
 /.qmlls.ini
 build/
+.cache/

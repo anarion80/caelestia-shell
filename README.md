@@ -314,12 +314,18 @@ default, you must create it manually.
             }
         ],
         "persistent": true,
+        "scrollActions": {
+            "brightness": true,
+            "workspaces": true,
+            "volume": true
+        },
         "showOnHover": true,
         "status": {
             "showAudio": false,
             "showBattery": true,
             "showBluetooth": true,
             "showKbLayout": false,
+            "showMicrophone": false,
             "showNetwork": true,
             "showLockStatus": true
         },

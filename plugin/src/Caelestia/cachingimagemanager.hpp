@@ -1,8 +1,10 @@
 #pragma once
 
-#include <QtQuick/QQuickItem>
+#include <QtQuick/qquickitem.h>
 #include <qobject.h>
 #include <qqmlintegration.h>
+
+namespace caelestia {
 
 class CachingImageManager : public QObject {
     Q_OBJECT
@@ -16,7 +18,8 @@ class CachingImageManager : public QObject {
 
 public:
     explicit CachingImageManager(QObject* parent = nullptr)
-        : QObject(parent) {}
+        : QObject(parent)
+        , m_item(nullptr) {}
 
     [[nodiscard]] QQuickItem* item() const;
     void setItem(QQuickItem* item);
@@ -56,5 +59,7 @@ private:
     [[nodiscard]] QSize effectiveSize() const;
 
     void createCache(const QString& path, const QString& cache, const QString& fillMode, const QSize& size) const;
-    [[nodiscard]] QString sha256sum(const QString& path) const;
+    [[nodiscard]] static QString sha256sum(const QString& path);
 };
+
+} // namespace caelestia

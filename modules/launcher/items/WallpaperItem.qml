@@ -8,7 +8,7 @@ import Quickshell
 import Quickshell.Widgets
 import QtQuick
 
-StyledRect {
+Item {
     id: root
 
     required property FileSystemEntry modelData
@@ -46,16 +46,24 @@ StyledRect {
         }
     }
 
-    ClippingRectangle {
+    StyledClippingRect {
         id: image
 
         anchors.horizontalCenter: parent.horizontalCenter
         y: Appearance.padding.large
-        color: "transparent"
+        color: Colours.tPalette.m3surfaceContainer
         radius: Appearance.rounding.normal
 
         implicitWidth: Config.launcher.sizes.wallpaperWidth
         implicitHeight: implicitWidth / 16 * 9
+
+        MaterialIcon {
+            anchors.centerIn: parent
+            text: "image"
+            color: Colours.tPalette.m3outline
+            font.pointSize: Appearance.font.size.extraLarge * 2
+            font.weight: 600
+        }
 
         CachingImage {
             path: root.modelData.path
