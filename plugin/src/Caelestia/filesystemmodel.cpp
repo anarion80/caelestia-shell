@@ -1,14 +1,10 @@
 #include "filesystemmodel.hpp"
 
-#include <QAbstractListModel>
-#include <QDir>
-#include <QDirIterator>
-#include <QFileInfo>
-#include <QFutureWatcher>
-#include <QImageReader>
-#include <QObject>
-#include <QtConcurrent>
-#include <qqmlintegration.h>
+#include <qdiriterator.h>
+#include <qfuturewatcher.h>
+#include <qtconcurrentrun.h>
+
+namespace caelestia {
 
 int FileSystemModel::rowCount(const QModelIndex& parent) const {
     if (parent != QModelIndex()) {
@@ -366,3 +362,5 @@ bool FileSystemModel::compareEntries(const FileSystemEntry* a, const FileSystemE
     }
     return a->relativePath().localeAwareCompare(b->relativePath()) < 0;
 }
+
+} // namespace caelestia

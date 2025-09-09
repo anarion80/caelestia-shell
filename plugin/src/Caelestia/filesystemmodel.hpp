@@ -1,14 +1,15 @@
 #pragma once
 
-#include <QAbstractListModel>
-#include <QDir>
-#include <QFileInfo>
-#include <QFileSystemWatcher>
-#include <QFuture>
-#include <QImageReader>
-#include <QMimeDatabase>
-#include <QObject>
+#include <qabstractitemmodel.h>
+#include <qdir.h>
+#include <qfilesystemwatcher.h>
+#include <qfuture.h>
+#include <qimagereader.h>
+#include <qmimedatabase.h>
+#include <qobject.h>
 #include <qqmlintegration.h>
+
+namespace caelestia {
 
 class FileSystemEntry : public QObject {
     Q_OBJECT
@@ -34,16 +35,16 @@ public:
         , m_isImageInitialised(false)
         , m_mimeTypeInitialised(false) {}
 
-    QString path() const { return m_path; };
-    QString relativePath() const { return m_relativePath; };
+    [[nodiscard]] QString path() const { return m_path; };
+    [[nodiscard]] QString relativePath() const { return m_relativePath; };
 
-    QString name() const { return m_fileInfo.fileName(); };
-    QString parentDir() const { return m_fileInfo.absolutePath(); };
-    QString suffix() const { return m_fileInfo.completeSuffix(); };
-    qint64 size() const { return m_fileInfo.size(); };
-    bool isDir() const { return m_fileInfo.isDir(); };
+    [[nodiscard]] QString name() const { return m_fileInfo.fileName(); };
+    [[nodiscard]] QString parentDir() const { return m_fileInfo.absolutePath(); };
+    [[nodiscard]] QString suffix() const { return m_fileInfo.completeSuffix(); };
+    [[nodiscard]] qint64 size() const { return m_fileInfo.size(); };
+    [[nodiscard]] bool isDir() const { return m_fileInfo.isDir(); };
 
-    bool isImage() {
+    [[nodiscard]] bool isImage() {
         if (!m_isImageInitialised) {
             QImageReader reader(m_path);
             m_isImage = reader.canRead();
@@ -52,7 +53,7 @@ public:
         return m_isImage;
     }
 
-    QString mimeType() {
+    [[nodiscard]] QString mimeType() {
         if (!m_mimeTypeInitialised) {
             const QMimeDatabase db;
             m_mimeType = db.mimeTypeForFile(m_path).name();
@@ -109,22 +110,22 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    QString path() const;
+    [[nodiscard]] QString path() const;
     void setPath(const QString& path);
 
-    bool recursive() const;
+    [[nodiscard]] bool recursive() const;
     void setRecursive(bool recursive);
 
-    bool watchChanges() const;
+    [[nodiscard]] bool watchChanges() const;
     void setWatchChanges(bool watchChanges);
 
-    bool showHidden() const;
+    [[nodiscard]] bool showHidden() const;
     void setShowHidden(bool showHidden);
 
-    Filter filter() const;
+    [[nodiscard]] Filter filter() const;
     void setFilter(Filter filter);
 
-    QList<FileSystemEntry*> entries() const;
+    [[nodiscard]] QList<FileSystemEntry*> entries() const;
 
 signals:
     void pathChanged();
@@ -155,5 +156,7 @@ private:
     void updateEntries();
     void updateEntriesForDir(const QString& dir);
     void applyChanges(const QSet<QString>& removedPaths, const QSet<QString>& addedPaths);
-    static bool compareEntries(const FileSystemEntry* a, const FileSystemEntry* b);
+    [[nodiscard]] static bool compareEntries(const FileSystemEntry* a, const FileSystemEntry* b);
 };
+
+} // namespace caelestia

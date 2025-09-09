@@ -1,14 +1,15 @@
 #include "cachingimagemanager.hpp"
 
-#include <QCryptographicHash>
-#include <QDir>
-#include <QFile>
-#include <QImageReader>
-#include <QObject>
-#include <QPainter>
-#include <QThreadPool>
-#include <QtQuick/QQuickItem>
-#include <QtQuick/QQuickWindow>
+#include <QtQuick/qquickwindow.h>
+#include <qcryptographichash.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qfuturewatcher.h>
+#include <qimagereader.h>
+#include <qpainter.h>
+#include <qtconcurrentrun.h>
+
+namespace caelestia {
 
 qreal CachingImageManager::effectiveScale() const {
     if (m_item && m_item->window()) {
@@ -104,59 +105,63 @@ void CachingImageManager::updateSource(const QString& path) {
 
     m_shaPath = path;
 
-    const QPointer<CachingImageManager> self(this);
-    QThreadPool::globalInstance()->start([path, self] {
-        const QString sha = self->sha256sum(path);
+    const auto future = QtConcurrent::run(&CachingImageManager::sha256sum, path);
 
-        QMetaObject::invokeMethod(
-            self,
-            [path, sha, self]() {
-                if (!self || self->m_path != path) {
-                    // Object is destroyed or path has changed, ignore
-                    return;
-                }
+    const auto watcher = new QFutureWatcher<QString>(this);
 
-                const QSize size = self->effectiveSize();
+    connect(watcher, &QFutureWatcher<QString>::finished, this, [watcher, path, this]() {
+        if (m_path != path) {
+            // Object is destroyed or path has changed, ignore
+            watcher->deleteLater();
+            return;
+        }
 
-                if (!self->m_item || !size.width() || !size.height()) {
-                    return;
-                }
+        const QSize size = effectiveSize();
 
-                const QString fillMode = self->m_item->property("fillMode").toString();
-                // clang-format off
-                const QString filename = QString("%1@%2x%3-%4.png")
-                    .arg(sha).arg(size.width()).arg(size.height())
-                    .arg(fillMode == "PreserveAspectCrop" ? "crop" : fillMode == "PreserveAspectFit" ? "fit" : "stretch");
-                // clang-format on
+        if (!m_item || !size.width() || !size.height()) {
+            watcher->deleteLater();
+            return;
+        }
 
-                const QUrl cache = self->m_cacheDir.resolved(QUrl(filename));
-                if (self->m_cachePath == cache) {
-                    return;
-                }
+        const QString fillMode = m_item->property("fillMode").toString();
+        // clang-format off
+        const QString filename = QString("%1@%2x%3-%4.png")
+            .arg(watcher->result()).arg(size.width()).arg(size.height())
+            .arg(fillMode == "PreserveAspectCrop" ? "crop" : fillMode == "PreserveAspectFit" ? "fit" : "stretch");
+        // clang-format on
 
-                self->m_cachePath = cache;
-                emit self->cachePathChanged();
+        const QUrl cache = m_cacheDir.resolved(QUrl(filename));
+        if (m_cachePath == cache) {
+            watcher->deleteLater();
+            return;
+        }
 
-                if (!cache.isLocalFile()) {
-                    qWarning() << "CachingImageManager::updateSource: cachePath" << cache << "is not a local file";
-                    return;
-                }
+        m_cachePath = cache;
+        emit cachePathChanged();
 
-                const QImageReader reader(cache.toLocalFile());
-                if (reader.canRead()) {
-                    self->m_item->setProperty("source", cache);
-                } else {
-                    self->m_item->setProperty("source", QUrl::fromLocalFile(path));
-                    self->createCache(path, cache.toLocalFile(), fillMode, size);
-                }
+        if (!cache.isLocalFile()) {
+            qWarning() << "CachingImageManager::updateSource: cachePath" << cache << "is not a local file";
+            watcher->deleteLater();
+            return;
+        }
 
-                // Clear current running sha if same
-                if (self->m_shaPath == path) {
-                    self->m_shaPath = QString();
-                }
-            },
-            Qt::QueuedConnection);
+        const QImageReader reader(cache.toLocalFile());
+        if (reader.canRead()) {
+            m_item->setProperty("source", cache);
+        } else {
+            m_item->setProperty("source", QUrl::fromLocalFile(path));
+            createCache(path, cache.toLocalFile(), fillMode, size);
+        }
+
+        // Clear current running sha if same
+        if (m_shaPath == path) {
+            m_shaPath = QString();
+        }
+
+        watcher->deleteLater();
     });
+
+    watcher->setFuture(future);
 }
 
 QUrl CachingImageManager::cachePath() const {
@@ -201,7 +206,7 @@ void CachingImageManager::createCache(
     });
 }
 
-QString CachingImageManager::sha256sum(const QString& path) const {
+QString CachingImageManager::sha256sum(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "CachingImageManager::sha256sum: failed to open" << path;
@@ -214,3 +219,5 @@ QString CachingImageManager::sha256sum(const QString& path) const {
 
     return hash.result().toHex();
 }
+
+} // namespace caelestia

@@ -8,3 +8,4 @@ build/
 devenv.local.nix
 # direnv
 .direnv
+.cache/
