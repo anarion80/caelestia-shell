@@ -36,7 +36,6 @@ void Service::unref() {
     {
         QMutexLocker locker(&m_mutex);
         if (m_refCount == 0) {
-            qWarning() << "ServiceRef::unref: attempted to unref service with no active refs";
             return;
         }
         m_refCount--;
