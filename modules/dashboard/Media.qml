@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.components.effects
-import qs.components.misc
 import qs.components.controls
 import qs.services
 import qs.utils
@@ -56,11 +55,11 @@ Item {
     }
 
     ServiceRef {
-        service: Cava.provider
+        service: Audio.cava
     }
 
     ServiceRef {
-        service: BeatTracker
+        service: Audio.beatTracker
     }
 
     Shape {
@@ -91,7 +90,7 @@ Item {
             id: visualiserBar
 
             required property int modelData
-            readonly property real value: Math.max(1e-3, Math.min(1, Cava.values[modelData]))
+            readonly property real value: Math.max(1e-3, Math.min(1, Audio.cava.values[modelData]))
 
             readonly property real angle: modelData * 2 * Math.PI / Config.services.visualiserBars
             readonly property real magnitude: value * Config.dashboard.sizes.mediaVisualiserSize
@@ -530,7 +529,7 @@ Item {
             height: visualiser.height * 0.75
 
             playing: Players.active?.isPlaying ?? false
-            speed: BeatTracker.bpm / 300
+            speed: Audio.beatTracker.bpm / 300
             source: Paths.absolutePath(Config.paths.mediaGif)
             asynchronous: true
             fillMode: AnimatedImage.PreserveAspectFit
@@ -544,7 +543,6 @@ Item {
         readonly property string icon: Icons.getAppIcon(player?.identity)
 
         Layout.fillHeight: true
-        asynchronous: true
         sourceComponent: !player || icon === "image://icon/" ? fallbackIcon : playerImage
 
         Component {

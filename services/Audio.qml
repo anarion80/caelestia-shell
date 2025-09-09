@@ -1,6 +1,7 @@
 pragma Singleton
 
 import qs.config
+import Caelestia
 import Quickshell
 import Quickshell.Services.Pipewire
 
@@ -31,6 +32,9 @@ Singleton {
 
     readonly property bool sourceMuted: !!source?.audio?.muted
     readonly property real sourceVolume: source?.audio?.volume ?? 0
+
+    readonly property alias cava: cava
+    readonly property alias beatTracker: beatTracker
 
     function setVolume(newVolume: real): void {
         if (sink?.ready && sink?.audio) {
@@ -72,5 +76,22 @@ Singleton {
 
     PwObjectTracker {
         objects: [...root.sinks, ...root.sources]
+    }
+
+    AudioCollector {
+        id: collector
+    }
+
+    CavaProvider {
+        id: cava
+
+        collector: collector
+        bars: Config.services.visualiserBars
+    }
+
+    BeatTracker {
+        id: beatTracker
+
+        collector: collector
     }
 }

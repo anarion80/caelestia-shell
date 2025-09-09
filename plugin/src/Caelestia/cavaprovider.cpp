@@ -9,16 +9,38 @@
 
 namespace caelestia {
 
-CavaProcessor::CavaProcessor(QObject* parent)
-    : AudioProcessor(parent)
+CavaProcessor::CavaProcessor(AudioCollector* collector, QObject* parent)
+    : AudioProcessor(collector, parent)
     , m_plan(nullptr)
-    , m_in(new double[static_cast<size_t>(m_chunkSize)])
+    , m_in(nullptr)
     , m_out(nullptr)
-    , m_bars(0) {};
+    , m_bars(0) {
+    if (collector) {
+        m_in = new double[collector->chunkSize()];
+    }
+};
 
 CavaProcessor::~CavaProcessor() {
     cleanup();
-    delete[] m_in;
+    if (m_in) {
+        delete[] m_in;
+    }
+}
+
+void CavaProcessor::setCollector(AudioCollector* collector) {
+    AudioProcessor::setCollector(collector);
+
+    if (m_in) {
+        delete[] m_in;
+    }
+
+    if (collector) {
+        m_in = new double[collector->chunkSize()];
+    } else {
+        m_in = nullptr;
+    }
+
+    reload();
 }
 
 void CavaProcessor::setBars(int bars) {
@@ -39,12 +61,10 @@ void CavaProcessor::reload() {
 }
 
 void CavaProcessor::cleanup() {
-    if (!m_plan) {
-        return;
+    if (m_plan) {
+        cava_destroy(m_plan);
+        m_plan = nullptr;
     }
-
-    cava_destroy(m_plan);
-    m_plan = nullptr;
 
     if (m_out) {
         delete[] m_out;
@@ -53,11 +73,11 @@ void CavaProcessor::cleanup() {
 }
 
 void CavaProcessor::initCava() {
-    if (m_plan || m_bars == 0) {
+    if (m_plan || m_bars == 0 || !m_collector) {
         return;
     }
 
-    m_plan = cava_init(m_bars, static_cast<unsigned int>(m_sampleRate), 1, 1, 0.85, 50, 10000);
+    m_plan = cava_init(m_bars, m_collector->sampleRate(), 1, 1, 0.85, 50, 10000);
 
     if (m_plan->status == -1) {
         qWarning() << "CavaProcessor::initCava: failed to initialise cava plan";
@@ -69,11 +89,11 @@ void CavaProcessor::initCava() {
 }
 
 void CavaProcessor::process() {
-    if (!m_plan || m_bars == 0) {
+    if (!m_plan || m_bars == 0 || !m_collector || !m_in || !m_out) {
         return;
     }
 
-    const int count = static_cast<int>(AudioCollector::instance()->readChunk(m_in));
+    const int count = static_cast<int>(m_collector->readChunk(m_in));
 
     // Process in data via cava
     cava_execute(m_in, count, m_out, m_plan);
@@ -100,8 +120,8 @@ void CavaProcessor::process() {
 CavaProvider::CavaProvider(QObject* parent)
     : AudioProvider(parent)
     , m_bars(0)
-    , m_values(m_bars) {
-    m_processor = new CavaProcessor();
+    , m_values(m_bars, 0.0) {
+    m_processor = new CavaProcessor(m_collector);
     init();
 
     connect(static_cast<CavaProcessor*>(m_processor), &CavaProcessor::valuesChanged, this, &CavaProvider::updateValues);
@@ -121,7 +141,7 @@ void CavaProvider::setBars(int bars) {
         return;
     }
 
-    m_values.resize(bars);
+    m_values.resize(bars, 0.0);
     m_bars = bars;
     emit barsChanged();
     emit valuesChanged();
