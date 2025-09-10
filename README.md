@@ -477,7 +477,8 @@ default, you must create it manually.
             "variants": false,
             "wallpapers": false
         },
-        "showOnHover": false
+        "showOnHover": false,
+        "hiddenApps": []
     },
     "lock": {
         "recolourLogo": false

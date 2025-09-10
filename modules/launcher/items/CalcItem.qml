@@ -23,7 +23,7 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Appearance.rounding.full
+        radius: Appearance.rounding.normal
 
         function onClicked(): void {
             root.onClicked();
