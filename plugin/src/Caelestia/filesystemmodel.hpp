@@ -27,40 +27,17 @@ class FileSystemEntry : public QObject {
     Q_PROPERTY(QString mimeType READ mimeType CONSTANT)
 
 public:
-    explicit FileSystemEntry(const QString& path, const QString& relativePath, QObject* parent = nullptr)
-        : QObject(parent)
-        , m_fileInfo(QFileInfo(path))
-        , m_path(path)
-        , m_relativePath(relativePath)
-        , m_isImageInitialised(false)
-        , m_mimeTypeInitialised(false) {}
+    explicit FileSystemEntry(const QString& path, const QString& relativePath, QObject* parent = nullptr);
 
-    [[nodiscard]] QString path() const { return m_path; };
-    [[nodiscard]] QString relativePath() const { return m_relativePath; };
-
-    [[nodiscard]] QString name() const { return m_fileInfo.fileName(); };
-    [[nodiscard]] QString parentDir() const { return m_fileInfo.absolutePath(); };
-    [[nodiscard]] QString suffix() const { return m_fileInfo.completeSuffix(); };
-    [[nodiscard]] qint64 size() const { return m_fileInfo.size(); };
-    [[nodiscard]] bool isDir() const { return m_fileInfo.isDir(); };
-
-    [[nodiscard]] bool isImage() {
-        if (!m_isImageInitialised) {
-            QImageReader reader(m_path);
-            m_isImage = reader.canRead();
-            m_isImageInitialised = true;
-        }
-        return m_isImage;
-    }
-
-    [[nodiscard]] QString mimeType() {
-        if (!m_mimeTypeInitialised) {
-            const QMimeDatabase db;
-            m_mimeType = db.mimeTypeForFile(m_path).name();
-            m_mimeTypeInitialised = true;
-        }
-        return m_mimeType;
-    }
+    [[nodiscard]] QString path() const;
+    [[nodiscard]] QString relativePath() const;
+    [[nodiscard]] QString name() const;
+    [[nodiscard]] QString parentDir() const;
+    [[nodiscard]] QString suffix() const;
+    [[nodiscard]] qint64 size() const;
+    [[nodiscard]] bool isDir() const;
+    [[nodiscard]] bool isImage() const;
+    [[nodiscard]] QString mimeType() const;
 
 private:
     const QFileInfo m_fileInfo;
@@ -68,11 +45,11 @@ private:
     const QString m_path;
     const QString m_relativePath;
 
-    bool m_isImage;
-    bool m_isImageInitialised;
+    mutable bool m_isImage;
+    mutable bool m_isImageInitialised;
 
-    QString m_mimeType;
-    bool m_mimeTypeInitialised;
+    mutable QString m_mimeType;
+    mutable bool m_mimeTypeInitialised;
 };
 
 class FileSystemModel : public QAbstractListModel {
@@ -96,15 +73,7 @@ public:
     };
     Q_ENUM(Filter)
 
-    explicit FileSystemModel(QObject* parent = nullptr)
-        : QAbstractListModel(parent)
-        , m_recursive(false)
-        , m_watchChanges(true)
-        , m_showHidden(false)
-        , m_filter(NoFilter) {
-        connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &FileSystemModel::watchDirIfRecursive);
-        connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &FileSystemModel::updateEntriesForDir);
-    }
+    explicit FileSystemModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;

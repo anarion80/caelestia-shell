@@ -307,10 +307,6 @@ default, you must create it manually.
             {
                 "id": "power",
                 "enabled": true
-            },
-            {
-                "id": "idleInhibitor",
-                "enabled": false
             }
         ],
         "persistent": true,
@@ -521,6 +517,9 @@ default, you must create it manually.
             "hibernate": ["systemctl", "hibernate"],
             "reboot": ["systemctl", "reboot"]
         }
+    },
+    "utilities": {
+        "enabled": true
     }
 }
 ```

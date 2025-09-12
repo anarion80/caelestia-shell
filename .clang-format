@@ -19,4 +19,7 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
 IndentAccessModifiers: false
 IndentCaseLabels: false
+InsertNewlineAtEOF: true
+SeparateDefinitionBlocks: Always
+WrapNamespaceBodyWithEmptyLines: Always
 ...

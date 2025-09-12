@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import qs.components
 import qs.services
 import qs.config
@@ -46,10 +48,17 @@ Item {
         }
     ]
 
-    Content {
+    Loader {
         id: content
 
-        monitor: Brightness.getMonitorForScreen(root.screen)
-        visibilities: root.visibilities
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+
+        Component.onCompleted: active = Qt.binding(() => (root.visibilities.osd && Config.osd.enabled) || root.visible)
+
+        sourceComponent: Content {
+            monitor: Brightness.getMonitorForScreen(root.screen)
+            visibilities: root.visibilities
+        }
     }
 }
