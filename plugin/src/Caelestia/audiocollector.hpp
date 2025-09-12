@@ -2,7 +2,6 @@
 
 #include "service.hpp"
 #include <atomic>
-#include <cstdint>
 #include <pipewire/pipewire.h>
 #include <qmutex.h>
 #include <qqmlintegration.h>
@@ -35,7 +34,7 @@ private:
     static void handleTimeout(void* data, uint64_t expirations);
     void streamStateChanged(pw_stream_state state);
     void processStream();
-    void processSamples(const int16_t* samples, uint32_t count);
+    void processSamples(const qint16* samples, quint32 count);
 
     [[nodiscard]] unsigned int nextPowerOf2(unsigned int n);
 };
@@ -44,22 +43,22 @@ class AudioCollector : public Service {
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(uint32_t nodeId READ nodeId WRITE setNodeId NOTIFY nodeIdChanged)
+    Q_PROPERTY(quint32 nodeId READ nodeId WRITE setNodeId NOTIFY nodeIdChanged)
 
 public:
     explicit AudioCollector(QObject* parent = nullptr);
     ~AudioCollector();
 
-    [[nodiscard]] uint32_t sampleRate() const;
-    [[nodiscard]] uint32_t chunkSize() const;
+    [[nodiscard]] quint32 sampleRate() const;
+    [[nodiscard]] quint32 chunkSize() const;
 
-    [[nodiscard]] uint32_t nodeId();
-    void setNodeId(uint32_t nodeId);
+    [[nodiscard]] quint32 nodeId();
+    void setNodeId(quint32 nodeId);
 
     void clearBuffer();
-    void loadChunk(const int16_t* samples, uint32_t count);
-    uint32_t readChunk(float* out, uint32_t count = 0);
-    uint32_t readChunk(double* out, uint32_t count = 0);
+    void loadChunk(const qint16* samples, quint32 count);
+    quint32 readChunk(float* out, quint32 count = 0);
+    quint32 readChunk(double* out, quint32 count = 0);
 
 signals:
     void sampleRateChanged();
@@ -67,9 +66,9 @@ signals:
     void nodeIdChanged();
 
 private:
-    const uint32_t m_sampleRate;
-    const uint32_t m_chunkSize;
-    uint32_t m_nodeId;
+    const quint32 m_sampleRate;
+    const quint32 m_chunkSize;
+    quint32 m_nodeId;
     QMutex m_nodeIdMutex;
 
     std::jthread m_thread;
@@ -77,7 +76,7 @@ private:
     std::vector<float> m_buffer2;
     std::atomic<std::vector<float>*> m_readBuffer;
     std::atomic<std::vector<float>*> m_writeBuffer;
-    uint32_t m_sampleCount;
+    quint32 m_sampleCount;
 
     void reload();
     void start() override;

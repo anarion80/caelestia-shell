@@ -1,6 +1,7 @@
 import qs.components
 import qs.components.effects
 import qs.components.images
+import qs.components.filedialog
 import qs.services
 import qs.config
 import qs.utils
@@ -12,6 +13,7 @@ Row {
 
     required property PersistentProperties visibilities
     required property PersistentProperties state
+    required property FileDialog facePicker
 
     padding: Appearance.padding.large
     spacing: Appearance.spacing.normal
@@ -72,7 +74,7 @@ Row {
 
                     function onClicked(): void {
                         root.visibilities.launcher = false;
-                        root.state.facePicker.open();
+                        root.facePicker.open();
                     }
                 }
 

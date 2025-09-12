@@ -20,6 +20,7 @@ Singleton {
     property alias session: adapter.session
     property alias winfo: adapter.winfo
     property alias lock: adapter.lock
+    property alias utilities: adapter.utilities
     property alias services: adapter.services
     property alias paths: adapter.paths
 
@@ -44,6 +45,7 @@ Singleton {
             property SessionConfig session: SessionConfig {}
             property WInfoConfig winfo: WInfoConfig {}
             property LockConfig lock: LockConfig {}
+            property UtilitiesConfig utilities: UtilitiesConfig {}
             property ServiceConfig services: ServiceConfig {}
             property UserPaths paths: UserPaths {}
         }

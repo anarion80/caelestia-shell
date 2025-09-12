@@ -7,11 +7,18 @@ Singleton {
     id: root
 
     property alias enabled: props.enabled
+    readonly property alias enabledSince: props.enabledSince
+
+    onEnabledChanged: {
+        if (enabled)
+            props.enabledSince = new Date();
+    }
 
     PersistentProperties {
         id: props
 
         property bool enabled
+        property date enabledSince
 
         reloadableId: "idleInhibitor"
     }

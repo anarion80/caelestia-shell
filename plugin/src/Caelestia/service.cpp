@@ -8,7 +8,7 @@ Service::Service(QObject* parent)
     : QObject(parent)
     , m_refCount(0) {}
 
-int Service::refCount() {
+int Service::refCount() const {
     QMutexLocker locker(&m_mutex);
     return m_refCount;
 }

@@ -10,6 +10,7 @@ Slider {
 
     required property string icon
     property real oldValue
+    property bool initialized
 
     orientation: Qt.Vertical
 
@@ -32,7 +33,7 @@ Slider {
     handle: Item {
         id: handle
 
-        property bool moving
+        property alias moving: icon.moving
 
         y: root.visualPosition * (root.availableHeight - height)
         implicitWidth: root.width
@@ -64,7 +65,7 @@ Slider {
             MaterialIcon {
                 id: icon
 
-                property bool moving: handle.moving
+                property bool moving
 
                 function update(): void {
                     animate = !moving;
@@ -73,7 +74,6 @@ Slider {
                     font.family = moving ? Appearance.font.family.sans : Appearance.font.family.material;
                 }
 
-                animate: true
                 text: root.icon
                 color: Colours.palette.m3inverseOnSurface
                 anchors.centerIn: parent
@@ -108,6 +108,10 @@ Slider {
     onPressedChanged: handle.moving = pressed
 
     onValueChanged: {
+        if (!initialized) {
+            initialized = true;
+            return;
+        }
         if (Math.abs(value - oldValue) < 0.01)
             return;
         oldValue = value;

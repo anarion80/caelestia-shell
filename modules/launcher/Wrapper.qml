@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import qs.components
 import qs.config
 import Quickshell
@@ -9,48 +11,66 @@ Item {
     required property PersistentProperties visibilities
     required property var panels
 
+    readonly property bool shouldBeActive: visibilities.launcher && Config.launcher.enabled
+    property int contentHeight
+
     visible: height > 0
     implicitHeight: 0
     implicitWidth: content.implicitWidth
 
-    states: State {
-        name: "visible"
-        when: root.visibilities.launcher && Config.launcher.enabled
-
-        PropertyChanges {
-            root.implicitHeight: content.implicitHeight
+    onShouldBeActiveChanged: {
+        if (shouldBeActive) {
+            hideAnim.stop();
+            showAnim.start();
+        } else {
+            showAnim.stop();
+            hideAnim.start();
         }
     }
 
-    transitions: [
-        Transition {
-            from: ""
-            to: "visible"
+    SequentialAnimation {
+        id: showAnim
 
-            Anim {
-                target: root
-                property: "implicitHeight"
-                duration: Appearance.anim.durations.expressiveDefaultSpatial
-                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-            }
-        },
-        Transition {
-            from: "visible"
-            to: ""
-
-            Anim {
-                target: root
-                property: "implicitHeight"
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
+        Anim {
+            target: root
+            property: "implicitHeight"
+            to: root.contentHeight
+            duration: Appearance.anim.durations.expressiveDefaultSpatial
+            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
         }
-    ]
+        ScriptAction {
+            script: root.implicitHeight = Qt.binding(() => content.implicitHeight)
+        }
+    }
 
-    Content {
+    SequentialAnimation {
+        id: hideAnim
+
+        ScriptAction {
+            script: root.implicitHeight = root.implicitHeight
+        }
+        Anim {
+            target: root
+            property: "implicitHeight"
+            to: 0
+            easing.bezierCurve: Appearance.anim.curves.emphasized
+        }
+    }
+
+    Loader {
         id: content
 
-        wrapper: root
-        visibilities: root.visibilities
-        panels: root.panels
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        Component.onCompleted: {
+            root.contentHeight = implicitHeight;
+            active = Qt.binding(() => root.shouldBeActive || root.visible);
+        }
+
+        sourceComponent: Content {
+            visibilities: root.visibilities
+            panels: root.panels
+        }
     }
 }

@@ -51,10 +51,6 @@ JsonObject {
         {
             id: "power",
             enabled: true
-        },
-        {
-            id: "idleInhibitor",
-            enabled: false
         }
     ]
 

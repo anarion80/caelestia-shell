@@ -14,9 +14,6 @@ Item {
     required property Brightness.Monitor monitor
     required property var visibilities
 
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-
     implicitWidth: layout.implicitWidth + Appearance.padding.large * 2
     implicitHeight: layout.implicitHeight + Appearance.padding.large * 2
 

@@ -11,7 +11,7 @@ import QtQuick.Controls
 Item {
     id: root
 
-    required property var wrapper
+    required property var content
     required property PersistentProperties visibilities
     required property var panels
     required property TextField search
@@ -77,7 +77,6 @@ Item {
         id: appList
 
         active: false
-        asynchronous: true
 
         anchors.left: parent.left
         anchors.right: parent.right
@@ -92,7 +91,6 @@ Item {
         id: wallpaperList
 
         active: false
-        asynchronous: true
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -102,7 +100,7 @@ Item {
             search: root.search
             visibilities: root.visibilities
             panels: root.panels
-            wrapper: root.wrapper
+            content: root.content
         }
     }
 

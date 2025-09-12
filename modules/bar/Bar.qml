@@ -153,12 +153,6 @@ RowLayout {
                     }
                 }
             }
-            DelegateChoice {
-                roleValue: "idleInhibitor"
-                delegate: WrappedLoader {
-                    sourceComponent: IdleInhibitor {}
-                }
-            }
         }
     }
 

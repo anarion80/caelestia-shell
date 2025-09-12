@@ -1,31 +1,17 @@
-import qs.components
-import qs.services
+import "cards"
 import qs.config
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
+import QtQuick.Layouts
 
-Item {
+ColumnLayout {
     id: root
 
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.right: parent.right
+    required property var visibilities
 
-    // implicitWidth: 300
-    // implicitHeight: 100
+    spacing: Appearance.spacing.normal
 
-    // Rectangle {
-    //     anchors.fill: parent
-    // }
+    IdleInhibit {}
 
-    Behavior on implicitHeight {
-        Anim {}
-    }
-
-    component Anim: NumberAnimation {
-        duration: Appearance.anim.durations.expressiveDefaultSpatial
-        easing.type: Easing.BezierSpline
-        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+    Toggles {
+        visibilities: root.visibilities
     }
 }

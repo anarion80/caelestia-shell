@@ -25,6 +25,15 @@ Scope {
     }
 
     CustomShortcut {
+        name: "dashboard"
+        description: "Toggle dashboard"
+        onPressed: {
+            const visibilities = Visibilities.getForActive();
+            visibilities.dashboard = !visibilities.dashboard;
+        }
+    }
+
+    CustomShortcut {
         name: "session"
         description: "Toggle session menu"
         onPressed: {
