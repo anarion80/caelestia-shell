@@ -2,7 +2,7 @@ import qs.components
 import qs.services
 import qs.config
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Templates
 
 Slider {
     id: root

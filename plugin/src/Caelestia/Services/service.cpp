@@ -1,6 +1,7 @@
 #include "service.hpp"
 
 #include <qdebug.h>
+#include <qpointer.h>
 
 namespace caelestia {
 
@@ -26,7 +27,15 @@ void Service::ref() {
     emit refCountChanged();
 
     if (needsStart) {
-        QMetaObject::invokeMethod(this, &Service::start, Qt::QueuedConnection);
+        const QPointer<Service> self(this);
+        QMetaObject::invokeMethod(
+            this,
+            [self]() {
+                if (self) {
+                    self->start();
+                }
+            },
+            Qt::QueuedConnection);
     }
 }
 
@@ -46,7 +55,15 @@ void Service::unref() {
     emit refCountChanged();
 
     if (needsStop) {
-        QMetaObject::invokeMethod(this, &Service::stop, Qt::QueuedConnection);
+        const QPointer<Service> self(this);
+        QMetaObject::invokeMethod(
+            this,
+            [self]() {
+                if (self) {
+                    self->stop();
+                }
+            },
+            Qt::QueuedConnection);
     }
 }
 

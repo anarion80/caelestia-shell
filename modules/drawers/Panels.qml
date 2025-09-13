@@ -62,6 +62,7 @@ Item {
     Launcher.Wrapper {
         id: launcher
 
+        screen: root.screen
         visibilities: root.visibilities
         panels: root
 

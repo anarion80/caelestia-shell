@@ -2,7 +2,7 @@ import ".."
 import qs.services
 import qs.config
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Templates
 import QtQuick.Shapes
 
 Switch {

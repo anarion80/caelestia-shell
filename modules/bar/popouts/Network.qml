@@ -104,7 +104,7 @@ ColumnLayout {
                 radius: Appearance.rounding.full
                 color: Qt.alpha(Colours.palette.m3primary, networkItem.modelData.active ? 1 : 0)
 
-                StyledBusyIndicator {
+                CircularIndicator {
                     anchors.fill: parent
                     running: networkItem.loading
                 }
@@ -183,7 +183,7 @@ ColumnLayout {
             }
         }
 
-        StyledBusyIndicator {
+        CircularIndicator {
             anchors.centerIn: parent
             strokeWidth: Appearance.padding.small / 2
             bgColour: "transparent"

@@ -10,11 +10,13 @@ Item {
     id: root
 
     required property Item wrapper
+    readonly property Popout currentPopout: content.children.find(c => c.shouldBeActive) ?? null
+    readonly property Item current: currentPopout?.item ?? null
 
     anchors.centerIn: parent
 
-    implicitWidth: (content.children.find(c => c.shouldBeActive)?.implicitWidth ?? 0) + Appearance.padding.large * 2
-    implicitHeight: (content.children.find(c => c.shouldBeActive)?.implicitHeight ?? 0) + Appearance.padding.large * 2
+    implicitWidth: (currentPopout?.implicitWidth ?? 0) + Appearance.padding.large * 2
+    implicitHeight: (currentPopout?.implicitHeight ?? 0) + Appearance.padding.large * 2
 
     Item {
         id: content

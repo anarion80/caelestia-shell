@@ -242,7 +242,7 @@ ColumnLayout {
                     radius: Appearance.rounding.full
                     color: Qt.alpha(Colours.palette.m3primaryContainer, device.connected ? 1 : 0)
 
-                    StyledBusyIndicator {
+                    CircularIndicator {
                         anchors.fill: parent
                         running: device.loading
                     }

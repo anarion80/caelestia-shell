@@ -174,7 +174,7 @@ ColumnLayout {
                     }
                 }
 
-                StyledBusyIndicator {
+                CircularIndicator {
                     anchors.fill: parent
                     running: root.lock.pam.passwd.active
                 }

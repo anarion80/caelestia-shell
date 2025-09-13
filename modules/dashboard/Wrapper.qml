@@ -31,6 +31,8 @@ Item {
         }
     }
 
+    readonly property real nonAnimHeight: state === "visible" ? (content.item?.nonAnimHeight ?? 0) : 0
+
     visible: height > 0
     implicitHeight: 0
     implicitWidth: content.implicitWidth

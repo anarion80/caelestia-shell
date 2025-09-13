@@ -78,7 +78,7 @@ Dependencies:
 -   [`ddcutil`](https://github.com/rockowitz/ddcutil)
 -   [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
 -   [`app2unit`](https://github.com/Vladimir-csp/app2unit)
--   [`cava`](https://github.com/karlstav/cava)
+-   [`libcava`](https://github.com/LukashonakV/cava)
 -   [`networkmanager`](https://networkmanager.dev)
 -   [`lm-sensors`](https://github.com/lm-sensors/lm-sensors)
 -   [`fish`](https://github.com/fish-shell/fish-shell)
@@ -463,7 +463,7 @@ default, you must create it manually.
         "dragThreshold": 50,
         "vimKeybinds": false,
         "enableDangerousActions": false,
-        "maxShown": 8,
+        "maxShown": 7,
         "maxWallpapers": 9,
         "specialPrefix": "@",
         "useFuzzy": {
