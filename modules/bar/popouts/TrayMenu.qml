@@ -28,7 +28,7 @@ StackView {
     popExit: NoAnim {}
 
     HyprlandFocusGrab {
-        active: true
+        active: root.depth > 1
         windows: [QsWindow.window]
         onCleared: root.popouts.hasCurrent = false
     }

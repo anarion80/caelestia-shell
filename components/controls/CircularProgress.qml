@@ -1,3 +1,4 @@
+import ".."
 import qs.services
 import qs.config
 import QtQuick
@@ -38,10 +39,8 @@ Shape {
         }
 
         Behavior on strokeColor {
-            ColorAnimation {
+            CAnim {
                 duration: Appearance.anim.durations.large
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
     }
@@ -62,10 +61,8 @@ Shape {
         }
 
         Behavior on strokeColor {
-            ColorAnimation {
+            CAnim {
                 duration: Appearance.anim.durations.large
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
     }

@@ -110,7 +110,7 @@ ColumnLayout {
                 radius: Appearance.rounding.full
                 color: Qt.alpha(Colours.palette.m3primary, device.modelData.state === BluetoothDeviceState.Connected ? 1 : 0)
 
-                StyledBusyIndicator {
+                CircularIndicator {
                     anchors.fill: parent
                     running: device.loading
                 }

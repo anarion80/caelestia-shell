@@ -1,16 +1,16 @@
 pragma ComponentBehavior: Bound
 
 import "items"
+import qs.components.controls
 import qs.services
 import qs.config
 import Quickshell
 import QtQuick
-import QtQuick.Controls
 
 PathView {
     id: root
 
-    required property TextField search
+    required property StyledTextField search
     required property PersistentProperties visibilities
     required property var panels
     required property var content

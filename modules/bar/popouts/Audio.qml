@@ -31,10 +31,9 @@ Item {
 
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 0
+        spacing: Appearance.spacing.normal
 
         StyledText {
-            Layout.bottomMargin: Appearance.spacing.small / 2
             text: qsTr("Output device")
             font.weight: 500
         }
@@ -55,8 +54,7 @@ Item {
         }
 
         StyledText {
-            Layout.topMargin: Appearance.spacing.normal
-            Layout.bottomMargin: Appearance.spacing.small / 2
+            Layout.topMargin: Appearance.spacing.smaller
             text: qsTr("Input device")
             font.weight: 500
         }
@@ -75,8 +73,8 @@ Item {
         }
 
         StyledText {
-            Layout.topMargin: Appearance.spacing.normal
-            Layout.bottomMargin: Appearance.spacing.small / 2
+            Layout.topMargin: Appearance.spacing.smaller
+            Layout.bottomMargin: -Appearance.spacing.small / 2
             text: qsTr("Volume (%1)").arg(Audio.muted ? qsTr("Muted") : `${Math.round(Audio.volume * 100)}%`)
             font.weight: 500
         }

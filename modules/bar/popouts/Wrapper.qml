@@ -17,6 +17,7 @@ Item {
 
     readonly property real nonAnimWidth: x > 0 || hasCurrent ? children.find(c => c.shouldBeActive)?.implicitWidth ?? content.implicitWidth : 0
     readonly property real nonAnimHeight: children.find(c => c.shouldBeActive)?.implicitHeight ?? content.implicitHeight
+    readonly property Item current: content.item?.current ?? null
 
     property string currentName
     property real currentCenter

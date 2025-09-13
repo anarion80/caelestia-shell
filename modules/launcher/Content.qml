@@ -13,6 +13,7 @@ Item {
 
     required property PersistentProperties visibilities
     required property var panels
+    required property real maxHeight
 
     readonly property int padding: Appearance.padding.large
     readonly property int rounding: Appearance.rounding.large
@@ -36,6 +37,7 @@ Item {
             content: root
             visibilities: root.visibilities
             panels: root.panels
+            maxHeight: root.maxHeight - searchWrapper.implicitHeight - root.padding * 3
             search: search
             padding: root.padding
             rounding: root.rounding

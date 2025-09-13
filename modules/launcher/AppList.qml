@@ -14,7 +14,7 @@ import QtQuick.Controls
 StyledListView {
     id: root
 
-    required property TextField search
+    required property StyledTextField search
     required property PersistentProperties visibilities
 
     model: ScriptModel {

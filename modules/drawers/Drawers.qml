@@ -122,25 +122,32 @@ Variants {
                 panels: panels
                 bar: bar
 
-                Panels {
-                    id: panels
+                // FIXME: remove when Hyprland bug fixed
+                Item {
+                    anchors.fill: parent
+                    anchors.rightMargin: 1
+                    anchors.bottomMargin: 1
 
-                    screen: scope.modelData
-                    visibilities: visibilities
-                    bar: bar
-                }
+                    Panels {
+                        id: panels
 
-                BarWrapper {
-                    id: bar
+                        screen: scope.modelData
+                        visibilities: visibilities
+                        bar: bar
+                    }
 
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
+                    BarWrapper {
+                        id: bar
 
-                    screen: scope.modelData
-                    visibilities: visibilities
-                    popouts: panels.popouts
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
 
-                    Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
+                        screen: scope.modelData
+                        visibilities: visibilities
+                        popouts: panels.popouts
+
+                        Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
+                    }
                 }
             }
         }
