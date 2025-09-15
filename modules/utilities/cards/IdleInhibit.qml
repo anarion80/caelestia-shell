@@ -117,6 +117,9 @@ StyledRect {
     }
 
     Behavior on implicitHeight {
-        Anim {}
+        Anim {
+            duration: Appearance.anim.durations.expressiveDefaultSpatial
+            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+        }
     }
 }

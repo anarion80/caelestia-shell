@@ -21,8 +21,8 @@ public:
     Q_INVOKABLE void saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, QJSValue onSaved, QJSValue onFailed);
     // clang-format on
 
-    Q_INVOKABLE bool copyFile(const QUrl& source, const QUrl& target) const;
-    Q_INVOKABLE bool copyFile(const QUrl& source, const QUrl& target, bool overwrite) const;
+    Q_INVOKABLE bool copyFile(const QUrl& source, const QUrl& target, bool overwrite = true) const;
+    Q_INVOKABLE bool deleteFile(const QUrl& path) const;
 
     Q_INVOKABLE void getDominantColour(QQuickItem* item, QJSValue callback);
     Q_INVOKABLE void getDominantColour(QQuickItem* item, int rescaleSize, QJSValue callback);

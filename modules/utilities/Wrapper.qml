@@ -2,12 +2,19 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.config
+import Quickshell
 import QtQuick
 
 Item {
     id: root
 
     required property var visibilities
+    readonly property PersistentProperties props: PersistentProperties {
+        property bool recordingListExpanded: false
+        property string recordingConfirmDelete
+
+        reloadableId: "utilities"
+    }
 
     visible: height > 0
     implicitHeight: 0
@@ -76,6 +83,7 @@ Item {
         active: true
 
         sourceComponent: Content {
+            props: root.props
             visibilities: root.visibilities
         }
     }

@@ -18,11 +18,8 @@ Item {
     readonly property string activeSpecial: (Config.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace.name ?? ""
 
     layer.enabled: true
-    layer.effect: ShaderEffect {
-        required property Item source
-        readonly property Item maskSource: mask
-
-        fragmentShader: Qt.resolvedUrl(`${Quickshell.shellDir}/assets/shaders/opacitymask.frag.qsb`)
+    layer.effect: OpacityMask {
+        maskSource: mask
     }
 
     Item {

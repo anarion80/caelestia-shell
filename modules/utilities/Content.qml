@@ -1,17 +1,36 @@
 import "cards"
 import qs.config
+import QtQuick
 import QtQuick.Layouts
 
-ColumnLayout {
+Item {
     id: root
 
+    required property var props
     required property var visibilities
 
-    spacing: Appearance.spacing.normal
+    implicitWidth: layout.implicitWidth
+    implicitHeight: layout.implicitHeight
 
-    IdleInhibit {}
+    ColumnLayout {
+        id: layout
 
-    Toggles {
-        visibilities: root.visibilities
+        anchors.fill: parent
+        spacing: Appearance.spacing.normal
+
+        IdleInhibit {}
+
+        Record {
+            props: root.props
+            visibilities: root.visibilities
+        }
+
+        Toggles {
+            visibilities: root.visibilities
+        }
+    }
+
+    RecordingDeleteModal {
+        props: root.props
     }
 }

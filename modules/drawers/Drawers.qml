@@ -27,6 +27,14 @@ Variants {
         StyledWindow {
             id: win
 
+            readonly property bool hasFullscreen: Hypr.monitorFor(screen)?.activeWorkspace?.toplevels.values.some(t => t.lastIpcObject.fullscreen === 2) ?? false
+
+            onHasFullscreenChanged: {
+                visibilities.launcher = false;
+                visibilities.session = false;
+                visibilities.dashboard = false;
+            }
+
             screen: scope.modelData
             name: "drawers"
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
