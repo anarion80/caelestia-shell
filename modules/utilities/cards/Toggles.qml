@@ -89,7 +89,7 @@ StyledRect {
         required property string icon
         required property string text
         property bool checked
-        property bool toggle
+        property bool toggle: true
         property bool internalChecked
 
         function onClicked(): void {

@@ -47,7 +47,7 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
 
     auto scaledRect = rect;
     const qreal scale = target->window()->devicePixelRatio();
-    if (rect.isValid() && qFuzzyCompare(scale + 1.0, 2.0)) {
+    if (rect.isValid() && !qFuzzyCompare(scale + 1.0, 2.0)) {
         scaledRect =
             QRectF(rect.left() * scale, rect.top() * scale, rect.width() * scale, rect.height() * scale).toRect();
     }
@@ -87,10 +87,6 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
         });
 }
 
-bool CUtils::copyFile(const QUrl& source, const QUrl& target) const {
-    return this->copyFile(source, target, true);
-}
-
 bool CUtils::copyFile(const QUrl& source, const QUrl& target, bool overwrite) const {
     if (!source.isLocalFile()) {
         qWarning() << "CUtils::copyFile: source" << source << "is not a local file";
@@ -106,6 +102,15 @@ bool CUtils::copyFile(const QUrl& source, const QUrl& target, bool overwrite) co
     }
 
     return QFile::copy(source.toLocalFile(), target.toLocalFile());
+}
+
+bool CUtils::deleteFile(const QUrl& path) const {
+    if (!path.isLocalFile()) {
+        qWarning() << "CUtils::deleteFile: path" << path << "is not a local file";
+        return false;
+    }
+
+    return QFile::remove(path.toLocalFile());
 }
 
 void CUtils::getDominantColour(QQuickItem* item, QJSValue callback) {

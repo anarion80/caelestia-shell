@@ -4,7 +4,6 @@ import qs.components
 import qs.components.effects
 import qs.services
 import qs.config
-import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
@@ -27,11 +26,8 @@ Item {
         sourceSize.height: height
 
         layer.enabled: true
-        layer.effect: ShaderEffect {
-            required property Item source
-            readonly property Item maskSource: mask
-
-            fragmentShader: Qt.resolvedUrl(`${Quickshell.shellDir}/assets/shaders/opacitymask.frag.qsb`)
+        layer.effect: OpacityMask {
+            maskSource: mask
         }
 
         opacity: status === Image.Ready ? 1 : 0

@@ -26,6 +26,10 @@ QString FileSystemEntry::name() const {
     return m_fileInfo.fileName();
 };
 
+QString FileSystemEntry::baseName() const {
+    return m_fileInfo.baseName();
+};
+
 QString FileSystemEntry::parentDir() const {
     return m_fileInfo.absolutePath();
 };
@@ -149,6 +153,21 @@ void FileSystemModel::setShowHidden(bool showHidden) {
     update();
 }
 
+bool FileSystemModel::sortReverse() const {
+    return m_sortReverse;
+}
+
+void FileSystemModel::setSortReverse(bool sortReverse) {
+    if (m_sortReverse == sortReverse) {
+        return;
+    }
+
+    m_sortReverse = sortReverse;
+    emit sortReverseChanged();
+
+    update();
+}
+
 FileSystemModel::Filter FileSystemModel::filter() const {
     return m_filter;
 }
@@ -160,6 +179,21 @@ void FileSystemModel::setFilter(Filter filter) {
 
     m_filter = filter;
     emit filterChanged();
+
+    update();
+}
+
+QStringList FileSystemModel::nameFilters() const {
+    return m_nameFilters;
+}
+
+void FileSystemModel::setNameFilters(const QStringList& nameFilters) {
+    if (m_nameFilters == nameFilters) {
+        return;
+    }
+
+    m_nameFilters = nameFilters;
+    emit nameFiltersChanged();
 
     update();
 }
@@ -238,22 +272,22 @@ void FileSystemModel::updateEntries() {
 }
 
 void FileSystemModel::updateEntriesForDir(const QString& dir) {
-    const bool recursive = m_recursive;
-    const bool showHidden = m_showHidden;
+    const auto recursive = m_recursive;
+    const auto showHidden = m_showHidden;
     const auto filter = m_filter;
+    const auto nameFilters = m_nameFilters;
     const auto oldEntries = m_entries;
     const auto baseDir = m_dir;
 
-    const auto future = QtConcurrent::run([dir, recursive, showHidden, filter, oldEntries, baseDir](
-                                              QPromise<QPair<QSet<QString>, QSet<QString>>>& promise) {
+    const auto future = QtConcurrent::run([=](QPromise<QPair<QSet<QString>, QSet<QString>>>& promise) {
         const auto flags = recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags;
 
         std::optional<QDirIterator> iter;
 
         if (filter == Images) {
-            QStringList nameFilters;
+            QStringList extraNameFilters = nameFilters;
             for (const auto& format : QImageReader::supportedImageFormats()) {
-                nameFilters << "*." + format;
+                extraNameFilters << "*." + format;
             }
 
             QDir::Filters filters = QDir::Files;
@@ -261,7 +295,7 @@ void FileSystemModel::updateEntriesForDir(const QString& dir) {
                 filters |= QDir::Hidden;
             }
 
-            iter.emplace(dir, nameFilters, filters, flags);
+            iter.emplace(dir, extraNameFilters, filters, flags);
         } else {
             QDir::Filters filters;
 
@@ -277,7 +311,11 @@ void FileSystemModel::updateEntriesForDir(const QString& dir) {
                 filters |= QDir::Hidden;
             }
 
-            iter.emplace(dir, filters, flags);
+            if (nameFilters.isEmpty()) {
+                iter.emplace(dir, filters, flags);
+            } else {
+                iter.emplace(dir, nameFilters, filters, flags);
+            }
         }
 
         QSet<QString> newPaths;
@@ -376,13 +414,16 @@ void FileSystemModel::applyChanges(const QSet<QString>& removedPaths, const QSet
     for (const auto& path : addedPaths) {
         newEntries << new FileSystemEntry(path, m_dir.relativeFilePath(path), this);
     }
-    std::sort(newEntries.begin(), newEntries.end(), &FileSystemModel::compareEntries);
+    const auto comp = [this](const FileSystemEntry* a, const FileSystemEntry* b) {
+        return compareEntries(a, b);
+    };
+    std::sort(newEntries.begin(), newEntries.end(), comp);
 
     int insertStart = -1;
     int prevRow = -1;
     QList<FileSystemEntry*> batchItems;
     for (const auto& entry : newEntries) {
-        const auto it = std::lower_bound(m_entries.begin(), m_entries.end(), entry, &FileSystemModel::compareEntries);
+        const auto it = std::lower_bound(m_entries.begin(), m_entries.end(), entry, comp);
         int row = static_cast<int>(it - m_entries.begin());
 
         if (insertStart == -1) {
@@ -420,11 +461,11 @@ void FileSystemModel::applyChanges(const QSet<QString>& removedPaths, const QSet
     emit entriesChanged();
 }
 
-bool FileSystemModel::compareEntries(const FileSystemEntry* a, const FileSystemEntry* b) {
+bool FileSystemModel::compareEntries(const FileSystemEntry* a, const FileSystemEntry* b) const {
     if (a->isDir() != b->isDir()) {
-        return a->isDir();
+        return m_sortReverse ^ a->isDir();
     }
-    return a->relativePath().localeAwareCompare(b->relativePath()) < 0;
+    return m_sortReverse ^ (a->relativePath().localeAwareCompare(b->relativePath()) < 0);
 }
 
 } // namespace caelestia
