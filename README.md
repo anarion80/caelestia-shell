@@ -252,6 +252,12 @@ default, you must create it manually.
         "apps": {
             "terminal": ["foot"],
             "audio": ["pavucontrol"]
+        },
+        "idle": {
+            "inhibitWhenAudio": true,
+            "lockTimeout": 180,
+            "dpmsTimeout": 300,
+            "sleepTimeout": 600
         }
     },
     "background": {
@@ -510,6 +516,7 @@ default, you must create it manually.
     },
     "session": {
         "dragThreshold": 30,
+        "enabled": true,
         "vimKeybinds": false,
         "commands": {
             "logout": ["loginctl", "terminate-user", ""],
@@ -518,6 +525,10 @@ default, you must create it manually.
             "reboot": ["systemctl", "reboot"]
         }
     },
+    "sidebar": {
+        "dragThreshold": 80,
+        "enabled": true
+    }.
     "utilities": {
         "enabled": true
     }

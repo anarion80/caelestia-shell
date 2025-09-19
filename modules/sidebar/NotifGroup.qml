@@ -15,13 +15,23 @@ StyledRect {
     id: root
 
     required property string modelData
+    required property Props props
 
     readonly property list<var> notifs: Notifs.list.filter(notif => notif.appName === modelData).reverse()
     readonly property string image: notifs.find(n => n.image.length > 0)?.image ?? ""
     readonly property string appIcon: notifs.find(n => n.appIcon.length > 0)?.appIcon ?? ""
     readonly property string urgency: notifs.some(n => n.urgency === NotificationUrgency.Critical) ? "critical" : notifs.some(n => n.urgency === NotificationUrgency.Normal) ? "normal" : "low"
 
-    property bool expanded
+    readonly property bool expanded: props.expandedNotifs.includes(modelData)
+
+    function toggleExpand(expand: bool): void {
+        if (expand) {
+            if (!expanded)
+                props.expandedNotifs.push(modelData);
+        } else if (expanded) {
+            props.expandedNotifs.splice(props.expandedNotifs.indexOf(modelData), 1);
+        }
+    }
 
     anchors.left: parent?.left
     anchors.right: parent?.right
@@ -29,7 +39,7 @@ StyledRect {
 
     clip: true
     radius: Appearance.rounding.normal
-    color: root.urgency === "critical" ? Colours.palette.m3secondaryContainer : Colours.layer(Colours.palette.m3surfaceContainerHigh, 2)
+    color: root.urgency === "critical" ? Colours.palette.m3secondaryContainer : Colours.layer(Colours.palette.m3surfaceContainer, 2)
 
     RowLayout {
         id: content
@@ -82,7 +92,7 @@ StyledRect {
 
             ClippingRectangle {
                 anchors.fill: parent
-                color: root.urgency === "critical" ? Colours.palette.m3error : root.urgency === "low" ? Colours.layer(Colours.palette.m3surfaceContainerHighest, 3) : Colours.palette.m3secondaryContainer
+                color: root.urgency === "critical" ? Colours.palette.m3error : root.urgency === "low" ? Colours.layer(Colours.palette.m3surfaceContainerHigh, 3) : Colours.palette.m3secondaryContainer
                 radius: Appearance.rounding.full
 
                 Loader {
@@ -102,7 +112,7 @@ StyledRect {
                     implicitWidth: Config.notifs.sizes.badge
                     implicitHeight: Config.notifs.sizes.badge
 
-                    color: root.urgency === "critical" ? Colours.palette.m3error : root.urgency === "low" ? Colours.palette.m3surfaceContainerHighest : Colours.palette.m3secondaryContainer
+                    color: root.urgency === "critical" ? Colours.palette.m3error : root.urgency === "low" ? Colours.palette.m3surfaceContainerHigh : Colours.palette.m3secondaryContainer
                     radius: Appearance.rounding.full
 
                     ColouredIcon {
@@ -117,13 +127,15 @@ StyledRect {
         }
 
         ColumnLayout {
+            id: column
+
             Layout.topMargin: -Appearance.padding.small
-            Layout.bottomMargin: -Appearance.padding.small / 2 - (root.expanded ? 0 : spacing)
+            Layout.bottomMargin: -Appearance.padding.small / 2
             Layout.fillWidth: true
-            spacing: Math.round(Appearance.spacing.small / 2)
+            spacing: 0
 
             RowLayout {
-                Layout.bottomMargin: -parent.spacing
+                Layout.bottomMargin: root.expanded ? Math.round(Appearance.spacing.small / 2) : 0
                 Layout.fillWidth: true
                 spacing: Appearance.spacing.smaller
 
@@ -146,17 +158,14 @@ StyledRect {
                     implicitWidth: expandBtn.implicitWidth + Appearance.padding.smaller * 2
                     implicitHeight: groupCount.implicitHeight + Appearance.padding.small
 
-                    color: root.urgency === "critical" ? Colours.palette.m3error : Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
+                    color: root.urgency === "critical" ? Colours.palette.m3error : Colours.layer(Colours.palette.m3surfaceContainerHigh, 3)
                     radius: Appearance.rounding.full
-
-                    opacity: root.notifs.length > Config.notifs.groupPreviewNum ? 1 : 0
-                    Layout.preferredWidth: root.notifs.length > Config.notifs.groupPreviewNum ? implicitWidth : 0
 
                     StateLayer {
                         color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
 
                         function onClicked(): void {
-                            root.expanded = !root.expanded;
+                            root.toggleExpand(!root.expanded);
                         }
                     }
 
@@ -171,7 +180,7 @@ StyledRect {
 
                             Layout.leftMargin: Appearance.padding.small / 2
                             animate: true
-                            text: root.notifs.length
+                            text: root.notifs.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
                             color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
                             font.pointSize: Appearance.font.size.small
                         }
@@ -183,137 +192,19 @@ StyledRect {
                             color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
                         }
                     }
-
-                    Behavior on opacity {
-                        Anim {}
-                    }
-
-                    Behavior on Layout.preferredWidth {
-                        Anim {}
-                    }
-                }
-            }
-
-            Repeater {
-                model: ScriptModel {
-                    values: root.notifs.slice(0, Config.notifs.groupPreviewNum)
                 }
 
-                NotifLine {
-                    id: notif
-
-                    ParallelAnimation {
-                        running: true
-
-                        Anim {
-                            target: notif
-                            property: "opacity"
-                            from: 0
-                            to: 1
-                        }
-                        Anim {
-                            target: notif
-                            property: "scale"
-                            from: 0.7
-                            to: 1
-                        }
-                        Anim {
-                            target: notif.Layout
-                            property: "preferredHeight"
-                            from: 0
-                            to: notif.implicitHeight
-                        }
-                    }
-
-                    ParallelAnimation {
-                        running: notif.modelData.closed
-                        onFinished: notif.modelData.lock(notif)
-
-                        Anim {
-                            target: notif
-                            property: "opacity"
-                            to: 0
-                        }
-                        Anim {
-                            target: notif
-                            property: "scale"
-                            to: 0.7
-                        }
-                        Anim {
-                            target: notif.Layout
-                            property: "preferredHeight"
-                            to: 0
-                        }
-                    }
-                }
-            }
-
-            Loader {
-                Layout.fillWidth: true
-
-                opacity: root.expanded ? 1 : 0
-                Layout.preferredHeight: root.expanded ? implicitHeight : 0
-                active: opacity > 0
-                asynchronous: true
-
-                sourceComponent: ColumnLayout {
-                    Repeater {
-                        model: ScriptModel {
-                            values: root.notifs.slice(Config.notifs.groupPreviewNum)
-                        }
-
-                        NotifLine {}
-                    }
-                }
-
-                Behavior on opacity {
+                Behavior on Layout.bottomMargin {
                     Anim {}
                 }
             }
-        }
-    }
 
-    Behavior on implicitHeight {
-        Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-        }
-    }
-
-    component NotifLine: StyledText {
-        id: notifLine
-
-        required property Notifs.Notif modelData
-
-        Layout.fillWidth: true
-        textFormat: Text.MarkdownText
-        text: {
-            const summary = modelData.summary.replace(/\n/g, " ");
-            const body = modelData.body.replace(/\n/g, " ");
-            const colour = root.urgency === "critical" ? Colours.palette.m3secondary : Colours.palette.m3outline;
-
-            if (metrics.text === metrics.elidedText)
-                return `${summary} <span style='color:${colour}'>${body}</span>`;
-
-            const t = metrics.elidedText.length - 3;
-            if (t < summary.length)
-                return `${summary.slice(0, t)}...`;
-
-            return `${summary} <span style='color:${colour}'>${body.slice(0, t - summary.length)}...</span>`;
-        }
-        color: root.urgency === "critical" ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
-
-        Component.onCompleted: modelData.lock(this)
-        Component.onDestruction: modelData.unlock(this)
-
-        TextMetrics {
-            id: metrics
-
-            text: `${notifLine.modelData.summary} ${notifLine.modelData.body}`.replace(/\n/g, " ")
-            font.pointSize: notifLine.font.pointSize
-            font.family: notifLine.font.family
-            elideWidth: notifLine.width
-            elide: Text.ElideRight
+            NotifGroupList {
+                props: root.props
+                notifs: root.notifs
+                expanded: root.expanded
+                onRequestToggleExpand: expand => root.toggleExpand(expand)
+            }
         }
     }
 }

@@ -13,10 +13,6 @@ Column {
     required property PersistentProperties visibilities
 
     padding: Appearance.padding.large
-
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-
     spacing: Appearance.spacing.large
 
     SessionButton {
@@ -27,17 +23,14 @@ Column {
 
         KeyNavigation.down: shutdown
 
+        Component.onCompleted: forceActiveFocus()
+
         Connections {
             target: root.visibilities
 
-            function onSessionChanged(): void {
-                if (root.visibilities.session)
-                    logout.focus = true;
-            }
-
             function onLauncherChanged(): void {
-                if (root.visibilities.session && !root.visibilities.launcher)
-                    logout.focus = true;
+                if (!root.visibilities.launcher)
+                    logout.forceActiveFocus();
             }
         }
     }

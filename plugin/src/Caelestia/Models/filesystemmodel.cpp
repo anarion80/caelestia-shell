@@ -393,7 +393,7 @@ void FileSystemModel::applyChanges(const QSet<QString>& removedPaths, const QSet
             beginRemoveRows(QModelIndex(), end, start);
             for (int i = start; i >= end; --i) {
                 emit removed(m_entries[i]->path());
-                delete m_entries.takeAt(i);
+                m_entries.takeAt(i)->deleteLater();
             }
             endRemoveRows();
 
@@ -405,7 +405,7 @@ void FileSystemModel::applyChanges(const QSet<QString>& removedPaths, const QSet
         beginRemoveRows(QModelIndex(), end, start);
         for (int i = start; i >= end; --i) {
             emit removed(m_entries[i]->path());
-            delete m_entries.takeAt(i);
+            m_entries.takeAt(i)->deleteLater();
         }
         endRemoveRows();
     }

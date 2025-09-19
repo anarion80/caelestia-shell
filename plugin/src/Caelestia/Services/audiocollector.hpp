@@ -12,6 +12,13 @@
 
 namespace caelestia {
 
+namespace ac {
+
+constexpr quint32 SAMPLE_RATE = 44100;
+constexpr quint32 CHUNK_SIZE = 512;
+
+} // namespace ac
+
 class AudioCollector;
 
 class PipeWireWorker {
@@ -29,47 +36,30 @@ private:
     std::stop_token m_token;
     AudioCollector* m_collector;
 
-    void cleanup();
-
     static void handleTimeout(void* data, uint64_t expirations);
     void streamStateChanged(pw_stream_state state);
     void processStream();
-    void processSamples(const qint16* samples, quint32 count);
 
     [[nodiscard]] unsigned int nextPowerOf2(unsigned int n);
 };
 
 class AudioCollector : public Service {
     Q_OBJECT
-    QML_ELEMENT
-
-    Q_PROPERTY(quint32 nodeId READ nodeId WRITE setNodeId NOTIFY nodeIdChanged)
 
 public:
-    explicit AudioCollector(QObject* parent = nullptr);
-    ~AudioCollector();
+    AudioCollector(const AudioCollector&) = delete;
+    AudioCollector& operator=(const AudioCollector&) = delete;
 
-    [[nodiscard]] quint32 sampleRate() const;
-    [[nodiscard]] quint32 chunkSize() const;
-
-    [[nodiscard]] quint32 nodeId();
-    void setNodeId(quint32 nodeId);
+    static AudioCollector& instance();
 
     void clearBuffer();
     void loadChunk(const qint16* samples, quint32 count);
     quint32 readChunk(float* out, quint32 count = 0);
     quint32 readChunk(double* out, quint32 count = 0);
 
-signals:
-    void sampleRateChanged();
-    void chunkSizeChanged();
-    void nodeIdChanged();
-
 private:
-    const quint32 m_sampleRate;
-    const quint32 m_chunkSize;
-    quint32 m_nodeId;
-    QMutex m_nodeIdMutex;
+    explicit AudioCollector(QObject* parent = nullptr);
+    ~AudioCollector();
 
     std::jthread m_thread;
     std::vector<float> m_buffer1;

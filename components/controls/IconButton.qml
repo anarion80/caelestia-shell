@@ -15,26 +15,34 @@ StyledRect {
     property alias icon: label.text
     property bool checked
     property bool toggle
-    property real padding: type == IconButton.Text ? Appearance.padding.small / 2 : Appearance.padding.smaller
+    property real padding: type === IconButton.Text ? Appearance.padding.small / 2 : Appearance.padding.smaller
     property alias font: label.font
     property int type: IconButton.Filled
 
     property alias stateLayer: stateLayer
     property alias label: label
+    property alias radiusAnim: radiusAnim
 
     property bool internalChecked
-    property color activeColour: type == IconButton.Filled ? Colours.palette.m3primary : Colours.palette.m3secondary
-    property color inactiveColour: type == IconButton.Filled ? Colours.palette.m3surfaceContainer : Colours.palette.m3secondaryContainer
-    property color activeOnColour: type == IconButton.Filled ? Colours.palette.m3onPrimary : Colours.palette.m3onSecondary
-    property color inactiveOnColour: type == IconButton.Filled ? Colours.palette.m3onSurface : Colours.palette.m3onSecondaryContainer
-
-    function onClicked(): void {
+    property color activeColour: type === IconButton.Filled ? Colours.palette.m3primary : Colours.palette.m3secondary
+    property color inactiveColour: {
+        if (!toggle && type === IconButton.Filled)
+            return Colours.palette.m3primary;
+        return type === IconButton.Filled ? Colours.tPalette.m3surfaceContainer : Colours.palette.m3secondaryContainer;
     }
+    property color activeOnColour: type === IconButton.Filled ? Colours.palette.m3onPrimary : type === IconButton.Tonal ? Colours.palette.m3onSecondary : Colours.palette.m3primary
+    property color inactiveOnColour: {
+        if (!toggle && type === IconButton.Filled)
+            return Colours.palette.m3onPrimary;
+        return type === IconButton.Tonal ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurfaceVariant;
+    }
+
+    signal clicked
 
     onCheckedChanged: internalChecked = checked
 
     radius: internalChecked ? Appearance.rounding.small : implicitHeight / 2
-    color: type == IconButton.Text ? "transparent" : internalChecked ? activeColour : inactiveColour
+    color: type === IconButton.Text ? "transparent" : internalChecked ? activeColour : inactiveColour
 
     implicitWidth: implicitHeight
     implicitHeight: label.implicitHeight + padding * 2
@@ -47,7 +55,7 @@ StyledRect {
         function onClicked(): void {
             if (root.toggle)
                 root.internalChecked = !root.internalChecked;
-            root.onClicked();
+            root.clicked();
         }
     }
 
@@ -56,7 +64,7 @@ StyledRect {
 
         anchors.centerIn: parent
         color: root.internalChecked ? root.activeOnColour : root.inactiveOnColour
-        fill: root.internalChecked ? 1 : 0
+        fill: !root.toggle || root.internalChecked ? 1 : 0
 
         Behavior on fill {
             Anim {}
@@ -64,6 +72,8 @@ StyledRect {
     }
 
     Behavior on radius {
-        Anim {}
+        Anim {
+            id: radiusAnim
+        }
     }
 }

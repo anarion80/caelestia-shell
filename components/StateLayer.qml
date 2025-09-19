@@ -8,6 +8,7 @@ MouseArea {
     property bool disabled
     property color color: Colours.palette.m3onSurface
     property real radius: parent?.radius ?? 0
+    property alias rect: hoverLayer
 
     function onClicked(): void {
     }

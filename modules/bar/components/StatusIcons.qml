@@ -188,12 +188,12 @@ StyledRect {
                         required property BluetoothDevice modelData
 
                         animate: true
-                        text: Icons.getBluetoothIcon(modelData.icon)
+                        text: Icons.getBluetoothIcon(modelData?.icon)
                         color: root.colour
                         fill: 1
 
                         SequentialAnimation on opacity {
-                            running: device.modelData.state !== BluetoothDeviceState.Connected
+                            running: device.modelData?.state !== BluetoothDeviceState.Connected
                             alwaysRunToEnd: true
                             loops: Animation.Infinite
 

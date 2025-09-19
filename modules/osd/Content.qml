@@ -14,6 +14,12 @@ Item {
     required property Brightness.Monitor monitor
     required property var visibilities
 
+    required property real volume
+    required property bool muted
+    required property real sourceVolume
+    required property bool sourceMuted
+    required property real brightness
+
     implicitWidth: layout.implicitWidth + Appearance.padding.large * 2
     implicitHeight: layout.implicitHeight + Appearance.padding.large * 2
 
@@ -38,8 +44,8 @@ Item {
             FilledSlider {
                 anchors.fill: parent
 
-                icon: Icons.getVolumeIcon(value, Audio.muted)
-                value: Audio.volume
+                icon: Icons.getVolumeIcon(value, root.muted)
+                value: root.volume
                 onMoved: Audio.setVolume(value)
             }
         }
@@ -62,8 +68,8 @@ Item {
                 FilledSlider {
                     anchors.fill: parent
 
-                    icon: Icons.getMicVolumeIcon(value, Audio.sourceMuted)
-                    value: Audio.sourceVolume
+                    icon: Icons.getMicVolumeIcon(value, root.sourceMuted)
+                    value: root.sourceVolume
                     onMoved: Audio.setSourceVolume(value)
                 }
             }
@@ -91,7 +97,7 @@ Item {
                     anchors.fill: parent
 
                     icon: `brightness_${(Math.round(value * 6) + 1)}`
-                    value: root.monitor?.brightness ?? 0
+                    value: root.brightness
                     onMoved: root.monitor?.setBrightness(value)
                 }
             }

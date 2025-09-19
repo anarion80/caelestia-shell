@@ -6,6 +6,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 Scope {
+    property alias lock: lock
 
     WlSessionLock {
         id: lock

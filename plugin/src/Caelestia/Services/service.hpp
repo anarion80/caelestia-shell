@@ -23,7 +23,6 @@ signals:
 
 private:
     int m_refCount;
-    mutable QMutex m_mutex;
 
     virtual void start() = 0;
     virtual void stop() = 0;
