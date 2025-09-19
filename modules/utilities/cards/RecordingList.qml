@@ -66,7 +66,9 @@ ColumnLayout {
         implicitHeight: (Appearance.font.size.larger + Appearance.padding.small) * (root.props.recordingListExpanded ? 10 : 3)
         clip: true
 
-        StyledScrollBar.vertical: StyledScrollBar {}
+        StyledScrollBar.vertical: StyledScrollBar {
+            flickable: list
+        }
 
         delegate: RowLayout {
             id: recording
