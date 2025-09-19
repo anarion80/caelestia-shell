@@ -179,21 +179,13 @@ Loader {
                     TextButton {
                         text: qsTr("Cancel")
                         type: TextButton.Text
-                        label.color: Colours.palette.m3primary
-                        stateLayer.color: Colours.palette.m3primary
-
-                        function onClicked(): void {
-                            root.props.recordingConfirmDelete = "";
-                        }
+                        onClicked: root.props.recordingConfirmDelete = ""
                     }
 
                     TextButton {
                         text: qsTr("Delete")
                         type: TextButton.Text
-                        label.color: Colours.palette.m3primary
-                        stateLayer.color: Colours.palette.m3primary
-
-                        function onClicked(): void {
+                        onClicked: {
                             CUtils.deleteFile(Qt.resolvedUrl(root.props.recordingConfirmDelete));
                             root.props.recordingConfirmDelete = "";
                         }

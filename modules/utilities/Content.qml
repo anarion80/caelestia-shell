@@ -23,6 +23,7 @@ Item {
         Record {
             props: root.props
             visibilities: root.visibilities
+            z: 1
         }
 
         Toggles {

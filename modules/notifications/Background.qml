@@ -1,7 +1,6 @@
 import qs.components
 import qs.services
 import qs.config
-import Quickshell
 import QtQuick
 import QtQuick.Shapes
 
@@ -9,10 +8,10 @@ ShapePath {
     id: root
 
     required property Wrapper wrapper
+    required property var sidebar
     readonly property real rounding: Config.border.rounding
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
-    property real fullHeightRounding: wrapper.height >= QsWindow.window?.height - Config.border.thickness * 2 ? -rounding : rounding
 
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
@@ -32,14 +31,14 @@ ShapePath {
         relativeY: root.wrapper.height - root.roundingY * 2
     }
     PathArc {
-        relativeX: root.fullHeightRounding
+        relativeX: root.sidebar.notifsRoundingX
         relativeY: root.roundingY
-        radiusX: Math.abs(root.fullHeightRounding)
+        radiusX: root.sidebar.notifsRoundingX
         radiusY: Math.min(root.rounding, root.wrapper.height)
-        direction: root.fullHeightRounding < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
+        direction: PathArc.Counterclockwise
     }
     PathLine {
-        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding - root.fullHeightRounding : root.wrapper.width
+        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding - root.sidebar.notifsRoundingX : root.wrapper.width
         relativeY: 0
     }
     PathArc {
@@ -51,9 +50,5 @@ ShapePath {
 
     Behavior on fillColor {
         CAnim {}
-    }
-
-    Behavior on fullHeightRounding {
-        Anim {}
     }
 }

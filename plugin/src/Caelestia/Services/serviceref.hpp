@@ -1,6 +1,7 @@
 #pragma once
 
 #include "service.hpp"
+#include <qpointer.h>
 #include <qqmlintegration.h>
 
 namespace caelestia {
@@ -22,7 +23,7 @@ signals:
     void serviceChanged();
 
 private:
-    Service* m_service;
+    QPointer<Service> m_service;
 };
 
 } // namespace caelestia

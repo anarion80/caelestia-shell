@@ -21,6 +21,7 @@ Singleton {
     property alias winfo: adapter.winfo
     property alias lock: adapter.lock
     property alias utilities: adapter.utilities
+    property alias sidebar: adapter.sidebar
     property alias services: adapter.services
     property alias paths: adapter.paths
 
@@ -46,6 +47,7 @@ Singleton {
             property WInfoConfig winfo: WInfoConfig {}
             property LockConfig lock: LockConfig {}
             property UtilitiesConfig utilities: UtilitiesConfig {}
+            property SidebarConfig sidebar: SidebarConfig {}
             property ServiceConfig services: ServiceConfig {}
             property UserPaths paths: UserPaths {}
         }

@@ -2,6 +2,7 @@ pragma Singleton
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 
 Singleton {
     id: root
@@ -23,28 +24,33 @@ Singleton {
         reloadableId: "idleInhibitor"
     }
 
-    Process {
-        running: root.enabled
-        command: ["systemd-inhibit", "--what=idle", "--who=caelestia-shell", "--why=Idle inhibitor active", "--mode=block", "sleep", "inf"]
+    IdleInhibitor {
+        enabled: props.enabled
+        window: PanelWindow {
+            implicitWidth: 0
+            implicitHeight: 0
+            color: "transparent"
+            mask: Region {}
+        }
     }
 
     IpcHandler {
         target: "idleInhibitor"
 
         function isEnabled(): bool {
-            return root.enabled;
+            return props.enabled;
         }
 
         function toggle(): void {
-            root.enabled = !root.enabled;
+            props.enabled = !props.enabled;
         }
 
         function enable(): void {
-            root.enabled = true;
+            props.enabled = true;
         }
 
         function disable(): void {
-            root.enabled = false;
+            props.enabled = false;
         }
     }
 }

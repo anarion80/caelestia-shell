@@ -1,4 +1,5 @@
 import qs.components
+import qs.components.controls
 import qs.services
 import qs.config
 import qs.modules.controlcenter
@@ -16,129 +17,90 @@ StyledRect {
     implicitHeight: layout.implicitHeight + Appearance.padding.large * 2
 
     radius: Appearance.rounding.normal
-    color: Colours.palette.m3surfaceContainer
+    color: Colours.tPalette.m3surfaceContainer
 
-    GridLayout {
+    ColumnLayout {
         id: layout
 
         anchors.fill: parent
         anchors.margins: Appearance.padding.large
-
-        columns: 2
-        rowSpacing: Appearance.spacing.normal
-        columnSpacing: Appearance.spacing.normal
-        uniformCellWidths: true
+        spacing: Appearance.spacing.normal
 
         StyledText {
-            Layout.columnSpan: 2
             text: qsTr("Quick Toggles")
             font.pointSize: Appearance.font.size.normal
         }
 
-        Toggle {
-            icon: "wifi"
-            text: qsTr("WiFi")
-            checked: Network.wifiEnabled
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: Appearance.spacing.small
 
-            function onClicked(): void {
-                Network.toggleWifi();
+            Toggle {
+                icon: "wifi"
+                checked: Network.wifiEnabled
+                onClicked: Network.toggleWifi()
             }
-        }
 
-        Toggle {
-            icon: "bluetooth"
-            text: qsTr("Bluetooth")
-            checked: Bluetooth.defaultAdapter?.enabled ?? false
-
-            function onClicked(): void {
-                const adapter = Bluetooth.defaultAdapter;
-                if (adapter)
-                    adapter.enabled = !adapter.enabled;
+            Toggle {
+                icon: "bluetooth"
+                checked: Bluetooth.defaultAdapter?.enabled ?? false
+                onClicked: {
+                    const adapter = Bluetooth.defaultAdapter;
+                    if (adapter)
+                        adapter.enabled = !adapter.enabled;
+                }
             }
-        }
 
-        Toggle {
-            icon: "mic"
-            text: qsTr("Microphone")
-            checked: !Audio.sourceMuted
-
-            function onClicked(): void {
-                const audio = Audio.source?.audio;
-                if (audio)
-                    audio.muted = !audio.muted;
+            Toggle {
+                icon: "mic"
+                checked: !Audio.sourceMuted
+                onClicked: {
+                    const audio = Audio.source?.audio;
+                    if (audio)
+                        audio.muted = !audio.muted;
+                }
             }
-        }
 
-        Toggle {
-            icon: "settings"
-            text: qsTr("Settings")
-            toggle: false
+            Toggle {
+                icon: "settings"
+                inactiveOnColour: Colours.palette.m3onSurfaceVariant
+                toggle: false
+                onClicked: {
+                    root.visibilities.utilities = false;
+                    WindowFactory.create(null, {
+                        screen: QsWindow.window?.screen ?? null
+                    });
+                }
+            }
 
-            function onClicked(): void {
-                root.visibilities.utilities = false;
-                WindowFactory.create(null, {
-                    screen: QsWindow.window?.screen ?? null
-                });
+            Toggle {
+                icon: "gamepad"
+                checked: GameMode.enabled
+                onClicked: GameMode.enabled = !GameMode.enabled
+            }
+
+            Toggle {
+                icon: "notifications_off"
+                checked: Notifs.dnd
+                onClicked: Notifs.dnd = !Notifs.dnd
             }
         }
     }
 
-    component Toggle: StyledRect {
-        id: toggle
-
-        required property string icon
-        required property string text
-        property bool checked
-        property bool toggle: true
-        property bool internalChecked
-
-        function onClicked(): void {
-        }
-
-        onCheckedChanged: internalChecked = checked
-
-        radius: internalChecked ? Appearance.rounding.small : implicitHeight / 2
-        color: internalChecked ? Colours.palette.m3primary : Colours.palette.m3surfaceContainerHigh
-
+    component Toggle: IconButton {
         Layout.fillWidth: true
-        implicitWidth: label.implicitWidth + Appearance.padding.larger * 2
-        implicitHeight: label.implicitHeight + Appearance.padding.smaller * 2
+        Layout.preferredWidth: implicitWidth + (stateLayer.pressed ? Appearance.padding.large : internalChecked ? Appearance.padding.smaller : 0)
+        radius: stateLayer.pressed ? Appearance.rounding.small / 2 : internalChecked ? Appearance.rounding.small : Appearance.rounding.normal
+        inactiveColour: Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
+        toggle: true
+        radiusAnim.duration: Appearance.anim.durations.expressiveFastSpatial
+        radiusAnim.easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
 
-        StateLayer {
-            color: toggle.internalChecked ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-
-            function onClicked(): void {
-                if (toggle.toggle)
-                    toggle.internalChecked = !toggle.internalChecked;
-                toggle.onClicked();
+        Behavior on Layout.preferredWidth {
+            Anim {
+                duration: Appearance.anim.durations.expressiveFastSpatial
+                easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
             }
-        }
-
-        RowLayout {
-            id: label
-
-            anchors.centerIn: parent
-            spacing: Appearance.spacing.small
-
-            MaterialIcon {
-                text: toggle.icon
-                color: toggle.internalChecked ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-                fill: toggle.internalChecked ? 1 : 0
-
-                Behavior on fill {
-                    Anim {}
-                }
-            }
-
-            StyledText {
-                text: toggle.text
-                color: toggle.internalChecked ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-                font.pointSize: Appearance.font.size.small
-            }
-        }
-
-        Behavior on radius {
-            Anim {}
         }
     }
 }

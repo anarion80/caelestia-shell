@@ -26,6 +26,8 @@ Singleton {
     readonly property string kbLayout: kbMap.get(kbLayoutFull) ?? "??"
     readonly property var kbMap: new Map()
 
+    signal configReloaded
+
     function dispatch(request: string): void {
         Hyprland.dispatch(request);
     }
@@ -43,6 +45,7 @@ Singleton {
                 return;
 
             if (n === "configreloaded") {
+                root.configReloaded();
                 setDynamicConfsProc.running = true;
             } else if (n === "activelayout") {
                 devicesProc.running = true;

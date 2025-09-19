@@ -10,7 +10,7 @@ Item {
     id: root
 
     required property PersistentProperties visibilities
-    required property Item panel
+    required property Item panels
     readonly property int padding: Appearance.padding.large
 
     anchors.top: parent.top
@@ -27,15 +27,15 @@ Item {
         for (let i = 0; i < count; i++)
             height += list.itemAtIndex(i)?.nonAnimHeight ?? 0;
 
-        if (visibilities && panel) {
+        if (visibilities && panels) {
             if (visibilities.osd) {
-                const h = panel.osd.y - Config.border.rounding * 2 - padding * 2;
+                const h = panels.osd.y - Config.border.rounding * 2 - padding * 2;
                 if (height > h)
                     height = h;
             }
 
             if (visibilities.session) {
-                const h = panel.session.y - Config.border.rounding * 2 - padding * 2;
+                const h = panels.session.y - Config.border.rounding * 2 - padding * 2;
                 if (height > h)
                     height = h;
             }
@@ -55,7 +55,7 @@ Item {
             id: list
 
             model: ScriptModel {
-                values: [...Notifs.popups].reverse()
+                values: Notifs.popups.filter(n => !n.closed).reverse()
             }
 
             anchors.fill: parent

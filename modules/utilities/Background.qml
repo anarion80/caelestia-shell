@@ -8,6 +8,7 @@ ShapePath {
     id: root
 
     required property Wrapper wrapper
+    required property var sidebar
     readonly property real rounding: Config.border.rounding
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
@@ -31,13 +32,13 @@ ShapePath {
         relativeY: -(root.wrapper.height - root.roundingY * 2)
     }
     PathArc {
-        relativeX: root.rounding
+        relativeX: root.sidebar.utilsRoundingX
         relativeY: -root.roundingY
-        radiusX: root.rounding
+        radiusX: root.sidebar.utilsRoundingX
         radiusY: Math.min(root.rounding, root.wrapper.height)
     }
     PathLine {
-        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding * 2 : root.wrapper.width
+        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding - root.sidebar.utilsRoundingX : root.wrapper.width
         relativeY: 0
     }
     PathArc {

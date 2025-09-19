@@ -7,9 +7,8 @@
 
 namespace caelestia {
 
-AudioProcessor::AudioProcessor(AudioCollector* collector, QObject* parent)
-    : QObject(parent)
-    , m_collector(collector) {}
+AudioProcessor::AudioProcessor(QObject* parent)
+    : QObject(parent) {}
 
 AudioProcessor::~AudioProcessor() {
     stop();
@@ -17,53 +16,26 @@ AudioProcessor::~AudioProcessor() {
 
 void AudioProcessor::init() {
     m_timer = new QTimer(this);
-    if (m_collector) {
-        m_timer->setInterval(static_cast<int>(m_collector->chunkSize() * 1000.0 / m_collector->sampleRate()));
-    }
+    m_timer->setInterval(static_cast<int>(ac::CHUNK_SIZE * 1000.0 / ac::SAMPLE_RATE));
     connect(m_timer, &QTimer::timeout, this, &AudioProcessor::process);
 }
 
-void AudioProcessor::setCollector(AudioCollector* collector) {
-    if (m_collector == collector) {
-        return;
-    }
-
-    if (m_timer) {
-        if (m_timer->isActive()) {
-            if (m_collector) {
-                m_collector->unref();
-            }
-            if (collector) {
-                collector->ref();
-            }
-        }
-        if (collector) {
-            m_timer->setInterval(static_cast<int>(collector->chunkSize() * 1000.0 / collector->sampleRate()));
-        } else {
-            m_timer->stop();
-        }
-    }
-
-    m_collector = collector;
-}
-
 void AudioProcessor::start() {
-    if (m_timer && m_collector) {
-        m_collector->ref();
+    QMetaObject::invokeMethod(&AudioCollector::instance(), &AudioCollector::ref);
+    if (m_timer) {
         m_timer->start();
     }
 }
 
 void AudioProcessor::stop() {
-    if (m_timer && m_collector) {
+    if (m_timer) {
         m_timer->stop();
-        m_collector->unref();
     }
+    QMetaObject::invokeMethod(&AudioCollector::instance(), &AudioCollector::unref);
 }
 
 AudioProvider::AudioProvider(QObject* parent)
     : Service(parent)
-    , m_collector(nullptr)
     , m_processor(nullptr)
     , m_thread(nullptr) {}
 
@@ -71,23 +43,6 @@ AudioProvider::~AudioProvider() {
     if (m_thread) {
         m_thread->quit();
         m_thread->wait();
-    }
-}
-
-AudioCollector* AudioProvider::collector() const {
-    return m_collector;
-}
-
-void AudioProvider::setCollector(AudioCollector* collector) {
-    if (m_collector == collector) {
-        return;
-    }
-
-    m_collector = collector;
-    emit collectorChanged();
-
-    if (m_processor) {
-        QMetaObject::invokeMethod(m_processor, "setCollector", Qt::QueuedConnection, Q_ARG(AudioCollector*, collector));
     }
 }
 
@@ -109,13 +64,14 @@ void AudioProvider::init() {
 
 void AudioProvider::start() {
     if (m_processor) {
-        QMetaObject::invokeMethod(m_processor, "start", Qt::QueuedConnection);
+        AudioCollector::instance(); // Create instance on main thread
+        QMetaObject::invokeMethod(m_processor, &AudioProcessor::start);
     }
 }
 
 void AudioProvider::stop() {
     if (m_processor) {
-        QMetaObject::invokeMethod(m_processor, "stop", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(m_processor, &AudioProcessor::stop);
     }
 }
 

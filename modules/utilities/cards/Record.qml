@@ -2,14 +2,8 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.components.controls
-import qs.components.containers
 import qs.services
 import qs.config
-import qs.utils
-import Caelestia
-import Caelestia.Models
-import Quickshell
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 
@@ -23,7 +17,7 @@ StyledRect {
     implicitHeight: layout.implicitHeight + layout.anchors.margins * 2
 
     radius: Appearance.rounding.normal
-    color: Colours.palette.m3surfaceContainer
+    color: Colours.tPalette.m3surfaceContainer
 
     ColumnLayout {
         id: layout
@@ -34,6 +28,7 @@ StyledRect {
 
         RowLayout {
             spacing: Appearance.spacing.normal
+            z: 1
 
             StyledRect {
                 implicitWidth: implicitHeight
@@ -77,239 +72,205 @@ StyledRect {
                 }
             }
 
-            IconButton {
-                icon: "not_started"
-                checked: Recorder.running
-                type: IconButton.Filled
-                inactiveColour: Colours.palette.m3surfaceContainerHighest
-                toggle: true
+            SplitButton {
+                disabled: Recorder.running
+                active: menuItems.find(m => root.props.recordingMode === m.icon + m.text) ?? menuItems[0]
+                menu.onItemSelected: item => root.props.recordingMode = item.icon + item.text
 
-                function onClicked(): void {
-                    Recorder.toggle();
-                }
+                menuItems: [
+                    MenuItem {
+                        icon: "fullscreen"
+                        text: qsTr("Record fullscreen")
+                        activeText: qsTr("Fullscreen")
+                        onClicked: Recorder.start()
+                    },
+                    MenuItem {
+                        icon: "screenshot_region"
+                        text: qsTr("Record region")
+                        activeText: qsTr("Region")
+                        onClicked: Recorder.start(["-r"])
+                    },
+                    MenuItem {
+                        icon: "select_to_speak"
+                        text: qsTr("Record fullscreen with sound")
+                        activeText: qsTr("Fullscreen")
+                        onClicked: Recorder.start(["-s"])
+                    },
+                    MenuItem {
+                        icon: "volume_up"
+                        text: qsTr("Record region with sound")
+                        activeText: qsTr("Region")
+                        onClicked: Recorder.start(["-sr"])
+                    }
+                ]
             }
         }
 
-        WrapperMouseArea {
-            Layout.bottomMargin: -layout.spacing
+        Loader {
+            id: listOrControls
+
+            property bool running: Recorder.running
+
             Layout.fillWidth: true
+            Layout.preferredHeight: implicitHeight
+            sourceComponent: running ? recordingControls : recordingList
 
-            cursorShape: Qt.PointingHandCursor
-            onClicked: root.props.recordingListExpanded = !root.props.recordingListExpanded
+            Behavior on Layout.preferredHeight {
+                id: locHeightAnim
 
-            RowLayout {
-                spacing: Appearance.spacing.smaller
+                enabled: false
 
-                MaterialIcon {
-                    Layout.alignment: Qt.AlignVCenter
-                    text: "list"
-                    font.pointSize: Appearance.font.size.large
-                }
+                Anim {}
+            }
 
-                StyledText {
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    text: qsTr("Recordings")
-                    font.pointSize: Appearance.font.size.normal
-                }
-
-                IconButton {
-                    icon: root.props.recordingListExpanded ? "unfold_less" : "unfold_more"
-                    type: IconButton.Text
-                    label.animate: true
-
-                    function onClicked(): void {
-                        root.props.recordingListExpanded = !root.props.recordingListExpanded;
+            Behavior on running {
+                SequentialAnimation {
+                    ParallelAnimation {
+                        Anim {
+                            target: listOrControls
+                            property: "scale"
+                            to: 0.7
+                            duration: Appearance.anim.durations.small
+                            easing.bezierCurve: Appearance.anim.curves.standardAccel
+                        }
+                        Anim {
+                            target: listOrControls
+                            property: "opacity"
+                            to: 0
+                            duration: Appearance.anim.durations.small
+                            easing.bezierCurve: Appearance.anim.curves.standardAccel
+                        }
+                    }
+                    PropertyAction {
+                        target: locHeightAnim
+                        property: "enabled"
+                        value: true
+                    }
+                    PropertyAction {}
+                    PropertyAction {
+                        target: locHeightAnim
+                        property: "enabled"
+                        value: false
+                    }
+                    ParallelAnimation {
+                        Anim {
+                            target: listOrControls
+                            property: "scale"
+                            to: 1
+                            duration: Appearance.anim.durations.small
+                            easing.bezierCurve: Appearance.anim.curves.standardDecel
+                        }
+                        Anim {
+                            target: listOrControls
+                            property: "opacity"
+                            to: 1
+                            duration: Appearance.anim.durations.small
+                            easing.bezierCurve: Appearance.anim.curves.standardDecel
+                        }
                     }
                 }
             }
         }
+    }
 
-        StyledListView {
-            id: recordingList
+    Component {
+        id: recordingList
 
-            model: FileSystemModel {
-                path: Paths.recsdir
-                nameFilters: ["recording_*.mp4"]
-                sortReverse: true
-            }
+        RecordingList {
+            props: root.props
+            visibilities: root.visibilities
+        }
+    }
 
-            Layout.fillWidth: true
-            Layout.rightMargin: -Appearance.spacing.small
-            implicitHeight: (Appearance.font.size.larger + Appearance.padding.small) * (root.props.recordingListExpanded ? 10 : 3)
-            clip: true
+    Component {
+        id: recordingControls
 
-            StyledScrollBar.vertical: StyledScrollBar {}
+        RowLayout {
+            spacing: Appearance.spacing.normal
 
-            delegate: RowLayout {
-                id: recording
+            StyledRect {
+                radius: Appearance.rounding.full
+                color: Recorder.paused ? Colours.palette.m3tertiary : Colours.palette.m3error
 
-                required property FileSystemEntry modelData
-                property string baseName
-
-                anchors.left: recordingList.contentItem.left
-                anchors.right: recordingList.contentItem.right
-                anchors.rightMargin: Appearance.spacing.small
-                spacing: Appearance.spacing.small / 2
-
-                Component.onCompleted: baseName = modelData.baseName
+                implicitWidth: recText.implicitWidth + Appearance.padding.normal * 2
+                implicitHeight: recText.implicitHeight + Appearance.padding.smaller * 2
 
                 StyledText {
-                    Layout.fillWidth: true
-                    Layout.rightMargin: Appearance.spacing.small / 2
-                    text: {
-                        const time = recording.baseName;
-                        const matches = time.match(/^recording_(\d{4})(\d{2})(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
-                        if (!matches)
-                            return time;
-                        const date = new Date(...matches.slice(1));
-                        return qsTr("Recording at %1").arg(Qt.formatDateTime(date, Qt.locale()));
-                    }
-                    color: Colours.palette.m3onSurfaceVariant
-                    elide: Text.ElideRight
+                    id: recText
+
+                    anchors.centerIn: parent
+                    animate: true
+                    text: Recorder.paused ? "PAUSED" : "REC"
+                    color: Recorder.paused ? Colours.palette.m3onTertiary : Colours.palette.m3onError
+                    font.family: Appearance.font.family.mono
                 }
 
-                IconButton {
-                    icon: "play_arrow"
-                    type: IconButton.Text
-
-                    function onClicked(): void {
-                        root.visibilities.utilities = false;
-                        Quickshell.execDetached([...Config.general.apps.playback, recording.modelData.path]);
-                    }
-                }
-
-                IconButton {
-                    icon: "folder"
-                    type: IconButton.Text
-
-                    function onClicked(): void {
-                        root.visibilities.utilities = false;
-                        Quickshell.execDetached([...Config.general.apps.explorer, recording.modelData.path]);
-                    }
-                }
-
-                IconButton {
-                    icon: "delete_forever"
-                    type: IconButton.Text
-                    label.color: Colours.palette.m3error
-                    stateLayer.color: Colours.palette.m3error
-
-                    function onClicked(): void {
-                        root.props.recordingConfirmDelete = recording.modelData.path;
-                    }
-                }
-            }
-
-            add: Transition {
-                Anim {
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                }
-                Anim {
-                    property: "scale"
-                    from: 0.5
-                    to: 1
-                }
-            }
-
-            remove: Transition {
-                Anim {
-                    property: "opacity"
-                    to: 0
-                }
-                Anim {
-                    property: "scale"
-                    to: 0.5
-                }
-            }
-
-            displaced: Transition {
-                Anim {
-                    properties: "opacity,scale"
-                    to: 1
-                }
-                Anim {
-                    property: "y"
-                }
-            }
-
-            Loader {
-                anchors.centerIn: parent
-
-                opacity: recordingList.count === 0 ? 1 : 0
-                active: opacity > 0
-                asynchronous: true
-
-                sourceComponent: ColumnLayout {
-                    spacing: Appearance.spacing.small
-
-                    MaterialIcon {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: "scan_delete"
-                        color: Colours.palette.m3outline
-                        font.pointSize: Appearance.font.size.extraLarge
-
-                        opacity: root.props.recordingListExpanded ? 1 : 0
-                        scale: root.props.recordingListExpanded ? 1 : 0
-                        Layout.preferredHeight: root.props.recordingListExpanded ? implicitHeight : 0
-
-                        Behavior on opacity {
-                            Anim {}
-                        }
-
-                        Behavior on scale {
-                            Anim {}
-                        }
-
-                        Behavior on Layout.preferredHeight {
-                            Anim {}
-                        }
-                    }
-
-                    RowLayout {
-                        spacing: Appearance.spacing.smaller
-
-                        MaterialIcon {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: "scan_delete"
-                            color: Colours.palette.m3outline
-
-                            opacity: !root.props.recordingListExpanded ? 1 : 0
-                            scale: !root.props.recordingListExpanded ? 1 : 0
-                            Layout.preferredWidth: !root.props.recordingListExpanded ? implicitWidth : 0
-
-                            Behavior on opacity {
-                                Anim {}
-                            }
-
-                            Behavior on scale {
-                                Anim {}
-                            }
-
-                            Behavior on Layout.preferredWidth {
-                                Anim {}
-                            }
-                        }
-
-                        StyledText {
-                            text: qsTr("No recordings found")
-                            color: Colours.palette.m3outline
-                        }
-                    }
-                }
-
-                Behavior on opacity {
+                Behavior on implicitWidth {
                     Anim {}
                 }
+
+                SequentialAnimation on opacity {
+                    running: !Recorder.paused
+                    alwaysRunToEnd: true
+                    loops: Animation.Infinite
+
+                    Anim {
+                        from: 1
+                        to: 0
+                        duration: Appearance.anim.durations.large
+                        easing.bezierCurve: Appearance.anim.curves.emphasizedAccel
+                    }
+                    Anim {
+                        from: 0
+                        to: 1
+                        duration: Appearance.anim.durations.extraLarge
+                        easing.bezierCurve: Appearance.anim.curves.emphasizedDecel
+                    }
+                }
             }
 
-            Behavior on implicitHeight {
-                Anim {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            StyledText {
+                text: {
+                    const elapsed = Recorder.elapsed;
+
+                    const hours = Math.floor(elapsed / 3600);
+                    const mins = Math.floor((elapsed % 3600) / 60);
+                    const secs = Math.floor(elapsed % 60).toString().padStart(2, "0");
+
+                    let time;
+                    if (hours > 0)
+                        time = `${hours}:${mins.toString().padStart(2, "0")}:${secs}`;
+                    else
+                        time = `${mins}:${secs}`;
+
+                    return qsTr("Recording for %1").arg(time);
                 }
+                font.pointSize: Appearance.font.size.normal
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            IconButton {
+                label.animate: true
+                icon: Recorder.paused ? "play_arrow" : "pause"
+                toggle: true
+                checked: Recorder.paused
+                type: IconButton.Tonal
+                font.pointSize: Appearance.font.size.large
+                onClicked: {
+                    Recorder.togglePause();
+                    internalChecked = Recorder.paused;
+                }
+            }
+
+            IconButton {
+                icon: "stop"
+                inactiveColour: Colours.palette.m3error
+                inactiveOnColour: Colours.palette.m3onError
+                font.pointSize: Appearance.font.size.large
+                onClicked: Recorder.stop()
             }
         }
     }

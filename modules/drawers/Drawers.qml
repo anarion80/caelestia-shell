@@ -72,11 +72,12 @@ Variants {
             }
 
             HyprlandFocusGrab {
-                active: (visibilities.launcher && Config.launcher.enabled) || (visibilities.session && Config.session.enabled)
+                active: (visibilities.launcher && Config.launcher.enabled) || (visibilities.session && Config.session.enabled) || (visibilities.sidebar && Config.sidebar.enabled)
                 windows: [win]
                 onCleared: {
                     visibilities.launcher = false;
                     visibilities.session = false;
+                    visibilities.sidebar = false;
                 }
             }
 
@@ -119,6 +120,7 @@ Variants {
                 property bool launcher
                 property bool dashboard
                 property bool utilities
+                property bool sidebar
 
                 Component.onCompleted: Visibilities.load(scope.modelData, this)
             }
@@ -130,32 +132,25 @@ Variants {
                 panels: panels
                 bar: bar
 
-                // FIXME: remove when Hyprland bug fixed
-                Item {
-                    anchors.fill: parent
-                    anchors.rightMargin: 1
-                    anchors.bottomMargin: 1
+                Panels {
+                    id: panels
 
-                    Panels {
-                        id: panels
+                    screen: scope.modelData
+                    visibilities: visibilities
+                    bar: bar
+                }
 
-                        screen: scope.modelData
-                        visibilities: visibilities
-                        bar: bar
-                    }
+                BarWrapper {
+                    id: bar
 
-                    BarWrapper {
-                        id: bar
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
 
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
+                    screen: scope.modelData
+                    visibilities: visibilities
+                    popouts: panels.popouts
 
-                        screen: scope.modelData
-                        visibilities: visibilities
-                        popouts: panels.popouts
-
-                        Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
-                    }
+                    Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
                 }
             }
         }

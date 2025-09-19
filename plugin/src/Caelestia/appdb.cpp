@@ -195,7 +195,7 @@ void AppDb::updateApps() {
     for (auto id : m_apps.keys()) {
         if (!newIds.contains(id)) {
             dirty = true;
-            delete m_apps.take(id);
+            m_apps.take(id)->deleteLater();
         }
     }
 

@@ -98,9 +98,13 @@ Item {
                 content.visible = false;
                 content.active = true;
             } else {
-                root.contentHeight = content.implicitHeight;
+                root.contentHeight = Math.min(root.maxHeight, content.implicitHeight);
                 content.active = Qt.binding(() => root.shouldBeActive || root.visible);
                 content.visible = true;
+                if (showAnim.running) {
+                    showAnim.stop();
+                    showAnim.start();
+                }
             }
         }
     }

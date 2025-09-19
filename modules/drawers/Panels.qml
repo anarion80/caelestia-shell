@@ -6,6 +6,7 @@ import qs.modules.launcher as Launcher
 import qs.modules.dashboard as Dashboard
 import qs.modules.bar.popouts as BarPopouts
 import qs.modules.utilities as Utilities
+import qs.modules.sidebar as Sidebar
 import Quickshell
 import QtQuick
 
@@ -23,6 +24,7 @@ Item {
     readonly property Dashboard.Wrapper dashboard: dashboard
     readonly property BarPopouts.Wrapper popouts: popouts
     readonly property Utilities.Wrapper utilities: utilities
+    readonly property Sidebar.Wrapper sidebar: sidebar
 
     anchors.fill: parent
     anchors.margins: Config.border.thickness
@@ -31,20 +33,20 @@ Item {
     Osd.Wrapper {
         id: osd
 
-        clip: root.visibilities.session
+        clip: session.width > 0 || sidebar.width > 0
         screen: root.screen
         visibilities: root.visibilities
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: session.width
+        anchors.rightMargin: session.width + sidebar.width
     }
 
     Notifications.Wrapper {
         id: notifications
 
         visibilities: root.visibilities
-        panel: root
+        panels: root
 
         anchors.top: parent.top
         anchors.right: parent.right
@@ -53,10 +55,13 @@ Item {
     Session.Wrapper {
         id: session
 
+        clip: sidebar.width > 0
         visibilities: root.visibilities
+        panels: root
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
+        anchors.rightMargin: sidebar.width
     }
 
     Launcher.Wrapper {
@@ -101,8 +106,20 @@ Item {
         id: utilities
 
         visibilities: root.visibilities
+        sidebar: sidebar
 
         anchors.bottom: parent.bottom
+        anchors.right: parent.right
+    }
+
+    Sidebar.Wrapper {
+        id: sidebar
+
+        visibilities: root.visibilities
+        panels: root
+
+        anchors.top: notifications.bottom
+        anchors.bottom: utilities.top
         anchors.right: parent.right
     }
 }

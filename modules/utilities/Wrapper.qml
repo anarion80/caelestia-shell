@@ -9,16 +9,20 @@ Item {
     id: root
 
     required property var visibilities
+    required property Item sidebar
+
     readonly property PersistentProperties props: PersistentProperties {
         property bool recordingListExpanded: false
         property string recordingConfirmDelete
+        property string recordingMode
 
         reloadableId: "utilities"
     }
+    readonly property bool shouldBeActive: visibilities.sidebar || (visibilities.utilities && Config.utilities.enabled)
 
     visible: height > 0
     implicitHeight: 0
-    implicitWidth: Config.utilities.sizes.width
+    implicitWidth: Math.max(sidebar.width, Config.utilities.sizes.width)
 
     onStateChanged: {
         if (state === "visible" && timer.running) {
@@ -29,7 +33,7 @@ Item {
 
     states: State {
         name: "visible"
-        when: root.visibilities.utilities
+        when: root.shouldBeActive
 
         PropertyChanges {
             root.implicitHeight: content.implicitHeight + Appearance.padding.large * 2
@@ -66,7 +70,7 @@ Item {
         running: true
         interval: Appearance.anim.durations.extraLarge
         onTriggered: {
-            content.active = Qt.binding(() => (root.visibilities.utilities && Config.utilities.enabled) || root.visible);
+            content.active = Qt.binding(() => root.shouldBeActive || root.visible);
             content.visible = true;
         }
     }
@@ -76,13 +80,13 @@ Item {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.right: parent.right
         anchors.margins: Appearance.padding.large
 
         visible: false
         active: true
 
         sourceComponent: Content {
+            implicitWidth: Config.utilities.sizes.width - Appearance.padding.large * 2
             props: root.props
             visibilities: root.visibilities
         }
