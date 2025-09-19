@@ -59,7 +59,7 @@ Item {
             hoverEnabled: true
             cursorShape: pressed ? Qt.ClosedHandCursor : undefined
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-            preventStealing: true
+            preventStealing: !root.expanded
 
             drag.target: this
             drag.axis: Drag.XAxis
@@ -72,7 +72,7 @@ Item {
                     modelData.close();
             }
             onPositionChanged: event => {
-                if (pressed) {
+                if (pressed && !root.expanded) {
                     const diffY = event.y - startY;
                     if (Math.abs(diffY) > Config.notifs.expandThreshold)
                         root.requestToggleExpand(diffY > 0);

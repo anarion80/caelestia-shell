@@ -15,6 +15,7 @@ Item {
     id: root
 
     required property Props props
+    readonly property int notifCount: Notifs.list.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
 
     anchors.fill: parent
     anchors.margins: Appearance.padding.normal
@@ -29,7 +30,7 @@ Item {
         anchors.right: parent.right
         anchors.margins: Appearance.padding.small
 
-        text: Notifs.list.length > 0 ? qsTr("%1 notification%2").arg(Notifs.list.length).arg(Notifs.list.length === 1 ? "" : "s") : qsTr("Notifications")
+        text: root.notifCount > 0 ? qsTr("%1 notification%2").arg(root.notifCount).arg(root.notifCount === 1 ? "" : "s") : qsTr("Notifications")
         color: Colours.palette.m3outline
         font.pointSize: Appearance.font.size.normal
         font.family: Appearance.font.family.mono
@@ -53,7 +54,7 @@ Item {
             anchors.centerIn: parent
             asynchronous: true
             active: opacity > 0
-            opacity: Notifs.list.length > 0 ? 0 : 1
+            opacity: root.notifCount > 0 ? 0 : 1
 
             sourceComponent: ColumnLayout {
                 spacing: Appearance.spacing.large
@@ -89,13 +90,21 @@ Item {
         }
 
         StyledListView {
+            id: view
+
             anchors.fill: parent
 
             spacing: Appearance.spacing.small
-            clip: true
 
             model: ScriptModel {
-                values: [...new Set(Notifs.list.filter(n => !n.closed).map(n => n.appName))].reverse()
+                values: {
+                    const list = Notifs.list.filter(n => !n.closed).sort((a, b) => b.time - a.time).map(n => [n.appName, null]);
+                    return [...new Map(list).keys()];
+                }
+            }
+
+            StyledScrollBar.vertical: StyledScrollBar {
+                flickable: view
             }
 
             delegate: MouseArea {
@@ -217,8 +226,8 @@ Item {
         repeat: true
         interval: 50
         onTriggered: {
-            if (Notifs.list.length > 0)
-                Notifs.list[0].close();
+            if (root.notifCount > 0)
+                Notifs.list.find(n => !n.closed).close();
             else
                 stop();
         }
@@ -229,8 +238,8 @@ Item {
         anchors.bottom: parent.bottom
         anchors.margins: Appearance.padding.normal
 
-        scale: Notifs.list.length > 0 ? 1 : 0.5
-        opacity: Notifs.list.length > 0 ? 1 : 0
+        scale: root.notifCount > 0 ? 1 : 0.5
+        opacity: root.notifCount > 0 ? 1 : 0
         active: opacity > 0
 
         sourceComponent: IconButton {
@@ -239,7 +248,7 @@ Item {
             icon: "clear_all"
             radius: Appearance.rounding.normal
             padding: Appearance.padding.normal
-            font.pointSize: Math.round(Appearance.font.size.large * 1.3)
+            font.pointSize: Math.round(Appearance.font.size.large * 1.2)
             onClicked: clearTimer.start()
 
             Elevation {
