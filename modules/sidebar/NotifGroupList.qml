@@ -26,18 +26,35 @@ Item {
     }
 
     readonly property int spacing: Math.round(Appearance.spacing.small / 2)
+    property bool showAllNotifs
     property bool flag
 
     signal requestToggleExpand(expand: bool)
 
+    onExpandedChanged: {
+        if (expanded) {
+            clearTimer.stop();
+            showAllNotifs = true;
+        } else {
+            clearTimer.start();
+        }
+    }
+
     Layout.fillWidth: true
     implicitHeight: nonAnimHeight
+
+    Timer {
+        id: clearTimer
+
+        interval: Appearance.anim.durations.normal
+        onTriggered: root.showAllNotifs = false
+    }
 
     Repeater {
         id: repeater
 
         model: ScriptModel {
-            values: root.expanded ? root.notifs : root.notifs.slice(0, Config.notifs.groupPreviewNum + 1)
+            values: root.showAllNotifs ? root.notifs : root.notifs.slice(0, Config.notifs.groupPreviewNum + 1)
             onValuesChanged: root.flagChanged()
         }
 
@@ -120,7 +137,7 @@ Item {
             Component.onDestruction: modelData.unlock(this)
 
             ParallelAnimation {
-                running: !notif.previewHidden
+                Component.onCompleted: running = !notif.previewHidden
 
                 Anim {
                     target: notif
