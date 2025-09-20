@@ -28,8 +28,12 @@ Item {
 
         model: ScriptModel {
             values: {
-                const list = Notifs.list.map(n => [n.appName, null]);
-                return [...new Map(list).keys()];
+                const map = new Map();
+                for (const n of Notifs.notClosed)
+                    map.set(n.appName, null);
+                for (const n of Notifs.list)
+                    map.set(n.appName, null);
+                return [...map.keys()];
             }
             onValuesChanged: root.flagChanged()
         }
