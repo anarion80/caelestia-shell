@@ -274,18 +274,14 @@ Singleton {
 
         function unlock(item: Item): void {
             locks.delete(item);
-
-            if (closed && locks.size === 0 && root.list.includes(this)) {
-                root.list.splice(root.list.indexOf(this), 1);
-                notification?.dismiss();
-                destroy();
-            }
+            if (closed)
+                close();
         }
 
         function close(): void {
             closed = true;
             if (locks.size === 0 && root.list.includes(this)) {
-                root.list.splice(root.list.indexOf(this), 1);
+                root.list = root.list.filter(n => n !== this);
                 notification?.dismiss();
                 destroy();
             }

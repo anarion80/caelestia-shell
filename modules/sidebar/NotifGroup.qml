@@ -19,9 +19,9 @@ StyledRect {
 
     readonly property list<var> notifs: Notifs.list.filter(n => n.appName === modelData)
     readonly property int notifCount: notifs.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
-    readonly property string image: notifs.find(n => n.image.length > 0)?.image ?? ""
-    readonly property string appIcon: notifs.find(n => n.appIcon.length > 0)?.appIcon ?? ""
-    readonly property int urgency: notifs.some(n => n.urgency === NotificationUrgency.Critical) ? NotificationUrgency.Critical : notifs.some(n => n.urgency === NotificationUrgency.Normal) ? NotificationUrgency.Normal : NotificationUrgency.Low
+    readonly property string image: notifs.find(n => !n.closed && n.image.length > 0)?.image ?? ""
+    readonly property string appIcon: notifs.find(n => !n.closed && n.appIcon.length > 0)?.appIcon ?? ""
+    readonly property int urgency: notifs.some(n => !n.closed && n.urgency === NotificationUrgency.Critical) ? NotificationUrgency.Critical : notifs.some(n => n.urgency === NotificationUrgency.Normal) ? NotificationUrgency.Normal : NotificationUrgency.Low
 
     readonly property int nonAnimHeight: {
         const headerHeight = header.implicitHeight + (root.expanded ? Math.round(Appearance.spacing.small / 2) : 0);
@@ -162,7 +162,7 @@ StyledRect {
 
                 StyledText {
                     animate: true
-                    text: root.notifs[0]?.timeStr ?? ""
+                    text: root.notifs.find(n => !n.closed)?.timeStr ?? ""
                     color: Colours.palette.m3outline
                     font.pointSize: Appearance.font.size.small
                 }
