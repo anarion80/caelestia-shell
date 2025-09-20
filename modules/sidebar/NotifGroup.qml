@@ -16,11 +16,17 @@ StyledRect {
     required property string modelData
     required property Props props
 
-    readonly property list<var> notifs: Notifs.list.filter(notif => notif.appName === modelData).reverse()
+    readonly property list<var> notifs: Notifs.list.filter(n => n.appName === modelData)
+    readonly property int notifCount: notifs.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
     readonly property string image: notifs.find(n => n.image.length > 0)?.image ?? ""
     readonly property string appIcon: notifs.find(n => n.appIcon.length > 0)?.appIcon ?? ""
     readonly property int urgency: notifs.some(n => n.urgency === NotificationUrgency.Critical) ? NotificationUrgency.Critical : notifs.some(n => n.urgency === NotificationUrgency.Normal) ? NotificationUrgency.Normal : NotificationUrgency.Low
 
+    readonly property int nonAnimHeight: {
+        const headerHeight = header.implicitHeight + (root.expanded ? Math.round(Appearance.spacing.small / 2) : 0);
+        const columnHeight = headerHeight + notifList.nonAnimHeight + column.Layout.topMargin + column.Layout.bottomMargin;
+        return Math.round(Math.max(Config.notifs.sizes.image, columnHeight) + Appearance.padding.normal * 2);
+    }
     readonly property bool expanded: props.expandedNotifs.includes(modelData)
 
     function toggleExpand(expand: bool): void {
@@ -30,6 +36,11 @@ StyledRect {
         } else if (expanded) {
             props.expandedNotifs.splice(props.expandedNotifs.indexOf(modelData), 1);
         }
+    }
+
+    Component.onDestruction: {
+        if (notifCount === 0 && expanded)
+            props.expandedNotifs.splice(props.expandedNotifs.indexOf(modelData), 1);
     }
 
     anchors.left: parent?.left
@@ -133,6 +144,8 @@ StyledRect {
             spacing: 0
 
             RowLayout {
+                id: header
+
                 Layout.bottomMargin: root.expanded ? Math.round(Appearance.spacing.small / 2) : 0
                 Layout.fillWidth: true
                 spacing: Appearance.spacing.smaller
@@ -178,7 +191,7 @@ StyledRect {
 
                             Layout.leftMargin: Appearance.padding.small / 2
                             animate: true
-                            text: root.notifs.reduce((acc, n) => n.closed ? acc : acc + 1, 0)
+                            text: root.notifCount
                             color: root.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : Colours.palette.m3onSurface
                             font.pointSize: Appearance.font.size.small
                         }
@@ -198,6 +211,8 @@ StyledRect {
             }
 
             NotifGroupList {
+                id: notifList
+
                 props: root.props
                 notifs: root.notifs
                 expanded: root.expanded
