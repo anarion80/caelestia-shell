@@ -10,6 +10,7 @@ Item {
     id: root
 
     required property Props props
+    required property Flickable container
 
     readonly property alias repeater: repeater
     readonly property int spacing: Appearance.spacing.small
@@ -57,6 +58,14 @@ Item {
                         y += item.nonAnimHeight + root.spacing;
                 }
                 return y;
+            }
+
+            containmentMask: QtObject {
+                function contains(p: point): bool {
+                    if (!root.container.contains(notif.mapToItem(root.container, p)))
+                        return false;
+                    return notifInner.contains(p);
+                }
             }
 
             implicitWidth: root.width
@@ -130,6 +139,7 @@ Item {
 
                 modelData: notif.modelData
                 props: root.props
+                container: root.container
             }
 
             Behavior on x {

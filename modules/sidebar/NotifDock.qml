@@ -106,6 +106,7 @@ Item {
                 id: notifList
 
                 props: root.props
+                container: view
             }
         }
     }

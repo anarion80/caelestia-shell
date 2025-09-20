@@ -13,6 +13,7 @@ Item {
     required property Props props
     required property list<var> notifs
     required property bool expanded
+    required property Flickable container
 
     readonly property real nonAnimHeight: {
         let h = -root.spacing;
@@ -58,6 +59,14 @@ Item {
                         y += item.nonAnimHeight + root.spacing;
                 }
                 return y;
+            }
+
+            containmentMask: QtObject {
+                function contains(p: point): bool {
+                    if (!root.container.contains(notif.mapToItem(root.container, p)))
+                        return false;
+                    return notifInner.contains(p);
+                }
             }
 
             implicitWidth: root.width
