@@ -198,9 +198,24 @@ StyledRect {
 
                         MaterialIcon {
                             Layout.rightMargin: -Appearance.padding.small / 2
-                            animate: true
-                            text: root.expanded ? "expand_less" : "expand_more"
+                            text: "expand_more"
                             color: root.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : Colours.palette.m3onSurface
+                            rotation: root.expanded ? 180 : 0
+                            Layout.topMargin: root.expanded ? -Math.floor(Appearance.padding.smaller / 2) : 0
+
+                            Behavior on rotation {
+                                Anim {
+                                    duration: Appearance.anim.durations.expressiveDefaultSpatial
+                                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                                }
+                            }
+
+                            Behavior on Layout.topMargin {
+                                Anim {
+                                    duration: Appearance.anim.durations.expressiveDefaultSpatial
+                                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                                }
+                            }
                         }
                     }
                 }
