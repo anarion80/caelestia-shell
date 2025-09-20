@@ -22,7 +22,7 @@ Item {
 
     Component.onCompleted: Notifs.list.forEach(n => n.popup = false)
 
-    StyledText {
+    Item {
         id: title
 
         anchors.top: parent.top
@@ -30,12 +30,46 @@ Item {
         anchors.right: parent.right
         anchors.margins: Appearance.padding.small
 
-        text: root.notifCount > 0 ? qsTr("%1 notification%2").arg(root.notifCount).arg(root.notifCount === 1 ? "" : "s") : qsTr("Notifications")
-        color: Colours.palette.m3outline
-        font.pointSize: Appearance.font.size.normal
-        font.family: Appearance.font.family.mono
-        font.weight: 500
-        elide: Text.ElideRight
+        implicitHeight: Math.max(count.implicitHeight, titleText.implicitHeight)
+
+        StyledText {
+            id: count
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: root.notifCount > 0 ? 0 : -width - titleText.anchors.leftMargin
+            opacity: root.notifCount > 0 ? 1 : 0
+
+            text: root.notifCount
+            color: Colours.palette.m3outline
+            font.pointSize: Appearance.font.size.normal
+            font.family: Appearance.font.family.mono
+            font.weight: 500
+
+            Behavior on anchors.leftMargin {
+                Anim {}
+            }
+
+            Behavior on opacity {
+                Anim {}
+            }
+        }
+
+        StyledText {
+            id: titleText
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: count.right
+            anchors.right: parent.right
+            anchors.leftMargin: Appearance.spacing.small
+
+            text: root.notifCount > 0 ? qsTr("notification%1").arg(root.notifCount === 1 ? "" : "s") : qsTr("Notifications")
+            color: Colours.palette.m3outline
+            font.pointSize: Appearance.font.size.normal
+            font.family: Appearance.font.family.mono
+            font.weight: 500
+            elide: Text.ElideRight
+        }
     }
 
     ClippingRectangle {
@@ -89,133 +123,24 @@ Item {
             }
         }
 
-        StyledListView {
+        StyledFlickable {
             id: view
 
             anchors.fill: parent
 
-            spacing: Appearance.spacing.small
-
-            model: ScriptModel {
-                values: {
-                    const list = Notifs.list.filter(n => !n.closed).sort((a, b) => b.time - a.time).map(n => [n.appName, null]);
-                    return [...new Map(list).keys()];
-                }
-            }
+            flickableDirection: Flickable.VerticalFlick
+            contentWidth: width
+            contentHeight: notifList.implicitHeight
 
             StyledScrollBar.vertical: StyledScrollBar {
                 flickable: view
             }
 
-            delegate: MouseArea {
-                id: notif
+            NotifDockList {
+                id: notifList
 
-                required property int index
-                required property string modelData
-
-                property int startY
-
-                function closeAll(): void {
-                    for (const n of Notifs.list.filter(n => !n.closed && n.appName === modelData))
-                        n.close();
-                }
-
-                implicitWidth: root.width
-                implicitHeight: notifInner.implicitHeight
-
-                hoverEnabled: true
-                cursorShape: pressed ? Qt.ClosedHandCursor : undefined
-                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-                preventStealing: true
-
-                drag.target: this
-                drag.axis: Drag.XAxis
-
-                onPressed: event => {
-                    if (event.button === Qt.LeftButton)
-                        startY = event.y;
-                    else if (event.button === Qt.RightButton)
-                        notifInner.toggleExpand();
-                    else if (event.button === Qt.MiddleButton)
-                        closeAll();
-                }
-                onPositionChanged: event => {
-                    if (pressed) {
-                        const diffY = event.y - startY;
-                        if (Math.abs(diffY) > Config.notifs.expandThreshold)
-                            notifInner.toggleExpand(diffY > 0);
-                    }
-                }
-                onReleased: event => {
-                    if (Math.abs(x) < width * Config.notifs.clearThreshold)
-                        x = 0;
-                    else
-                        closeAll();
-                }
-
-                NotifGroup {
-                    id: notifInner
-
-                    modelData: notif.modelData
-                    props: root.props
-                }
-
-                Behavior on x {
-                    Anim {
-                        duration: Appearance.anim.durations.expressiveDefaultSpatial
-                        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                    }
-                }
-            }
-
-            add: Transition {
-                Anim {
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                }
-                Anim {
-                    property: "scale"
-                    from: 0
-                    to: 1
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                }
-            }
-
-            remove: Transition {
-                Anim {
-                    property: "opacity"
-                    to: 0
-                }
-                Anim {
-                    property: "scale"
-                    to: 0.6
-                }
-            }
-
-            move: Transition {
-                Anim {
-                    properties: "opacity,scale"
-                    to: 1
-                }
-                Anim {
-                    property: "y"
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                }
-            }
-
-            displaced: Transition {
-                Anim {
-                    properties: "opacity,scale"
-                    to: 1
-                }
-                Anim {
-                    property: "y"
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                }
+                props: root.props
+                container: view
             }
         }
     }
@@ -226,8 +151,14 @@ Item {
         repeat: true
         interval: 50
         onTriggered: {
-            if (root.notifCount > 0)
-                Notifs.list.find(n => !n.closed).close();
+            let next = null;
+            for (let i = 0; i < notifList.repeater.count; i++) {
+                next = notifList.repeater.itemAt(i);
+                if (!next?.closed)
+                    break;
+            }
+            if (next)
+                next.closeAll();
             else
                 stop();
         }

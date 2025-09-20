@@ -159,6 +159,7 @@ Item {
                         MaterialIcon {
                             animate: action.modelData.isCopy ?? false
                             text: action.modelData.isCopy ? "content_copy" : "close"
+                            color: Colours.palette.m3onSurfaceVariant
                         }
                     }
 
@@ -175,6 +176,7 @@ Item {
 
                         StyledText {
                             text: action.modelData.text
+                            color: Colours.palette.m3onSurfaceVariant
                         }
                     }
 
