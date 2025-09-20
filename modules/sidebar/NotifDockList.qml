@@ -79,6 +79,7 @@ Item {
             cursorShape: pressed ? Qt.ClosedHandCursor : undefined
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             preventStealing: true
+            enabled: !closed
 
             drag.target: this
             drag.axis: Drag.XAxis

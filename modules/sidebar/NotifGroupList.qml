@@ -19,7 +19,7 @@ Item {
         let h = -root.spacing;
         for (let i = 0; i < repeater.count; i++) {
             const item = repeater.itemAt(i);
-            if (!item.modelData.closed)
+            if (!item.modelData.closed && !item.previewHidden)
                 h += item.nonAnimHeight + root.spacing;
         }
         return h;
@@ -37,7 +37,7 @@ Item {
         id: repeater
 
         model: ScriptModel {
-            values: root.expanded ? root.notifs : root.notifs.slice(0, Config.notifs.groupPreviewNum)
+            values: root.expanded ? root.notifs : root.notifs.slice(0, Config.notifs.groupPreviewNum + 1)
             onValuesChanged: root.flagChanged()
         }
 
@@ -48,6 +48,17 @@ Item {
             required property Notifs.Notif modelData
 
             readonly property alias nonAnimHeight: notifInner.nonAnimHeight
+            readonly property bool previewHidden: {
+                if (root.expanded)
+                    return false;
+
+                let extraHidden = 0;
+                for (let i = 0; i < index; i++)
+                    if (root.notifs[i].closed)
+                        extraHidden++;
+
+                return index >= Config.notifs.groupPreviewNum + extraHidden;
+            }
             property int startY
 
             y: {
@@ -55,7 +66,7 @@ Item {
                 let y = 0;
                 for (let i = 0; i < index; i++) {
                     const item = repeater.itemAt(i);
-                    if (!item.modelData.closed)
+                    if (!item.modelData.closed && !item.previewHidden)
                         y += item.nonAnimHeight + root.spacing;
                 }
                 return y;
@@ -69,6 +80,9 @@ Item {
                 }
             }
 
+            opacity: previewHidden ? 0 : 1
+            scale: previewHidden ? 0.7 : 1
+
             implicitWidth: root.width
             implicitHeight: notifInner.implicitHeight
 
@@ -76,6 +90,7 @@ Item {
             cursorShape: pressed ? Qt.ClosedHandCursor : undefined
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             preventStealing: !root.expanded
+            enabled: !modelData.closed
 
             drag.target: this
             drag.axis: Drag.XAxis
@@ -105,7 +120,7 @@ Item {
             Component.onDestruction: modelData.unlock(this)
 
             ParallelAnimation {
-                running: true
+                running: !notif.previewHidden
 
                 Anim {
                     target: notif
@@ -144,6 +159,14 @@ Item {
                 modelData: notif.modelData
                 props: root.props
                 expanded: root.expanded
+            }
+
+            Behavior on opacity {
+                Anim {}
+            }
+
+            Behavior on scale {
+                Anim {}
             }
 
             Behavior on x {
