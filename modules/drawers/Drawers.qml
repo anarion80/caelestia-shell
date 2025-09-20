@@ -40,20 +40,24 @@ Variants {
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
             WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
-            mask: Region {
-                x: Config.border.thickness
-                y: bar.implicitHeight
-                width: win.width - Config.border.thickness * 2
-                height: win.height - bar.implicitHeight - Config.border.thickness
-                intersection: Intersection.Xor
-
-                regions: regions.instances
-            }
+            mask: focusGrab.active || Hypr.focusedMonitor?.activeWorkspace?.lastIpcObject.windows > 0 ? inputMask : null
 
             anchors.top: true
             anchors.bottom: true
             anchors.left: true
             anchors.right: true
+
+            Region {
+                id: inputMask
+
+                x: bar.implicitWidth
+                y: Config.border.thickness
+                width: win.width - bar.implicitWidth - Config.border.thickness
+                height: win.height - Config.border.thickness * 2
+                intersection: Intersection.Xor
+
+                regions: regions.instances
+            }
 
             Variants {
                 id: regions
@@ -72,6 +76,8 @@ Variants {
             }
 
             HyprlandFocusGrab {
+                id: focusGrab
+
                 active: (visibilities.launcher && Config.launcher.enabled) || (visibilities.session && Config.session.enabled) || (visibilities.sidebar && Config.sidebar.enabled)
                 windows: [win]
                 onCleared: {
