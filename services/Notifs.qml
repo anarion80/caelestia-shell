@@ -82,7 +82,7 @@ Singleton {
             const data = JSON.parse(text());
             for (const notif of data)
                 root.list.push(notifComp.createObject(root, notif));
-            root.list.sort((a, b) => a.time - b.time);
+            root.list.sort((a, b) => b.time - a.time);
             root.loaded = true;
         }
         onLoadFailed: err => {
