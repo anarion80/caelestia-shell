@@ -45,8 +45,8 @@ CustomMouseArea {
     }
 
     function onWheel(event: WheelEvent): void {
-        if (event.x < bar.implicitWidth) {
-            bar.handleWheel(event.y, event.angleDelta);
+        if (event.y < bar.implicitHeight) {
+            bar.handleWheel(event.x, event.angleDelta);
         }
     }
 
@@ -197,7 +197,7 @@ CustomMouseArea {
         }
 
         // Show popouts on hover
-        if (x < bar.implicitHeight)
+        if (y < bar.implicitHeight)
             bar.checkPopout(x);
         else if ((!popouts.currentName.startsWith("traymenu") || (popouts.current?.depth ?? 0) <= 1) && !inLeftPanel(panels.popouts, x, y))
             popouts.hasCurrent = false;

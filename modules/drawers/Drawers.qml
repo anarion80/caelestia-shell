@@ -50,10 +50,10 @@ Variants {
             Region {
                 id: inputMask
 
-                x: bar.implicitWidth
-                y: Config.border.thickness
-                width: win.width - bar.implicitWidth - Config.border.thickness
-                height: win.height - Config.border.thickness * 2
+                x: Config.border.thickness
+                y: bar.implicitHeight
+                width: win.width - Config.border.thickness * 2
+                height: win.height - bar.implicitHeight - Config.border.thickness
                 intersection: Intersection.Xor
 
                 regions: regions.instances
