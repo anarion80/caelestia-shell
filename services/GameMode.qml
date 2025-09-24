@@ -1,5 +1,6 @@
 pragma Singleton
 
+import qs.services
 import qs.config
 import Caelestia
 import Quickshell
@@ -12,7 +13,7 @@ Singleton {
     property alias enabled: props.enabled
 
     function setDynamicConfs(): void {
-        Quickshell.execDetached(["hyprctl", "--batch", "keyword animations:enabled 0;keyword decoration:shadow:enabled 0;keyword decoration:blur:enabled 0;keyword general:gaps_in 0;keyword general:gaps_out 0;keyword general:border_size 1;keyword decoration:rounding 0;keyword general:allow_tearing 1"]);
+        Hypr.message("[[BATCH]]keyword animations:enabled 0;keyword decoration:shadow:enabled 0;keyword decoration:blur:enabled 0;keyword general:gaps_in 0;keyword general:gaps_out 0;keyword general:border_size 1;keyword decoration:rounding 0;keyword general:allow_tearing 1");
     }
 
     onEnabledChanged: {
@@ -21,7 +22,7 @@ Singleton {
             if (Config.utilities.toasts.gameModeChanged)
                 Toaster.toast(qsTr("Game mode enabled"), qsTr("Disabled Hyprland animations, blur, gaps and shadows"), "gamepad");
         } else {
-            Quickshell.execDetached(["hyprctl", "reload"]);
+            Hypr.message("reload");
             if (Config.utilities.toasts.gameModeChanged)
                 Toaster.toast(qsTr("Game mode disabled"), qsTr("Hyprland settings restored"), "gamepad");
         }
@@ -30,7 +31,7 @@ Singleton {
     PersistentProperties {
         id: props
 
-        property bool enabled
+        property bool enabled: Hypr.options["animations:enabled"] === 0
 
         reloadableId: "gameMode"
     }
@@ -41,14 +42,6 @@ Singleton {
         function onConfigReloaded(): void {
             if (props.enabled)
                 root.setDynamicConfs();
-        }
-    }
-
-    Process {
-        running: true
-        command: ["hyprctl", "getoption", "animations:enabled", "-j"]
-        stdout: StdioCollector {
-            onStreamFinished: props.enabled = JSON.parse(text).int === 0
         }
     }
 
