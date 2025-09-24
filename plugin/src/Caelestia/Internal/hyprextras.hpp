@@ -21,6 +21,8 @@ public:
     [[nodiscard]] HyprDevices* devices() const;
 
     Q_INVOKABLE void message(const QString& message);
+    Q_INVOKABLE void batchMessage(const QStringList& messages);
+    Q_INVOKABLE void applyOptions(const QVariantHash& options);
 
     Q_INVOKABLE void refreshOptions();
     Q_INVOKABLE void refreshDevices();

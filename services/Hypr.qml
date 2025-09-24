@@ -35,10 +35,6 @@ Singleton {
 
     signal configReloaded
 
-    function message(message: string): void {
-        extras.message(message);
-    }
-
     function dispatch(request: string): void {
         Hyprland.dispatch(request);
     }
@@ -77,7 +73,7 @@ Singleton {
 
             if (n === "configreloaded") {
                 root.configReloaded();
-                extras.message("[[BATCH]]keyword bindln ,Caps_Lock,global,caelestia:refreshDevices;keyword bindln ,Num_Lock,global,caelestia:refreshDevices");
+                extras.batchMessage(["keyword bindln ,Caps_Lock,global,caelestia:refreshDevices", "keyword bindln ,Num_Lock,global,caelestia:refreshDevices"]);
             } else if (["workspace", "moveworkspace", "activespecial", "focusedmon"].includes(n)) {
                 Hyprland.refreshWorkspaces();
                 Hyprland.refreshMonitors();
