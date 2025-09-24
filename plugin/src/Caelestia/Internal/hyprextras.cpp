@@ -32,14 +32,14 @@ HyprExtras::HyprExtras(QObject* parent)
     }
 
     m_requestSocket = hyprDir + "/.socket.sock";
-    m_eventSocket = hyprDir + "/.event.sock";
+    m_eventSocket = hyprDir + "/.socket2.sock";
 
     refreshOptions();
     refreshDevices();
 
     m_socket = new QLocalSocket(this);
     QObject::connect(m_socket, &QLocalSocket::readyRead, this, &HyprExtras::readEvent);
-    m_socket->connectToServer(m_eventSocket);
+    m_socket->connectToServer(m_eventSocket, QLocalSocket::ReadOnly);
 }
 
 QVariantHash HyprExtras::options() const {
@@ -51,7 +51,37 @@ HyprDevices* HyprExtras::devices() const {
 }
 
 void HyprExtras::message(const QString& message) {
+    if (message.isEmpty()) {
+        return;
+    }
+
     makeRequest(message, [](bool, const QByteArray&) {
+    });
+}
+
+void HyprExtras::batchMessage(const QStringList& messages) {
+    if (messages.isEmpty()) {
+        return;
+    }
+
+    makeRequest("[[BATCH]]" + messages.join(";"), [](bool, const QByteArray&) {
+    });
+}
+
+void HyprExtras::applyOptions(const QVariantHash& options) {
+    if (options.isEmpty()) {
+        return;
+    }
+
+    QString request = "[[BATCH]]";
+    for (auto it = options.constBegin(); it != options.constEnd(); ++it) {
+        request += QString("keyword %1 %2;").arg(it.key(), it.value().toString());
+    }
+
+    makeRequest(request, [this](bool success, const QByteArray&) {
+        if (success) {
+            refreshOptions();
+        }
     });
 }
 
