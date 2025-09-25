@@ -79,7 +79,7 @@ RowLayout {
         }
     }
 
-    function handleWheel(y: real, angleDelta: point): void {
+    function handleWheel(x: real, angleDelta: point): void {
         const ch = childAt(x, height / 2) as WrappedLoader;
         if (ch?.id === "workspaces" && Config.bar.scrollActions.workspaces) {
             // Workspace scroll
