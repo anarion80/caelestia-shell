@@ -32,8 +32,14 @@
   },
   "general": {
     "apps": {
-      "terminal": ["ghostty"],
+      "terminal": ["ghostty", "-e"],
       "audio": ["pavucontrol"]
+    },
+    "idle": {
+      "inhibitWhenAudio": true,
+      "lockTimeout": 600,
+      "dpmsTimeout": 630,
+      "sleepTimeout": 1800
     }
   },
   "background": {
