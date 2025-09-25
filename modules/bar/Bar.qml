@@ -17,8 +17,24 @@ RowLayout {
     required property BarPopouts.Wrapper popouts
     readonly property int hPadding: Appearance.padding.large
 
+    function closeTray(): void {
+        if (!Config.bar.tray.compact)
+            return;
+
+        for (let i = 0; i < repeater.count; i++) {
+            const item = repeater.itemAt(i);
+            if (item?.enabled && item.id === "tray") {
+                item.item.expanded = false;
+            }
+        }
+    }
+
     function checkPopout(x: real): void {
         const ch = childAt(x, height / 2) as WrappedLoader;
+
+        if (ch?.id !== "tray")
+            closeTray();
+
         if (!ch) {
             popouts.hasCurrent = false;
             return;
@@ -38,12 +54,19 @@ RowLayout {
                 popouts.hasCurrent = true;
             }
         } else if (id === "tray") {
-            const index = Math.floor(((x - left) / itemWidth) * item.items.count);
-            const trayItem = item.items.itemAt(index);
-            if (trayItem) {
-                popouts.currentName = `traymenu${index}`;
-                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
-                popouts.hasCurrent = true;
+            if (!Config.bar.tray.compact || (item.expanded && !item.expandIcon.contains(mapToItem(item.expandIcon, item.implicitWidth / 2, y)))) {
+                const index = Math.floor(((x - left - item.padding * 2 + item.spacing) / item.layout.implicitWidth) * item.items.count);
+                const trayItem = item.items.itemAt(index);
+                if (trayItem) {
+                    popouts.currentName = `traymenu${index}`;
+                    popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitWidth / 2).x);
+                    popouts.hasCurrent = true;
+                } else {
+                    popouts.hasCurrent = false;
+                }
+            } else {
+                popouts.hasCurrent = false;
+                item.expanded = true;
             }
         } else if (id === "activeWindow") {
             popouts.currentName = id.toLowerCase();

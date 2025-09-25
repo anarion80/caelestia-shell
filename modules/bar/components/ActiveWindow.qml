@@ -15,7 +15,7 @@ Item {
 
     readonly property int maxWidth: {
         const otherModules = bar.children.filter(c => c.id && c.item !== this && c.id !== "spacer");
-        const otherWidth = otherModules.reduce((acc, curr) => acc + curr.width, 0);
+        const otherWidth = otherModules.reduce((acc, curr) => acc + (curr.item.nonAnimHeight ?? curr.width), 0);
         // Length - 2 cause repeater counts as a child
         return bar.width - otherWidth - bar.spacing * (bar.children.length - 1) - bar.hPadding * 2;
     }
@@ -61,8 +61,9 @@ Item {
     }
 
     Behavior on implicitWidth {
-        NumberAnimation {
-            easing.bezierCurve: Appearance.anim.curves.emphasized
+        Anim {
+            duration: Appearance.anim.durations.expressiveDefaultSpatial
+            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
         }
     }
 

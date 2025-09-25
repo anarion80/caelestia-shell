@@ -19,6 +19,10 @@ Item {
     readonly property bool shouldBeVisible: Config.bar.persistent || visibilities.bar || isHovered
     property bool isHovered
 
+    function closeTray(): void {
+        content.item?.closeTray();
+    }
+
     function checkPopout(x: real): void {
         content.item?.checkPopout(x);
     }

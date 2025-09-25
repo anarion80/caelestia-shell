@@ -371,6 +371,7 @@ default, you must create it manually.
         },
         "tray": {
             "background": false,
+            "compact": false,
             "iconSubs": [],
             "recolour": false
         },
