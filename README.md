@@ -588,6 +588,7 @@ default, you must create it manually.
             "configLoaded": true,
             "dndChanged": true,
             "gameModeChanged": true,
+            "kbLayoutChanged": true,
             "numLockChanged": true
         }
     }
