@@ -357,6 +357,11 @@ default, you must create it manually.
             }
         ],
         "persistent": true,
+        "popouts": {
+            "activeWindow": true,
+            "statusIcons": true,
+            "tray": true
+        },
         "scrollActions": {
             "brightness": true,
             "workspaces": true,

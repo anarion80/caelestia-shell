@@ -45,7 +45,7 @@ RowLayout {
         const item = ch.item;
         const itemWidth = item.implicitWidth;
 
-        if (id === "statusIcons") {
+        if (id === "statusIcons" && Config.bar.popouts.statusIcons) {
             const items = item.items;
             const icon = items.childAt(mapToItem(items, x, 0).x, items.height / 2);
             if (icon) {
@@ -53,7 +53,7 @@ RowLayout {
                 popouts.currentCenter = Qt.binding(() => icon.mapToItem(root, icon.implicitWidth / 2, 0).x);
                 popouts.hasCurrent = true;
             }
-        } else if (id === "tray") {
+        } else if (id === "tray" && Config.bar.popouts.tray) {
             if (!Config.bar.tray.compact || (item.expanded && !item.expandIcon.contains(mapToItem(item.expandIcon, x, item.implicitHeight / 2)))) {
                 const index = Math.floor(((x - left - item.padding * 2 + item.spacing) / item.layout.implicitWidth) * item.items.count);
                 const trayItem = item.items.itemAt(index);
@@ -68,7 +68,7 @@ RowLayout {
                 popouts.hasCurrent = false;
                 item.expanded = true;
             }
-        } else if (id === "activeWindow") {
+        } else if (id === "activeWindow" && Config.bar.popouts.activeWindow) {
             popouts.currentName = id.toLowerCase();
             popouts.currentCenter = item.mapToItem(root, itemWidth / 2, 0).x;
             popouts.hasCurrent = true;
