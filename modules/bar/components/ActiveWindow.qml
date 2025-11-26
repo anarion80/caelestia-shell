@@ -79,21 +79,21 @@ Item {
         color: root.colour
         opacity: root.current === this ? 1 : 0
 
-        transform: [
+        transform: 
             Translate {
                 x: Config.bar.activeWindow.inverted ? -implicitWidth + text.implicitHeight : 0
-            },
+            }
             // Rotation {
             //     angle: Config.bar.activeWindow.inverted ? 270 : 90
             //     origin.x: text.implicitHeight / 2
             //     origin.y: text.implicitHeight / 2
             // }
-        ]
 
         width: implicitWidth
         height: implicitHeight
 
         Behavior on opacity {
+
             Anim {}
         }
     }
