@@ -148,7 +148,19 @@ StyledRect {
 
             sourceComponent: MaterialIcon {
                 animate: true
-                text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
+                text: Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
+                color: root.colour
+            }
+        }
+
+        // Ethernet icon
+        WrappedLoader {
+            name: "ethernet"
+            active: Config.bar.status.showNetwork && Nmcli.activeEthernet
+
+            sourceComponent: MaterialIcon {
+                animate: true
+                text: "cable"
                 color: root.colour
             }
         }
