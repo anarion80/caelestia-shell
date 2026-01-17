@@ -61,7 +61,6 @@ RowLayout {
 
         visible: active
         active: root.hasWindows
-        asynchronous: true
 
         sourceComponent: Row {
             spacing: 0
