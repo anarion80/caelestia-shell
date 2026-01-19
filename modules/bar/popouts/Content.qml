@@ -6,6 +6,8 @@ import Quickshell
 import Quickshell.Services.SystemTray
 import QtQuick
 
+import "./kblayout"
+
 Item {
     id: root
 
@@ -119,8 +121,11 @@ Item {
 
         Popout {
             name: "kblayout"
-            sourceComponent: KbLayout {}
+            sourceComponent: KbLayout {
+                wrapper: root.wrapper
+            }
         }
+
 
         Popout {
             name: "lockstatus"

@@ -115,5 +115,6 @@ JsonObject {
         property int trayMenuWidth: 300
         property int batteryWidth: 250
         property int networkWidth: 320
+        property int kbLayoutWidth: 320
     }
 }
