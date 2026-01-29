@@ -126,7 +126,6 @@ Item {
             }
         }
 
-
         Popout {
             name: "lockstatus"
             sourceComponent: LockStatus {}
