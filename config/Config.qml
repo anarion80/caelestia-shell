@@ -122,6 +122,8 @@ Singleton {
                 }
             },
             anim: {
+                mediaGifSpeedAdjustment: 300,
+                sessionGifSpeed: 0.7,
                 durations: {
                     scale: appearance.anim.durations.scale
                 }
@@ -239,7 +241,8 @@ Singleton {
                 batteryWidth: bar.sizes.batteryWidth,
                 networkWidth: bar.sizes.networkWidth
             },
-            entries: bar.entries
+            entries: bar.entries,
+            excludedScreens: bar.excludedScreens
         };
     }
 
