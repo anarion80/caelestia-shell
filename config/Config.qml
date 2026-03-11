@@ -258,7 +258,8 @@ Singleton {
         return {
             enabled: dashboard.enabled,
             showOnHover: dashboard.showOnHover,
-            updateInterval: dashboard.updateInterval,
+            mediaUpdateInterval: dashboard.mediaUpdateInterval,
+            resourceUpdateInterval: dashboard.resourceUpdateInterval,
             dragThreshold: dashboard.dragThreshold,
             performance: {
                 showBattery: dashboard.performance.showBattery,
@@ -441,6 +442,7 @@ Singleton {
         return {
             weatherLocation: services.weatherLocation,
             useFahrenheit: services.useFahrenheit,
+            useFahrenheitPerformance: services.useFahrenheitPerformance,
             useTwelveHourClock: services.useTwelveHourClock,
             gpuType: services.gpuType,
             visualiserBars: services.visualiserBars,

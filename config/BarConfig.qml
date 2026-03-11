@@ -93,6 +93,7 @@ JsonObject {
         property bool recolour: false
         property bool compact: false
         property list<var> iconSubs: []
+        property list<string> hiddenIcons: []
     }
 
     component Status: JsonObject {
