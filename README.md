@@ -333,7 +333,8 @@ default, you must create it manually.
     "bar": {
         "activeWindow": {
             "compact": false,
-            "inverted": false
+            "inverted": false,
+            "showOnHover": true
         },
         "clock": {
             "showIcon": true
@@ -661,7 +662,37 @@ default, you must create it manually.
                     "enabled": false
                 }
             ]
-        }
+        },
+        "quickToggles": [
+            {
+                "id": "wifi",
+                "enabled": true
+            },
+            {
+                "id": "bluetooth",
+                "enabled": true
+            },
+            {
+                "id": "mic",
+                "enabled": true
+            },
+            {
+                "enabled": true,
+                "id": "settings"
+            },
+            {
+                "id": "gameMode",
+                "enabled": true
+            },
+            {
+                "id": "dnd",
+                "enabled": true
+            },
+            {
+                "id": "vpn",
+                "enabled": true
+            }
+        ]
     }
 }
 ```
