@@ -181,7 +181,8 @@ Singleton {
             },
             activeWindow: {
                 compact: bar.activeWindow.compact,
-                inverted: bar.activeWindow.inverted
+                inverted: bar.activeWindow.inverted,
+                showOnHover: bar.activeWindow.showOnHover
             },
             tray: {
                 background: bar.tray.background,
@@ -334,7 +335,8 @@ Singleton {
             vpn: {
                 enabled: utilities.vpn.enabled,
                 provider: utilities.vpn.provider
-            }
+            },
+            quickToggles: utilities.quickToggles
         };
     }
 
