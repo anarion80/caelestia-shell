@@ -79,6 +79,7 @@ Item {
     Loader {
         id: content
 
+        asynchronous: true
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.margins: Appearance.padding.large

@@ -45,6 +45,7 @@ StyledClippingRect {
         }
 
         Loader {
+            asynchronous: true
             active: Config.bar.workspaces.occupiedBg
 
             anchors.fill: parent
@@ -77,6 +78,7 @@ StyledClippingRect {
         }
 
         Loader {
+            asynchronous: true
             anchors.horizontalCenter: parent.horizontalCenter
             active: Config.bar.workspaces.activeIndicator
 
@@ -109,6 +111,8 @@ StyledClippingRect {
 
     Loader {
         id: specialWs
+
+        asynchronous: true
 
         anchors.fill: parent
         anchors.margins: Appearance.padding.small

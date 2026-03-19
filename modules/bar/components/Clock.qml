@@ -23,6 +23,7 @@ StyledRect {
         spacing: Appearance.spacing.small
 
         Loader {
+            asynchronous: true
             anchors.horizontalCenter: parent.horizontalCenter
 
             active: Config.bar.clock.showIcon

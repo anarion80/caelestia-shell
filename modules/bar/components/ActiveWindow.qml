@@ -39,6 +39,7 @@ Item {
     implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
 
     Loader {
+        asynchronous: true
         anchors.fill: parent
         active: !Config.bar.activeWindow.showOnHover
 

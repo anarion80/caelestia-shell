@@ -342,6 +342,7 @@ Item {
                                 spacing: Appearance.spacing.normal
 
                                 IconImage {
+                                    asynchronous: true
                                     Layout.alignment: Qt.AlignVCenter
                                     implicitSize: 32
                                     source: {
@@ -360,6 +361,7 @@ Item {
                                     Layout.alignment: Qt.AlignVCenter
                                     readonly property bool isHidden: modelData ? Strings.testRegexList(Config.launcher.hiddenApps, modelData.id) : false
                                     readonly property bool isFav: modelData ? Strings.testRegexList(Config.launcher.favouriteApps, modelData.id) : false
+                                    asynchronous: true
                                     active: isHidden || isFav
 
                                     sourceComponent: isHidden ? hiddenIcon : (isFav ? favouriteIcon : null)
@@ -414,6 +416,7 @@ Item {
 
                     anchors.fill: parent
 
+                    asynchronous: true
                     opacity: 1
                     scale: 1
                     transformOrigin: Item.Center
@@ -536,6 +539,8 @@ Item {
 
                     IconImage {
                         id: appIconImage
+
+                        asynchronous: true
                         Layout.alignment: Qt.AlignHCenter
                         implicitSize: Appearance.font.size.extraLarge * 3 * 2
                         source: {

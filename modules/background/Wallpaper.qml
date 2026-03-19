@@ -33,6 +33,7 @@ Item {
     }
 
     Loader {
+        asynchronous: true
         anchors.fill: parent
 
         active: root.completed && !root.source

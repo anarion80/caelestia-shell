@@ -89,6 +89,7 @@ Item {
         Loader {
             id: current
 
+            asynchronous: true
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
 

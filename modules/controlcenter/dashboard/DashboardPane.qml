@@ -80,6 +80,7 @@ Item {
             anchors.leftMargin: Appearance.padding.large
             anchors.rightMargin: Appearance.padding.large
 
+            asynchronous: true
             sourceComponent: dashboardContentComponent
         }
     }

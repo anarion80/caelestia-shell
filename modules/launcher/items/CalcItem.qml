@@ -12,8 +12,13 @@ Item {
     required property var list
     readonly property string math: list.search.text.slice(`${Config.launcher.actionPrefix}calc `.length)
 
+    onMathChanged: {
+        if (math.length > 0)
+            Qalculator.evalAsync(math);
+    }
+
     function onClicked(): void {
-        Quickshell.execDetached(["wl-copy", Qalculator.eval(math, false)]);
+        Quickshell.execDetached(["wl-copy", Qalculator.rawResult]);
         root.list.visibilities.launcher = false;
     }
 
@@ -55,7 +60,7 @@ Item {
                 return Colours.palette.m3onSurface;
             }
 
-            text: root.math.length > 0 ? Qalculator.eval(root.math) : qsTr("Type an expression to calculate")
+            text: root.math.length > 0 ? (Qalculator.result || qsTr("Calculating...")) : qsTr("Type an expression to calculate")
             elide: Text.ElideLeft
 
             Layout.fillWidth: true

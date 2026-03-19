@@ -128,6 +128,7 @@ CollapsibleSection {
                     }
 
                     Loader {
+                        asynchronous: true
                         active: isCurrent
 
                         sourceComponent: MaterialIcon {

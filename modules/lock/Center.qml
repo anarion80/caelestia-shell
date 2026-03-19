@@ -54,6 +54,7 @@ ColumnLayout {
         }
 
         Loader {
+            asynchronous: true
             Layout.leftMargin: Appearance.spacing.small
             Layout.alignment: Qt.AlignVCenter
 
