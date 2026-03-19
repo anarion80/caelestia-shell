@@ -12,6 +12,15 @@ Item {
     id: root
 
     required property PersistentProperties visibilities
+    readonly property bool needsKeyboard: {
+        const count = repeater.count;
+        for (let i = 0; i < count; i++) {
+            const item = repeater.itemAt(i) as Loader;
+            if (item?.sourceComponent === mediaComponent && (item?.item as MediaWrapper)?.needsKeyboard)
+                return true;
+        }
+        return false;
+    }
     required property PersistentProperties state
     required property FileDialog facePicker
 
@@ -81,21 +90,24 @@ Item {
             id: view
 
             readonly property int currentIndex: root.state.currentTab
-            readonly property Item currentItem: row.children[currentIndex]
+            readonly property Item currentItem: {
+                repeater.count; // Trigger update on count change
+                return repeater.itemAt(currentIndex);
+            }
 
             anchors.fill: parent
 
             flickableDirection: Flickable.HorizontalFlick
 
-            implicitWidth: currentItem.implicitWidth
-            implicitHeight: currentItem.implicitHeight
+            implicitWidth: currentItem?.implicitWidth ?? 0
+            implicitHeight: currentItem?.implicitHeight ?? 0
 
-            contentX: currentItem.x
+            contentX: currentItem?.x ?? 0
             contentWidth: row.implicitWidth
             contentHeight: row.implicitHeight
 
             onContentXChanged: {
-                if (!moving)
+                if (!moving || !currentItem)
                     return;
 
                 const x = contentX - currentItem.x;
@@ -106,19 +118,24 @@ Item {
             }
 
             onDragEnded: {
+                if (!currentItem)
+                    return;
+
                 const x = contentX - currentItem.x;
                 if (x > currentItem.implicitWidth / 10)
                     root.state.currentTab = Math.min(root.state.currentTab + 1, tabs.count - 1);
                 else if (x < -currentItem.implicitWidth / 10)
                     root.state.currentTab = Math.max(root.state.currentTab - 1, 0);
                 else
-                    contentX = Qt.binding(() => currentItem.x);
+                    contentX = Qt.binding(() => currentItem?.x ?? 0);
             }
 
             RowLayout {
                 id: row
 
                 Repeater {
+                    id: repeater
+
                     model: ScriptModel {
                         values: root.dashboardTabs
                     }
@@ -155,7 +172,7 @@ Item {
 
             Component {
                 id: mediaComponent
-                Media {
+                MediaWrapper {
                     visibilities: root.visibilities
                 }
             }

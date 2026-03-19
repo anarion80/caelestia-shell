@@ -5,34 +5,65 @@ import qs.services
 import qs.config
 import QtQuick
 
-Row {
+StyledRect {
     id: root
 
-    property color colour: Colours.palette.m3tertiary
+    readonly property color colour: Colours.palette.m3tertiary
+    readonly property int padding: Config.bar.clock.background ? Appearance.padding.normal : Appearance.padding.small
 
-    spacing: Appearance.spacing.small
+    implicitWidth: Config.bar.sizes.innerWidth
+    implicitHeight: layout.implicitHeight + root.padding * 2
 
-    Loader {
-        anchors.verticalCenter: parent.verticalCenter
+    color: Qt.alpha(Colours.tPalette.m3surfaceContainer, Config.bar.clock.background ? Colours.tPalette.m3surfaceContainer.a : 0)
+    radius: Appearance.rounding.full
 
-        active: Config.bar.clock.showIcon
-        visible: active
+    Column {
+        id: layout
+        anchors.centerIn: parent
+        spacing: Appearance.spacing.small
 
-        sourceComponent: MaterialIcon {
-            text: "calendar_month"
+        Loader {
+            anchors.verticalCenter: parent.verticalCenter
+
+            active: Config.bar.clock.showIcon
+            visible: active
+
+            sourceComponent: MaterialIcon {
+                text: "calendar_month"
+                color: root.colour
+            }
+        }
+        
+        StyledText {
+            anchors.verticalCenter: parent.verticalCenter
+
+            visible: Config.bar.clock.showDate
+
+            verticalAlignment: StyledText.AlignVCenter
+            text: Time.format("ddd\nd")
+            font.pointSize: Appearance.font.size.smaller
+            font.family: Appearance.font.family.sans
             color: root.colour
         }
-    }
 
-    StyledText {
-        id: text
+        Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
+            visible: Config.bar.clock.showDate
+            height: visible ? 1 : 0
+            
+            width: parent.width * 0.8
+            color: root.colour
+            opacity: 0.2
+        }
 
-        anchors.verticalCenter: parent.verticalCenter
+        StyledText {
+            anchors.verticalCenter: parent.verticalCenter
 
-        verticalAlignment: StyledText.AlignVCenter
-        text: Time.format(Config.services.useTwelveHourClock ? "hh:mm A" : "hh:mm")
-        font.pointSize: Appearance.font.size.smaller
-        font.family: Appearance.font.family.mono
-        color: root.colour
+            verticalAlignment: StyledText.AlignVCenter
+            text: Time.format(Config.services.useTwelveHourClock ? "hh\nmm\nA" : "hh\nmm")
+            font.pointSize: Appearance.font.size.smaller
+            font.family: Appearance.font.family.mono
+            color: root.colour
+        }
     }
 }

@@ -14,6 +14,7 @@ Item {
     required property BarPopouts.Wrapper popouts
     required property bool disabled
 
+    readonly property int clampedHeight: Math.max(Config.border.minThickness, implicitHeight)
     readonly property int padding: Math.max(Appearance.padding.smaller, Config.border.thickness)
     readonly property int contentHeight: Config.bar.sizes.innerHeight + padding * 2
     readonly property int exclusiveZone: !disabled && (Config.bar.persistent || visibilities.bar) ? contentHeight : Config.border.thickness

@@ -54,13 +54,13 @@ Variants {
             screen: scope.modelData
             name: "drawers"
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+            WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session || panels.dashboard.needsKeyboard ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
             mask: Region {
-                x: Config.border.thickness + win.dragMaskPadding
-                y: bar.implicitHeight + win.dragMaskPadding
-                width: win.width - Config.border.thickness * 2 - win.dragMaskPadding * 2
-                height: win.height - bar.implicitHeight - Config.border.thickness - win.dragMaskPadding * 2
+                x: Config.border.clampedThickness + win.dragMaskPadding
+                y: bar.clampedHeight + win.dragMaskPadding
+                width: win.width - Config.border.clampedThickness - win.dragMaskPadding * 2
+                height: win.height - bar.clampedHeight - Config.border.clampedThickness - win.dragMaskPadding * 2
                 intersection: Intersection.Xor
 
                 regions: regions.instances

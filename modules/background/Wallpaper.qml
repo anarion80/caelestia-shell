@@ -13,6 +13,7 @@ Item {
 
     property string source: Wallpapers.current
     property Image current: one
+    property bool completed
 
     onSourceChanged: {
         if (!source)
@@ -25,13 +26,16 @@ Item {
 
     Component.onCompleted: {
         if (source)
-            Qt.callLater(() => one.update());
+            Qt.callLater(() => {
+                one.update();
+                completed = true;
+            });
     }
 
     Loader {
         anchors.fill: parent
 
-        active: !root.source
+        active: root.completed && !root.source
 
         sourceComponent: StyledRect {
             color: Colours.palette.m3surfaceContainer
