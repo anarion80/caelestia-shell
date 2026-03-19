@@ -23,6 +23,7 @@ StyledRect {
         spacing: Appearance.spacing.small
 
         Loader {
+            asynchronous: true
             anchors.verticalCenter: parent.verticalCenter
 
             active: Config.bar.clock.showIcon

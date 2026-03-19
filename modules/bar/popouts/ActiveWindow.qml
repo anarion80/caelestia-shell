@@ -31,6 +31,7 @@ Item {
             IconImage {
                 id: icon
 
+                asynchronous: true
                 Layout.alignment: Qt.AlignVCenter
                 implicitSize: details.implicitHeight
                 source: Icons.getAppIcon(Hypr.activeToplevel?.lastIpcObject.class ?? "", "image-missing")

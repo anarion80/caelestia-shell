@@ -19,6 +19,7 @@ ColumnLayout {
     spacing: Appearance.spacing.small
 
     Loader {
+        asynchronous: true
         Layout.topMargin: Appearance.padding.large * 2
         Layout.bottomMargin: -Appearance.padding.large
         Layout.alignment: Qt.AlignHCenter
@@ -71,6 +72,7 @@ ColumnLayout {
         }
 
         Loader {
+            asynchronous: true
             Layout.rightMargin: Appearance.padding.smaller
             active: root.width > 400
             visible: active
@@ -107,6 +109,7 @@ ColumnLayout {
     Loader {
         id: forecastLoader
 
+        asynchronous: true
         Layout.topMargin: Appearance.spacing.smaller
         Layout.bottomMargin: Appearance.padding.large * 2
         Layout.fillWidth: true

@@ -21,6 +21,7 @@ Item {
     }
 
     Loader {
+        asynchronous: true
         anchors.centerIn: parent
         sourceComponent: SysInfo.isDefaultLogo ? caelestiaLogo : distroIcon
     }

@@ -86,6 +86,7 @@ Item {
         color: "transparent"
 
         Loader {
+            asynchronous: true
             anchors.centerIn: parent
             active: opacity > 0
             opacity: root.notifCount > 0 ? 0 : 1
@@ -166,6 +167,7 @@ Item {
     }
 
     Loader {
+        asynchronous: true
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: Appearance.padding.normal

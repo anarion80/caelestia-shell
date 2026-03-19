@@ -33,6 +33,7 @@ Item {
         radius: Appearance.rounding.small
 
         Loader {
+            asynchronous: true
             anchors.centerIn: parent
             active: !root.client
 

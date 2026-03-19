@@ -82,6 +82,8 @@ StyledRect {
     Loader {
         id: expandIcon
 
+        asynchronous: true
+
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
 

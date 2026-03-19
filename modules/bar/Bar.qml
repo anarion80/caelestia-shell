@@ -204,6 +204,7 @@ RowLayout {
             return null;
         }
 
+        asynchronous: true
         Layout.alignment: Qt.AlignVCenter
 
         // Cursed ahh thing to add padding to first and last enabled components

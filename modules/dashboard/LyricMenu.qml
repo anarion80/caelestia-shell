@@ -23,6 +23,7 @@ StyledRect {
     }
 
     Loader {
+        asynchronous: true
         anchors.fill: parent
         active: root.height > 0
 

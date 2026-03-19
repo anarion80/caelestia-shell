@@ -265,6 +265,7 @@ StyledRect {
     component WrappedLoader: Loader {
         required property string name
 
+        asynchronous: true
         Layout.alignment: Qt.AlignHCenter
         visible: active
     }

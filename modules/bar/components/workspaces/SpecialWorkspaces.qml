@@ -165,7 +165,9 @@ Item {
             Loader {
                 id: label
 
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft 
+                asynchronous: true
+
+                Layout.alignment: Qt.AlignVCenter | Qt.AlightLeft
                 Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
 
                 sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
@@ -192,6 +194,8 @@ Item {
 
             Loader {
                 id: windows
+
+                asynchronous: true
 
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
@@ -294,6 +298,7 @@ Item {
     }
 
     Loader {
+        asynchronous: true
         active: Config.bar.workspaces.activeIndicator
         anchors.fill: parent
 

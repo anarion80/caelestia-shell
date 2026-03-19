@@ -49,6 +49,7 @@ RowLayout {
                 anchors.leftMargin: Appearance.padding.large
                 anchors.rightMargin: Appearance.padding.large + Appearance.padding.normal / 2
 
+                asynchronous: true
                 sourceComponent: root.leftContent
 
                 Component.onCompleted: {
@@ -90,6 +91,7 @@ RowLayout {
                 anchors.fill: parent
                 anchors.margins: Appearance.padding.large * 2
 
+                asynchronous: true
                 sourceComponent: root.rightContent
 
                 Component.onCompleted: {

@@ -39,6 +39,7 @@ Item {
     implicitHeight: Math.max(icon.implicitWidth, current.implicitHeight)
 
     Loader {
+        asynchronous: true
         anchors.fill: parent
         active: !Config.bar.activeWindow.showOnHover
 

@@ -55,6 +55,8 @@ RowLayout {
     Loader {
         id: windows
 
+        asynchronous: true
+
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: true
         Layout.leftMargin: -Config.bar.sizes.innerHeight / 10

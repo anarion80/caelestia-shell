@@ -75,6 +75,7 @@ StyledRect {
                         spacing: 0
 
                         Loader {
+                            asynchronous: true
                             Layout.rightMargin: Appearance.spacing.small
                             active: folder.index > 0
                             sourceComponent: StyledText {
@@ -89,6 +90,7 @@ StyledRect {
                             implicitHeight: folderName.implicitHeight + Appearance.padding.small * 2
 
                             Loader {
+                                asynchronous: true
                                 anchors.fill: parent
                                 active: folder.index < root.dialog.cwd.length - 1
                                 sourceComponent: StateLayer {
@@ -102,6 +104,8 @@ StyledRect {
 
                             Loader {
                                 id: homeIcon
+
+                                asynchronous: true
 
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
