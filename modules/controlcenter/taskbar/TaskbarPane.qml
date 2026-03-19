@@ -22,6 +22,8 @@ Item {
     property bool activeWindowCompact: Config.bar.activeWindow.compact ?? false
     property bool activeWindowInverted: Config.bar.activeWindow.inverted ?? false
     property bool clockShowIcon: Config.bar.clock.showIcon ?? true
+    property bool clockBackground: Config.bar.clock.background ?? false
+    property bool clockShowDate: Config.bar.clock.showDate ?? false
     property bool persistent: Config.bar.persistent ?? true
     property bool showOnHover: Config.bar.showOnHover ?? true
     property int dragThreshold: Config.bar.dragThreshold ?? 20
@@ -69,6 +71,8 @@ Item {
     function saveConfig(entryIndex, entryEnabled) {
         Config.bar.activeWindow.compact = root.activeWindowCompact;
         Config.bar.activeWindow.inverted = root.activeWindowInverted;
+        Config.bar.clock.background = root.clockBackground;
+        Config.bar.clock.showDate = root.clockShowDate;
         Config.bar.clock.showIcon = root.clockShowIcon;
         Config.bar.persistent = root.persistent;
         Config.bar.showOnHover = root.showOnHover;
@@ -535,6 +539,24 @@ Item {
                             StyledText {
                                 text: qsTr("Clock")
                                 font.pointSize: Appearance.font.size.normal
+                            }
+
+                            SwitchRow {
+                                label: qsTr("Background")
+                                checked: root.clockBackground
+                                onToggled: checked => {
+                                    root.clockBackground = checked;
+                                    root.saveConfig();
+                                }
+                            }
+
+                            SwitchRow {
+                                label: qsTr("Show date")
+                                checked: root.clockShowDate
+                                onToggled: checked => {
+                                    root.clockShowDate = checked;
+                                    root.saveConfig();
+                                }
                             }
 
                             SwitchRow {
