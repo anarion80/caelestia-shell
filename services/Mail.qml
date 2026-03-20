@@ -9,10 +9,11 @@ Singleton {
 
     property list<string> unreadEmails: []
     readonly property int unreadEmailsCount: unreadEmails.length ?? null
-    
-    reloadableId: "mailText"
 
     property int refCount
+ 
+    reloadableId: "mailText"
+
 
     Timer {
         running: root.refCount > 0
@@ -26,6 +27,7 @@ Singleton {
 
     Process {
         id: getUnreadEmails
+
         running: true
         command: ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"]
         environment: ({

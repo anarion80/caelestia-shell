@@ -23,6 +23,7 @@ Column {
 
             MaterialIcon {
                 id: icon
+
                 animate: true
 
                 text: "mail"
@@ -31,6 +32,7 @@ Column {
 
             StyledText {
                 id: text
+
                 text: qsTr("%1").arg(modelData ?? "None")
             }
         }

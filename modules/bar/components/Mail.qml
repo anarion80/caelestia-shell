@@ -13,16 +13,16 @@ Item {
 
     StateLayer {
         // Cursed workaround to make the height larger than the parent
+        function onClicked(): void {
+          Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
+        }
+
         anchors.fill: undefined
         anchors.centerIn: parent
         implicitWidth: root.implicitWidth + Appearance.padding.small * 2
         implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
 
         radius: Appearance.rounding.full
-
-        function onClicked(): void {
-            Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
-        }
     }
 
     Row {
@@ -37,13 +37,13 @@ Item {
 
         MaterialIcon {
             id: icon
+
             animate: true
 
             text: "mail"
             color: Colours.palette.m3tertiary
 
             anchors.verticalCenter: parent.verticalCenter
-
         }
 
         StyledText {

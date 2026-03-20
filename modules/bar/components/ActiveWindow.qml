@@ -133,7 +133,6 @@ Item {
         height: implicitHeight
 
         Behavior on opacity {
-
             Anim {}
         }
     }
