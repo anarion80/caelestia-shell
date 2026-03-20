@@ -174,30 +174,30 @@ Item {
         spacing: Appearance.spacing.small
 
         Control {
-            icon: "skip_previous"
-            canUse: Players.active?.canGoPrevious ?? false
-
             function onClicked(): void {
                 Players.active?.previous();
             }
+
+            icon: "skip_previous"
+            canUse: Players.active?.canGoPrevious ?? false
         }
 
         Control {
-            icon: Players.active?.isPlaying ? "pause" : "play_arrow"
-            canUse: Players.active?.canTogglePlaying ?? false
-
             function onClicked(): void {
                 Players.active?.togglePlaying();
             }
+
+            icon: Players.active?.isPlaying ? "pause" : "play_arrow"
+            canUse: Players.active?.canTogglePlaying ?? false
         }
 
         Control {
-            icon: "skip_next"
-            canUse: Players.active?.canGoNext ?? false
-
             function onClicked(): void {
                 Players.active?.next();
             }
+
+            icon: "skip_next"
+            canUse: Players.active?.canGoNext ?? false
         }
     }
 
@@ -224,6 +224,7 @@ Item {
 
         required property string icon
         required property bool canUse
+
         function onClicked(): void {
         }
 
@@ -231,12 +232,12 @@ Item {
         implicitHeight: implicitWidth
 
         StateLayer {
-            disabled: !control.canUse
-            radius: Appearance.rounding.full
-
             function onClicked(): void {
                 control.onClicked();
             }
+
+            disabled: !control.canUse
+            radius: Appearance.rounding.full
         }
 
         MaterialIcon {

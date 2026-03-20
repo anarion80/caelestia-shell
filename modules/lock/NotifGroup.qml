@@ -176,11 +176,11 @@ StyledRect {
                     Layout.preferredWidth: root.notifs.length > Config.notifs.groupPreviewNum ? implicitWidth : 0
 
                     StateLayer {
-                        color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
-
                         function onClicked(): void {
                             root.expanded = !root.expanded;
                         }
+
+                        color: root.urgency === "critical" ? Colours.palette.m3onError : Colours.palette.m3onSurface
                     }
 
                     RowLayout {

@@ -12,14 +12,14 @@ Item {
     required property var list
     readonly property string math: list.search.text.slice(`${Config.launcher.actionPrefix}calc `.length)
 
-    onMathChanged: {
-        if (math.length > 0)
-            Qalculator.evalAsync(math);
-    }
-
     function onClicked(): void {
         Quickshell.execDetached(["wl-copy", Qalculator.rawResult]);
         root.list.visibilities.launcher = false;
+    }
+
+    onMathChanged: {
+        if (math.length > 0)
+            Qalculator.evalAsync(math);
     }
 
     implicitHeight: Config.launcher.sizes.itemHeight
@@ -28,11 +28,11 @@ Item {
     anchors.right: parent?.right
 
     StateLayer {
-        radius: Appearance.rounding.normal
-
         function onClicked(): void {
             root.onClicked();
         }
+
+        radius: Appearance.rounding.normal
     }
 
     RowLayout {
@@ -80,12 +80,12 @@ Item {
             StateLayer {
                 id: stateLayer
 
-                color: Colours.palette.m3onTertiary
-
                 function onClicked(): void {
                     Quickshell.execDetached(["app2unit", "--", ...Config.general.apps.terminal, "fish", "-C", `exec qalc -i '${root.math}'`]);
                     root.list.visibilities.launcher = false;
                 }
+
+                color: Colours.palette.m3onTertiary
             }
 
             StyledText {

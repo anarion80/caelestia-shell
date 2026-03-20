@@ -26,12 +26,12 @@ Item {
     implicitHeight: image.height + label.height + Appearance.spacing.small / 2 + Appearance.padding.large + Appearance.padding.normal
 
     StateLayer {
-        radius: Appearance.rounding.normal
-
         function onClicked(): void {
             Wallpapers.setWallpaper(root.modelData.path);
             root.visibilities.launcher = false;
         }
+
+        radius: Appearance.rounding.normal
     }
 
     Elevation {

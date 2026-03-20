@@ -46,17 +46,15 @@ Singleton {
     }
 
     Connections {
-        target: Hypr
-
         function onConfigReloaded(): void {
             if (props.enabled)
                 root.setDynamicConfs();
         }
+
+        target: Hypr
     }
 
     IpcHandler {
-        target: "gameMode"
-
         function isEnabled(): bool {
             return props.enabled;
         }
@@ -72,5 +70,7 @@ Singleton {
         function disable(): void {
             props.enabled = false;
         }
+
+        target: "gameMode"
     }
 }

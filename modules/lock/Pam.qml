@@ -166,8 +166,6 @@ Scope {
     }
 
     Connections {
-        target: root.lock
-
         function onSecureChanged(): void {
             if (root.lock.secure) {
                 availProc.running = true;
@@ -181,13 +179,15 @@ Scope {
         function onUnlock(): void {
             fprint.abort();
         }
+
+        target: root.lock
     }
 
     Connections {
-        target: Config.lock
-
         function onEnableFprintChanged(): void {
             fprint.checkAvail();
         }
+
+        target: Config.lock
     }
 }

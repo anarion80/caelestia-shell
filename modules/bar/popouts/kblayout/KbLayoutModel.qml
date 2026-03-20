@@ -10,6 +10,7 @@ import Caelestia
 
 Item {
     id: model
+
     visible: false
 
     ListModel {
@@ -33,31 +34,6 @@ Item {
     function switchTo(idx) {
         _switchProc.command = ["hyprctl", "switchxkblayout", "all", String(idx)];
         _switchProc.running = true;
-    }
-
-    ListModel {
-        id: _layoutsModel
-    }
-
-    property var _xkbMap: ({})
-    property bool _notifiedLimit: false
-
-    Process {
-        id: _xkbXmlBase
-        command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/base.xml"]
-        stdout: StdioCollector {
-            onStreamFinished: _buildXmlMap(text)
-        }
-        onRunningChanged: if (!running && (typeof exitCode !== "undefined") && exitCode !== 0)
-            _xkbXmlEvdev.running = true
-    }
-
-    Process {
-        id: _xkbXmlEvdev
-        command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/evdev.xml"]
-        stdout: StdioCollector {
-            onStreamFinished: _buildXmlMap(text)
-        }
     }
 
     function _buildXmlMap(xml) {
@@ -105,70 +81,6 @@ Item {
         return `${lang} (${code})`;
     }
 
-    Process {
-        id: _getKbLayoutOpt
-        command: ["hyprctl", "-j", "getoption", "input:kb_layout"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const j = JSON.parse(text);
-                    const raw = (j?.str || j?.value || "").toString().trim();
-                    if (raw.length) {
-                        _setLayouts(raw);
-                        _fetchActiveLayouts.running = true;
-                        return;
-                    }
-                } catch (e) {}
-                _fetchLayoutsFromDevices.running = true;
-            }
-        }
-    }
-
-    Process {
-        id: _fetchLayoutsFromDevices
-        command: ["hyprctl", "-j", "devices"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const dev = JSON.parse(text);
-                    const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
-                    const raw = (kb?.layout || "").trim();
-                    if (raw.length)
-                        _setLayouts(raw);
-                } catch (e) {}
-                _fetchActiveLayouts.running = true;
-            }
-        }
-    }
-
-    Process {
-        id: _fetchActiveLayouts
-        command: ["hyprctl", "-j", "devices"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const dev = JSON.parse(text);
-                    const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
-                    const idx = kb?.active_layout_index ?? -1;
-
-                    activeIndex = idx >= 0 ? idx : -1;
-                    activeLabel = (idx >= 0 && idx < _layoutsModel.count) ? _layoutsModel.get(idx).label : "";
-                } catch (e) {
-                    activeIndex = -1;
-                    activeLabel = "";
-                }
-
-                _rebuildVisible();
-            }
-        }
-    }
-
-    Process {
-        id: _switchProc
-        onRunningChanged: if (!running)
-            _fetchActiveLayouts.running = true
-    }
-
     function _setLayouts(raw) {
         const parts = raw.split(",").map(s => s.trim()).filter(Boolean);
         _layoutsModel.clear();
@@ -212,5 +124,100 @@ Item {
         if (_xkbMap[code])
             return code.toUpperCase() + " - " + _xkbMap[code];
         return code.toUpperCase() + " - " + code;
+    }
+
+    ListModel {
+        id: _layoutsModel
+    }
+
+    property var _xkbMap: ({})
+    property bool _notifiedLimit: false
+
+    Process {
+        id: _xkbXmlBase
+
+        command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/base.xml"]
+        stdout: StdioCollector {
+            onStreamFinished: _buildXmlMap(text)
+        }
+        onRunningChanged: if (!running && (typeof exitCode !== "undefined") && exitCode !== 0)
+            _xkbXmlEvdev.running = true
+    }
+
+    Process {
+        id: _xkbXmlEvdev
+
+        command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/evdev.xml"]
+        stdout: StdioCollector {
+            onStreamFinished: _buildXmlMap(text)
+        }
+    }
+
+    Process {
+        id: _getKbLayoutOpt
+
+        command: ["hyprctl", "-j", "getoption", "input:kb_layout"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const j = JSON.parse(text);
+                    const raw = (j?.str || j?.value || "").toString().trim();
+                    if (raw.length) {
+                        _setLayouts(raw);
+                        _fetchActiveLayouts.running = true;
+                        return;
+                    }
+                } catch (e) {}
+                _fetchLayoutsFromDevices.running = true;
+            }
+        }
+    }
+
+    Process {
+        id: _fetchLayoutsFromDevices
+
+        command: ["hyprctl", "-j", "devices"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const dev = JSON.parse(text);
+                    const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
+                    const raw = (kb?.layout || "").trim();
+                    if (raw.length)
+                        _setLayouts(raw);
+                } catch (e) {}
+                _fetchActiveLayouts.running = true;
+            }
+        }
+    }
+
+    Process {
+        id: _fetchActiveLayouts
+
+        command: ["hyprctl", "-j", "devices"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const dev = JSON.parse(text);
+                    const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
+                    const idx = kb?.active_layout_index ?? -1;
+
+                    activeIndex = idx >= 0 ? idx : -1;
+                    activeLabel = (idx >= 0 && idx < _layoutsModel.count) ? _layoutsModel.get(idx).label : "";
+                } catch (e) {
+                    activeIndex = -1;
+                    activeLabel = "";
+                }
+
+                _rebuildVisible();
+            }
+        }
+    }
+
+    Process {
+        id: _switchProc
+
+        onRunningChanged: if (!running)
+            _fetchActiveLayouts.running = true
     }
 }

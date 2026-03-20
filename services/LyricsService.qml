@@ -32,6 +32,12 @@ Singleton {
 
     property var lyricsMap: ({})
 
+    // shared headers for all NetEase requests
+    readonly property var _netEaseHeaders: ({
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0",
+            "Referer": "https://music.163.com/"
+        })
+
     ListModel {
         id: lyricsModel
     }
@@ -41,6 +47,7 @@ Singleton {
 
     Timer {
         id: seekTimer
+
         interval: 500
         onTriggered: root.isManualSeeking = false
     }
@@ -48,6 +55,7 @@ Singleton {
     // If no local lyrics were loaded within the interval, fall back to NetEase
     Timer {
         id: fallbackTimer
+
         interval: 200
         onTriggered: {
             if (lyricsModel.count === 0) {
@@ -59,12 +67,14 @@ Singleton {
 
     Timer {
         id: loadDebounce
+
         interval: 50
         onTriggered: root._doLoadLyrics()
     }
 
     FileView {
         id: lyricsMapFileView
+
         path: root.lyricsMapFile
         printErrors: false
         onLoaded: {
@@ -78,6 +88,7 @@ Singleton {
 
     FileView {
         id: lrcFile
+
         printErrors: false
         onLoaded: {
             fallbackTimer.stop();
@@ -94,23 +105,26 @@ Singleton {
     }
 
     Connections {
-        target: Players
         function onActiveChanged() {
             root.player = Players.active;
             loadLyrics();
         }
+
+        target: Players
     }
 
     Connections {
-        target: root.player
-        ignoreUnknownSignals: true
         function onMetadataChanged() {
             loadLyrics();
         }
+
+        target: root.player
+        ignoreUnknownSignals: true
     }
 
     Process {
         id: saveLyricsMap
+
         command: ["sh", "-c", `mkdir -p "${root.lyricsDir}" && echo '${JSON.stringify(root.lyricsMap)}' > "${root.lyricsMapFile}"`]
     }
 
@@ -219,12 +233,6 @@ Singleton {
     }
 
     // NetEase
-
-    // shared headers for all NetEase requests
-    readonly property var _netEaseHeaders: ({
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0",
-            "Referer": "https://music.163.com/"
-        })
 
     // searches NetEase and populates the candidates model. returns the result array via the onResults callback
     function _searchNetEase(title, artist, reqId, onResults) {

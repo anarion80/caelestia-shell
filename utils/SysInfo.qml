@@ -50,11 +50,11 @@ Singleton {
     }
 
     Connections {
-        target: Config.general
-
         function onLogoChanged(): void {
             osRelease.reload();
         }
+
+        target: Config.general
     }
 
     Timer {

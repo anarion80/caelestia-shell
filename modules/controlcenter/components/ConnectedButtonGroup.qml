@@ -40,6 +40,7 @@ StyledRect {
 
         GridLayout {
             id: buttonGrid
+
             Layout.alignment: Qt.AlignHCenter
             rowSpacing: Appearance.spacing.small
             columnSpacing: Appearance.spacing.small
@@ -48,18 +49,19 @@ StyledRect {
 
             Repeater {
                 id: repeater
+
                 model: root.options
 
                 delegate: TextButton {
                     id: button
+
                     required property int index
                     required property var modelData
 
-                    Layout.fillWidth: true
-                    text: modelData.label
-
                     property bool _checked: false
 
+                    Layout.fillWidth: true
+                    text: modelData.label
                     checked: _checked
                     toggle: false
                     type: TextButton.Tonal
@@ -68,8 +70,7 @@ StyledRect {
                     Component.onCompleted: {
                         if (modelData.state !== undefined && modelData.state) {
                             _checked = modelData.state;
-                        }
-                        else if (root.rootItem && modelData.propertyName) {
+                        } else if (root.rootItem && modelData.propertyName) {
                             const propName = modelData.propertyName;
                             const rootItem = root.rootItem;
                             _checked = Qt.binding(function () {

@@ -13,18 +13,17 @@ Item {
 
     StateLayer {
         // Cursed workaround to make the height larger than the parent
-        anchors.fill: undefined
-        anchors.centerIn: parent
-        implicitWidth: implicitHeight
-        implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
-
-        radius: Appearance.rounding.full
-
         function onClicked(): void {
             WindowFactory.create(null, {
                 active: "network"
             });
         }
+
+        anchors.fill: undefined
+        anchors.centerIn: parent
+        implicitWidth: implicitHeight
+        implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
+        radius: Appearance.rounding.full
     }
 
     MaterialIcon {

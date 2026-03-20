@@ -28,12 +28,12 @@ StyledRect {
             implicitHeight: upIcon.implicitHeight + Appearance.padding.small * 2
 
             StateLayer {
-                radius: Appearance.rounding.small
-                disabled: root.dialog.cwd.length === 1
-
                 function onClicked(): void {
                     root.dialog.cwd.pop();
                 }
+
+                radius: Appearance.rounding.small
+                disabled: root.dialog.cwd.length === 1
             }
 
             MaterialIcon {
@@ -94,11 +94,11 @@ StyledRect {
                                 anchors.fill: parent
                                 active: folder.index < root.dialog.cwd.length - 1
                                 sourceComponent: StateLayer {
-                                    radius: Appearance.rounding.small
-
                                     function onClicked(): void {
                                         root.dialog.cwd = root.dialog.cwd.slice(0, folder.index + 1);
                                     }
+
+                                    radius: Appearance.rounding.small
                                 }
                             }
 

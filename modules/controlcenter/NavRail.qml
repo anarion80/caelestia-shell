@@ -59,8 +59,6 @@ Item {
                 StateLayer {
                     id: normalWinState
 
-                    color: Colours.palette.m3onPrimaryContainer
-
                     function onClicked(): void {
                         root.session.root.close();
                         WindowFactory.create(null, {
@@ -68,6 +66,8 @@ Item {
                             navExpanded: root.session.navExpanded
                         });
                     }
+
+                    color: Colours.palette.m3onPrimaryContainer
                 }
 
                 MaterialIcon {
@@ -122,6 +122,7 @@ Item {
 
             NavItem {
                 required property int index
+
                 Layout.topMargin: index === 0 ? Appearance.spacing.large * 2 : 0
                 icon: PaneRegistry.getByIndex(index).icon
                 label: PaneRegistry.getByIndex(index).label
@@ -175,8 +176,6 @@ Item {
             implicitHeight: icon.implicitHeight + Appearance.padding.small
 
             StateLayer {
-                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
-
                 function onClicked(): void {
                     // Prevent tab switching during initial opening animation to avoid blank pages
                     if (!root.initialOpeningComplete) {
@@ -184,6 +183,8 @@ Item {
                     }
                     root.session.active = item.label;
                 }
+
+                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
             }
 
             MaterialIcon {

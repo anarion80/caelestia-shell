@@ -18,11 +18,11 @@ WlSessionLockSurface {
     color: "transparent"
 
     Connections {
-        target: root.lock
-
         function onUnlock(): void {
             unlockAnim.start();
         }
+
+        target: root.lock
     }
 
     SequentialAnimation {

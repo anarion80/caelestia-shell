@@ -210,10 +210,11 @@ Singleton {
     onLocChanged: fetchWeatherData()
 
     Connections {
-        target: Config.services
         function onWeatherLocationChanged(): void {
             root.reload();
         }
+
+        target: Config.services
     }
 
     // Refresh current location hourly

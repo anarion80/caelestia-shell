@@ -199,9 +199,6 @@ Item {
                 }
 
                 Connections {
-                    target: root.session && root.session.vpn ? root.session.vpn : null
-                    enabled: target !== null
-
                     function onActiveChanged() {
                         // Clear others when VPN is selected
                         if (root.session && root.session.vpn && root.session.vpn.active) {
@@ -212,12 +209,12 @@ Item {
                         }
                         rightPaneItem.nextComponent = rightPaneItem.getComponentForPane();
                     }
+
+                    target: root.session && root.session.vpn ? root.session.vpn : null
+                    enabled: target !== null
                 }
 
                 Connections {
-                    target: root.session && root.session.ethernet ? root.session.ethernet : null
-                    enabled: target !== null
-
                     function onActiveChanged() {
                         // Clear others when ethernet is selected
                         if (root.session && root.session.ethernet && root.session.ethernet.active) {
@@ -228,12 +225,12 @@ Item {
                         }
                         rightPaneItem.nextComponent = rightPaneItem.getComponentForPane();
                     }
+
+                    target: root.session && root.session.ethernet ? root.session.ethernet : null
+                    enabled: target !== null
                 }
 
                 Connections {
-                    target: root.session && root.session.network ? root.session.network : null
-                    enabled: target !== null
-
                     function onActiveChanged() {
                         // Clear others when wireless is selected
                         if (root.session && root.session.network && root.session.network.active) {
@@ -244,6 +241,9 @@ Item {
                         }
                         rightPaneItem.nextComponent = rightPaneItem.getComponentForPane();
                     }
+
+                    target: root.session && root.session.network ? root.session.network : null
+                    enabled: target !== null
                 }
 
                 Loader {
@@ -281,6 +281,7 @@ Item {
 
         StyledFlickable {
             id: settingsFlickable
+
             flickableDirection: Flickable.VerticalFlick
             contentHeight: settingsInner.height
 
@@ -304,6 +305,7 @@ Item {
 
         StyledFlickable {
             id: ethernetFlickable
+
             flickableDirection: Flickable.VerticalFlick
             contentHeight: ethernetDetailsInner.height
 
@@ -327,6 +329,7 @@ Item {
 
         StyledFlickable {
             id: wirelessFlickable
+
             flickableDirection: Flickable.VerticalFlick
             contentHeight: wirelessDetailsInner.height
 
@@ -350,6 +353,7 @@ Item {
 
         StyledFlickable {
             id: vpnFlickable
+
             flickableDirection: Flickable.VerticalFlick
             contentHeight: vpnDetailsInner.height
 

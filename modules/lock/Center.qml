@@ -135,12 +135,12 @@ ColumnLayout {
         }
 
         StateLayer {
-            hoverEnabled: false
-            cursorShape: Qt.IBeamCursor
-
             function onClicked(): void {
                 parent.forceActiveFocus();
             }
+
+            hoverEnabled: false
+            cursorShape: Qt.IBeamCursor
         }
 
         RowLayout {
@@ -194,11 +194,11 @@ ColumnLayout {
                 radius: Appearance.rounding.full
 
                 StateLayer {
-                    color: root.lock.pam.buffer ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-
                     function onClicked(): void {
                         root.lock.pam.passwd.start();
                     }
+
+                    color: root.lock.pam.buffer ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
                 }
 
                 MaterialIcon {
@@ -357,8 +357,6 @@ ColumnLayout {
             }
 
             Connections {
-                target: root.lock.pam
-
                 function onFlashMsg(): void {
                     exitAnim.stop();
                     if (message.scale < 1)
@@ -366,6 +364,8 @@ ColumnLayout {
                     else
                         flashAnim.restart();
                 }
+
+                target: root.lock.pam
             }
 
             Anim {

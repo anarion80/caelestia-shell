@@ -38,8 +38,6 @@ Scope {
     }
 
     IpcHandler {
-        target: "lock"
-
         function lock(): void {
             lock.locked = true;
         }
@@ -51,5 +49,7 @@ Scope {
         function isLocked(): bool {
             return lock.locked;
         }
+
+        target: "lock"
     }
 }

@@ -123,9 +123,6 @@ ColumnLayout {
                 }
 
                 StateLayer {
-                    color: networkItem.modelData.active ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-                    disabled: networkItem.loading || !Nmcli.wifiEnabled
-
                     function onClicked(): void {
                         if (networkItem.modelData.active) {
                             Nmcli.disconnectFromNetwork();
@@ -142,6 +139,9 @@ ColumnLayout {
                             // This is handled by the onActiveChanged connection below
                         }
                     }
+
+                    color: networkItem.modelData.active ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
+                    disabled: networkItem.loading || !Nmcli.wifiEnabled
                 }
 
                 MaterialIcon {
@@ -173,12 +173,12 @@ ColumnLayout {
         color: Colours.palette.m3primaryContainer
 
         StateLayer {
-            color: Colours.palette.m3onPrimaryContainer
-            disabled: Nmcli.scanning || !Nmcli.wifiEnabled
-
             function onClicked(): void {
                 Nmcli.rescanWifi();
             }
+
+            color: Colours.palette.m3onPrimaryContainer
+            disabled: Nmcli.scanning || !Nmcli.wifiEnabled
         }
 
         RowLayout {
@@ -303,9 +303,6 @@ ColumnLayout {
                 }
 
                 StateLayer {
-                    color: ethernetItem.modelData.connected ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-                    disabled: ethernetItem.loading
-
                     function onClicked(): void {
                         if (ethernetItem.modelData.connected && ethernetItem.modelData.connection) {
                             Nmcli.disconnectEthernet(ethernetItem.modelData.connection, () => {});
@@ -313,6 +310,9 @@ ColumnLayout {
                             Nmcli.connectEthernet(ethernetItem.modelData.connection || "", ethernetItem.modelData.interface || "", () => {});
                         }
                     }
+
+                    color: ethernetItem.modelData.connected ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
+                    disabled: ethernetItem.loading
                 }
 
                 MaterialIcon {
@@ -334,8 +334,6 @@ ColumnLayout {
     }
 
     Connections {
-        target: Nmcli
-
         function onActiveChanged(): void {
             if (Nmcli.active && root.connectingToSsid === Nmcli.active.ssid) {
                 root.connectingToSsid = "";
@@ -354,10 +352,11 @@ ColumnLayout {
             if (!Nmcli.scanning)
                 scanIcon.rotation = 0;
         }
+
+        target: Nmcli
     }
 
     Connections {
-        target: root.wrapper
         function onCurrentNameChanged(): void {
             // Clear password network when leaving password dialog
             if (root.wrapper.currentName !== "wirelesspassword" && root.showPasswordDialog) {
@@ -365,6 +364,8 @@ ColumnLayout {
                 root.passwordNetwork = null;
             }
         }
+
+        target: root.wrapper
     }
 
     component Toggle: RowLayout {

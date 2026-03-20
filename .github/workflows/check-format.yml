@@ -1,0 +1,33 @@
+name: Check formatting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-arch
+
+      - name: Check QML format
+        shell: fish {0}
+        run: |
+          for file in (string match -v 'build/*' **.qml)
+            /usr/lib/qt6/bin/qmlformat $file | diff -u $file - || exit 1
+          end
+          python3 scripts/qml-lint-conventions.py
+
+      - name: Check C++ format
+        shell: fish {0}
+        run: |
+          for file in (string match -v 'build/*' **.cpp **.hpp)
+            clang-format $file | diff -u $file - || exit 1
+          end

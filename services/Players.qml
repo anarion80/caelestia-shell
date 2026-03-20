@@ -21,8 +21,6 @@ Singleton {
     }
 
     Connections {
-        target: active
-
         function onPostTrackChanged() {
             if (!Config.utilities.toasts.nowPlaying) {
                 return;
@@ -31,6 +29,8 @@ Singleton {
                 Toaster.toast(qsTr("Now Playing"), qsTr("%1 - %2").arg(active.trackArtist).arg(active.trackTitle), "music_note");
             }
         }
+
+        target: active
     }
 
     PersistentProperties {
@@ -78,8 +78,6 @@ Singleton {
     }
 
     IpcHandler {
-        target: "mpris"
-
         function getActive(prop: string): string {
             const active = root.active;
             return active ? active[prop] ?? "Invalid property" : "No active player";
@@ -122,5 +120,7 @@ Singleton {
         function stop(): void {
             root.active?.stop();
         }
+
+        target: "mpris"
     }
 }
