@@ -71,8 +71,6 @@ Item {
     ]
 
     Connections {
-        target: Audio
-
         function onMutedChanged(): void {
             root.show();
             root.muted = Audio.muted;
@@ -92,15 +90,17 @@ Item {
             root.show();
             root.sourceVolume = Audio.sourceVolume;
         }
+
+        target: Audio
     }
 
     Connections {
-        target: root.monitor
-
         function onBrightnessChanged(): void {
             root.show();
             root.brightness = root.monitor?.brightness ?? 0;
         }
+
+        target: root.monitor
     }
 
     Timer {

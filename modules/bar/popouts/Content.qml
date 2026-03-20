@@ -35,6 +35,7 @@ Item {
 
         Popout {
             id: networkPopout
+
             name: "network"
             sourceComponent: Network {
                 wrapper: root.wrapper
@@ -52,15 +53,16 @@ Item {
 
         Popout {
             id: passwordPopout
+
             name: "wirelesspassword"
             sourceComponent: WirelessPassword {
                 id: passwordComponent
+
                 wrapper: root.wrapper
                 network: networkPopout.item?.passwordNetwork ?? null
             }
 
             Connections {
-                target: root.wrapper
                 function onCurrentNameChanged() {
                     // Update network immediately when password popout becomes active
                     if (root.wrapper.currentName === "wirelesspassword") {
@@ -78,10 +80,11 @@ Item {
                         }, 100);
                     }
                 }
+
+                target: root.wrapper
             }
 
             Connections {
-                target: networkPopout
                 function onItemChanged() {
                     // When network popout loads, update password popout if it's active
                     if (root.wrapper.currentName === "wirelesspassword" && passwordPopout.item) {
@@ -92,6 +95,8 @@ Item {
                         });
                     }
                 }
+
+                target: networkPopout
             }
         }
 
@@ -141,14 +146,14 @@ Item {
                 sourceComponent: trayMenuComp
 
                 Connections {
-                    target: root.wrapper
-
                     function onHasCurrentChanged(): void {
                         if (root.wrapper.hasCurrent && trayMenu.shouldBeActive) {
                             trayMenu.sourceComponent = null;
                             trayMenu.sourceComponent = trayMenuComp;
                         }
                     }
+
+                    target: root.wrapper
                 }
 
                 Component {

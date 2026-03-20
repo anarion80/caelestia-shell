@@ -23,9 +23,9 @@ Item {
         anchors.fill: parent
 
         leftContent: Component {
-
             StyledFlickable {
                 id: leftAudioFlickable
+
                 flickableDirection: Flickable.VerticalFlick
                 contentHeight: leftContent.height
 
@@ -217,6 +217,7 @@ Item {
         rightContent: Component {
             StyledFlickable {
                 id: rightAudioFlickable
+
                 flickableDirection: Flickable.VerticalFlick
                 contentHeight: contentLayout.height
 
@@ -265,6 +266,7 @@ Item {
 
                                 StyledInputField {
                                     id: outputVolumeInput
+
                                     Layout.preferredWidth: 70
                                     validator: IntValidator {
                                         bottom: 0
@@ -277,12 +279,13 @@ Item {
                                     }
 
                                     Connections {
-                                        target: Audio
                                         function onVolumeChanged() {
                                             if (!outputVolumeInput.hasFocus) {
                                                 outputVolumeInput.text = Math.round(Audio.volume * 100).toString();
                                             }
                                         }
+
+                                        target: Audio
                                     }
 
                                     onTextEdited: text => {
@@ -336,6 +339,7 @@ Item {
 
                             StyledSlider {
                                 id: outputVolumeSlider
+
                                 Layout.fillWidth: true
                                 implicitHeight: Appearance.padding.normal * 3
 
@@ -380,6 +384,7 @@ Item {
 
                                 StyledInputField {
                                     id: inputVolumeInput
+
                                     Layout.preferredWidth: 70
                                     validator: IntValidator {
                                         bottom: 0
@@ -392,12 +397,13 @@ Item {
                                     }
 
                                     Connections {
-                                        target: Audio
                                         function onSourceVolumeChanged() {
                                             if (!inputVolumeInput.hasFocus) {
                                                 inputVolumeInput.text = Math.round(Audio.sourceVolume * 100).toString();
                                             }
                                         }
+
+                                        target: Audio
                                     }
 
                                     onTextEdited: text => {
@@ -451,6 +457,7 @@ Item {
 
                             StyledSlider {
                                 id: inputVolumeSlider
+
                                 Layout.fillWidth: true
                                 implicitHeight: Appearance.padding.normal * 3
 
@@ -511,6 +518,7 @@ Item {
 
                                         StyledInputField {
                                             id: streamVolumeInput
+
                                             Layout.preferredWidth: 70
                                             validator: IntValidator {
                                                 bottom: 0
@@ -523,12 +531,13 @@ Item {
                                             }
 
                                             Connections {
-                                                target: modelData
                                                 function onAudioChanged() {
                                                     if (!streamVolumeInput.hasFocus && modelData?.audio) {
                                                         streamVolumeInput.text = Math.round(modelData.audio.volume * 100).toString();
                                                     }
                                                 }
+
+                                                target: modelData
                                             }
 
                                             onTextEdited: text => {
@@ -593,12 +602,13 @@ Item {
                                         }
 
                                         Connections {
-                                            target: modelData
                                             function onAudioChanged() {
                                                 if (modelData?.audio) {
                                                     value = modelData.audio.volume;
                                                 }
                                             }
+
+                                            target: modelData
                                         }
                                     }
                                 }

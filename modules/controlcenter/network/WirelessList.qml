@@ -19,6 +19,12 @@ DeviceList {
 
     required property Session session
 
+    function checkSavedProfileForNetwork(ssid: string): void {
+        if (ssid && ssid.length > 0) {
+            Nmcli.loadSavedConnections(() => {});
+        }
+    }
+
     title: qsTr("Networks (%1)").arg(Nmcli.networks.length)
     description: qsTr("All available WiFi networks")
     activeItem: session.network.active
@@ -217,12 +223,6 @@ DeviceList {
         session.network.active = item;
         if (item && item.ssid) {
             checkSavedProfileForNetwork(item.ssid);
-        }
-    }
-
-    function checkSavedProfileForNetwork(ssid: string): void {
-        if (ssid && ssid.length > 0) {
-            Nmcli.loadSavedConnections(() => {});
         }
     }
 }

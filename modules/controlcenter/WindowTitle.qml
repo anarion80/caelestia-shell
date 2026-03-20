@@ -34,11 +34,11 @@ StyledRect {
         implicitHeight: closeIcon.implicitHeight + Appearance.padding.small
 
         StateLayer {
-            radius: Appearance.rounding.full
-
             function onClicked(): void {
                 QsWindow.window.destroy();
             }
+
+            radius: Appearance.rounding.full
         }
 
         MaterialIcon {

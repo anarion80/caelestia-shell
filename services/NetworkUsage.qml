@@ -141,16 +141,19 @@ Singleton {
 
     CircularBuffer {
         id: _downloadBuffer
+
         capacity: root.historyLength + 1
     }
 
     CircularBuffer {
         id: _uploadBuffer
+
         capacity: root.historyLength + 1
     }
 
     FileView {
         id: netDevFile
+
         path: "/proc/net/dev"
     }
 

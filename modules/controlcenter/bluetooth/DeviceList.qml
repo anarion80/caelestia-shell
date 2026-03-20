@@ -222,9 +222,6 @@ DeviceList {
                     }
 
                     StateLayer {
-                        color: device.connected ? Colours.palette.m3onPrimaryContainer : Colours.palette.m3onSurface
-                        disabled: device.loading
-
                         function onClicked(): void {
                             if (device.loading)
                                 return;
@@ -239,6 +236,9 @@ DeviceList {
                                 }
                             }
                         }
+
+                        color: device.connected ? Colours.palette.m3onPrimaryContainer : Colours.palette.m3onSurface
+                        disabled: device.loading
                     }
 
                     MaterialIcon {

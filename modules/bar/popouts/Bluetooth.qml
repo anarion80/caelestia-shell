@@ -117,12 +117,12 @@ ColumnLayout {
                 }
 
                 StateLayer {
-                    color: device.modelData.state === BluetoothDeviceState.Connected ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-                    disabled: device.loading
-
                     function onClicked(): void {
                         device.modelData.connected = !device.modelData.connected;
                     }
+
+                    color: device.modelData.state === BluetoothDeviceState.Connected ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
+                    disabled: device.loading
                 }
 
                 MaterialIcon {
@@ -149,11 +149,11 @@ ColumnLayout {
                     implicitHeight: connectBtn.implicitHeight
 
                     StateLayer {
-                        radius: Appearance.rounding.full
-
                         function onClicked(): void {
                             device.modelData.forget();
                         }
+
+                        radius: Appearance.rounding.full
                     }
 
                     MaterialIcon {

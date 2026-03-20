@@ -111,6 +111,13 @@ Item {
         contentItem: CustomMouseArea {
             id: mouse
 
+            function onWheel(event: WheelEvent): void {
+                if (event.angleDelta.y < 0)
+                    root.state.currentTab = Math.min(root.state.currentTab + 1, bar.count - 1);
+                else if (event.angleDelta.y > 0)
+                    root.state.currentTab = Math.max(root.state.currentTab - 1, 0);
+            }
+
             implicitWidth: Math.max(icon.width, label.width)
             implicitHeight: icon.height + label.height
 
@@ -127,13 +134,6 @@ Item {
                 rippleAnim.radius = Math.sqrt(Math.max(dist(event.x, event.y + stateY), dist(event.x, stateWrapper.height - event.y), dist(width - event.x, event.y + stateY), dist(width - event.x, stateWrapper.height - event.y)));
 
                 rippleAnim.restart();
-            }
-
-            function onWheel(event: WheelEvent): void {
-                if (event.angleDelta.y < 0)
-                    root.state.currentTab = Math.min(root.state.currentTab + 1, bar.count - 1);
-                else if (event.angleDelta.y > 0)
-                    root.state.currentTab = Math.max(root.state.currentTab - 1, 0);
             }
 
             SequentialAnimation {

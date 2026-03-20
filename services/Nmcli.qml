@@ -24,12 +24,10 @@ Singleton {
     property var wifiConnectionQueue: []
     property int currentSsidQueryIndex: 0
     property var pendingConnection: null
-    signal connectionFailed(string ssid)
     property var wirelessDeviceDetails: null
     property var ethernetDeviceDetails: null
     property list<var> ethernetDevices: []
     readonly property var activeEthernet: ethernetDevices.find(d => d.connected) ?? null
-
     property list<var> activeProcesses: []
 
     // Constants
@@ -54,6 +52,8 @@ Singleton {
     readonly property string connectionParamSsid: "ssid"
     readonly property string connectionParamPassword: "password"
     readonly property string connectionParamBssid: "802-11-wireless.bssid"
+
+    signal connectionFailed(string ssid)
 
     function detectPasswordRequired(error: string): bool {
         if (!error || error.length === 0) {
@@ -1285,6 +1285,7 @@ Singleton {
 
     Timer {
         id: monitorRestartTimer
+
         interval: 2000
         onTriggered: {
             monitorProc.running = true;

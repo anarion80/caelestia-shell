@@ -205,12 +205,12 @@ Column {
         implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
 
         StateLayer {
-            radius: Appearance.rounding.full
-            color: profiles.current === parent.icon ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
-
             function onClicked(): void {
                 PowerProfiles.profile = parent.profile;
             }
+
+            radius: Appearance.rounding.full
+            color: profiles.current === parent.icon ? Colours.palette.m3onPrimary : Colours.palette.m3onSurface
         }
 
         MaterialIcon {

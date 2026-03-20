@@ -163,6 +163,7 @@ Item {
 
             Component {
                 id: dashComponent
+
                 Dash {
                     visibilities: root.visibilities
                     state: root.state
@@ -172,6 +173,7 @@ Item {
 
             Component {
                 id: mediaComponent
+
                 MediaWrapper {
                     visibilities: root.visibilities
                 }
@@ -179,11 +181,13 @@ Item {
 
             Component {
                 id: performanceComponent
+
                 Performance {}
             }
 
             Component {
                 id: weatherComponent
+
                 Weather {}
             }
 

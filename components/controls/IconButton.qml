@@ -53,14 +53,14 @@ StyledRect {
     StateLayer {
         id: stateLayer
 
-        color: root.internalChecked ? root.activeOnColour : root.inactiveOnColour
-        disabled: root.disabled
-
         function onClicked(): void {
             if (root.toggle)
                 root.internalChecked = !root.internalChecked;
             root.clicked();
         }
+
+        color: root.internalChecked ? root.activeOnColour : root.inactiveOnColour
+        disabled: root.disabled
     }
 
     MaterialIcon {

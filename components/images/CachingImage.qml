@@ -12,11 +12,11 @@ Image {
     fillMode: Image.PreserveAspectCrop
 
     Connections {
-        target: QsWindow.window
-
         function onDevicePixelRatioChanged(): void {
             manager.updateSource();
         }
+
+        target: QsWindow.window
     }
 
     CachingImageManager {

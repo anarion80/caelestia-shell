@@ -120,8 +120,6 @@ Singleton {
     }
 
     Connections {
-        target: Hyprland
-
         function onRawEvent(event: HyprlandEvent): void {
             const n = event.name;
             if (n.endsWith("v2"))
@@ -144,11 +142,11 @@ Singleton {
                 Hyprland.refreshToplevels();
             }
         }
+
+        target: Hyprland
     }
 
     Connections {
-        target: root.focusedMonitor
-
         function onLastIpcObjectChanged(): void {
             const specialName = root.focusedMonitor.lastIpcObject.specialWorkspace.name;
 
@@ -156,6 +154,8 @@ Singleton {
                 root.lastSpecialWorkspace = specialName;
             }
         }
+
+        target: root.focusedMonitor
     }
 
     FileView {
@@ -192,8 +192,6 @@ Singleton {
     }
 
     IpcHandler {
-        target: "hypr"
-
         function refreshDevices(): void {
             extras.refreshDevices();
         }
@@ -205,6 +203,8 @@ Singleton {
         function listSpecialWorkspaces(): string {
             return root.workspaces.values.filter(w => w.name.startsWith("special:") && w.lastIpcObject.windows > 0).map(w => w.name).join("\n");
         }
+
+        target: "hypr"
     }
 
     CustomShortcut {

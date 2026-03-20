@@ -20,15 +20,13 @@ StyledRect {
         return Config.utilities.quickToggles.filter(item => {
             if (!item.enabled)
                 return false;
-            
+
             if (seenIds.has(item.id)) {
                 return false;
             }
 
             if (item.id === "vpn") {
-                return Config.utilities.vpn.provider.some(p => 
-                    typeof p === "object" ? (p.enabled === true) : false
-                );
+                return Config.utilities.vpn.provider.some(p => typeof p === "object" ? (p.enabled === true) : false);
             }
 
             seenIds.add(item.id);

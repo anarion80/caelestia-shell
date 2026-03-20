@@ -125,8 +125,6 @@ Singleton {
     }
 
     Connections {
-        target: Pipewire.nodes
-
         function onValuesChanged(): void {
             const newSinks = [];
             const newSources = [];
@@ -147,6 +145,8 @@ Singleton {
             root.sources = newSources;
             root.streams = newStreams;
         }
+
+        target: Pipewire.nodes
     }
 
     PwObjectTracker {

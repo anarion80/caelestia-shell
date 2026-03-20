@@ -28,8 +28,6 @@ TextField {
         radius: Appearance.rounding.normal
 
         Connections {
-            target: root
-
             function onCursorPositionChanged(): void {
                 if (root.activeFocus && root.cursorVisible) {
                     cursor.opacity = 1;
@@ -37,6 +35,8 @@ TextField {
                     enableBlink.restart();
                 }
             }
+
+            target: root
         }
 
         Timer {

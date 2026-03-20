@@ -361,12 +361,12 @@ StyledRect {
                 implicitHeight: expandIcon.height
 
                 StateLayer {
-                    radius: Appearance.rounding.full
-                    color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
-
                     function onClicked() {
                         root.expanded = !root.expanded;
                     }
+
+                    radius: Appearance.rounding.full
+                    color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
                 }
 
                 MaterialIcon {
@@ -460,6 +460,7 @@ StyledRect {
                 Action {
                     modelData: QtObject {
                         readonly property string text: qsTr("Close")
+
                         function invoke(): void {
                             root.modelData.close();
                         }
@@ -491,12 +492,12 @@ StyledRect {
         implicitHeight: actionText.height + Appearance.padding.small * 2
 
         StateLayer {
-            radius: Appearance.rounding.full
-            color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurface
-
             function onClicked(): void {
                 action.modelData.invoke();
             }
+
+            radius: Appearance.rounding.full
+            color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3onSecondary : Colours.palette.m3onSurface
         }
 
         StyledText {

@@ -53,6 +53,7 @@ SplitPaneWithDetails {
     rightSettingsComponent: Component {
         StyledFlickable {
             id: settingsFlickable
+
             flickableDirection: Flickable.VerticalFlick
             contentHeight: settingsInner.height
 

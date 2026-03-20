@@ -48,6 +48,7 @@ CollapsibleSection {
 
                 Timer {
                     id: reloadTimer
+
                     interval: 300
                     onTriggered: {
                         Schemes.reload();

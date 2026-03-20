@@ -114,8 +114,6 @@ Singleton {
     }
 
     IpcHandler {
-        target: "notifs"
-
         function clear(): void {
             for (const notif of root.list.slice())
                 notif.close();
@@ -136,6 +134,8 @@ Singleton {
         function disableDnd(): void {
             props.dnd = false;
         }
+
+        target: "notifs"
     }
 
     component Notif: QtObject {
@@ -147,30 +147,6 @@ Singleton {
 
         property date time: new Date()
         property string timeStr: qsTr("now")
-
-        function updateTimeStr(): void {
-            const diff = Date.now() - time.getTime();
-            const m = Math.floor(diff / 60000);
-
-            if (m < 1) {
-                timeStr = qsTr("now");
-                timeStrTimer.interval = 5000;
-            } else {
-                const h = Math.floor(m / 60);
-                const d = Math.floor(h / 24);
-
-                if (d > 0) {
-                    timeStr = `${d}d`;
-                    timeStrTimer.interval = 3600000;
-                } else if (h > 0) {
-                    timeStr = `${h}h`;
-                    timeStrTimer.interval = 300000;
-                } else {
-                    timeStr = `${m}m`;
-                    timeStrTimer.interval = m < 10 ? 30000 : 60000;
-                }
-            }
-        }
 
         readonly property Timer timeStrTimer: Timer {
             running: !notif.closed
@@ -251,8 +227,6 @@ Singleton {
         }
 
         readonly property Connections conn: Connections {
-            target: notif.notification
-
             function onClosed(): void {
                 notif.close();
             }
@@ -305,6 +279,32 @@ Singleton {
 
             function onHintsChanged(): void {
                 notif.hints = notif.notification.hints;
+            }
+
+            target: notif.notification
+        }
+
+        function updateTimeStr(): void {
+            const diff = Date.now() - time.getTime();
+            const m = Math.floor(diff / 60000);
+
+            if (m < 1) {
+                timeStr = qsTr("now");
+                timeStrTimer.interval = 5000;
+            } else {
+                const h = Math.floor(m / 60);
+                const d = Math.floor(h / 24);
+
+                if (d > 0) {
+                    timeStr = `${d}d`;
+                    timeStrTimer.interval = 3600000;
+                } else if (h > 0) {
+                    timeStr = `${h}h`;
+                    timeStrTimer.interval = 300000;
+                } else {
+                    timeStr = `${m}m`;
+                    timeStrTimer.interval = m < 10 ? 30000 : 60000;
+                }
             }
         }
 

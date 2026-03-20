@@ -52,14 +52,14 @@ Elevation {
                     color: Qt.alpha(Colours.palette.m3secondaryContainer, active ? 1 : 0)
 
                     StateLayer {
-                        color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
-                        disabled: !root.expanded
-
                         function onClicked(): void {
                             root.itemSelected(item.modelData);
                             root.active = item.modelData;
                             root.expanded = false;
                         }
+
+                        color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
+                        disabled: !root.expanded
                     }
 
                     RowLayout {

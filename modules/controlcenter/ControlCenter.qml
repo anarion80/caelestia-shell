@@ -18,6 +18,7 @@ Item {
     property alias active: session.active
     property alias navExpanded: session.navExpanded
 
+    readonly property bool initialOpeningComplete: panes.initialOpeningComplete
     readonly property Session session: Session {
         id: session
 
@@ -61,8 +62,6 @@ Item {
             color: Colours.tPalette.m3surfaceContainer
 
             CustomMouseArea {
-                anchors.fill: parent
-
                 function onWheel(event: WheelEvent): void {
                     // Prevent tab switching during initial opening animation to avoid blank pages
                     if (!panes.initialOpeningComplete) {
@@ -74,6 +73,8 @@ Item {
                     else if (event.angleDelta.y > 0)
                         root.session.activeIndex = Math.max(root.session.activeIndex - 1, 0);
                 }
+
+                anchors.fill: parent
             }
 
             NavRail {
@@ -96,6 +97,4 @@ Item {
             session: root.session
         }
     }
-
-    readonly property bool initialOpeningComplete: panes.initialOpeningComplete
 }

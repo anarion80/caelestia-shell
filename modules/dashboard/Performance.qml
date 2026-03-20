@@ -695,12 +695,12 @@ Item {
                     historyLength: NetworkUsage.historyLength
 
                     Connections {
-                        target: NetworkUsage.downloadBuffer
-
                         function onValuesChanged(): void {
                             sparkline.targetMax = Math.max(NetworkUsage.downloadBuffer.maximum, NetworkUsage.uploadBuffer.maximum, 1024);
                             slideAnim.restart();
                         }
+
+                        target: NetworkUsage.downloadBuffer
                     }
 
                     NumberAnimation {

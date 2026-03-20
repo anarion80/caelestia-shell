@@ -16,17 +16,18 @@ ColumnLayout {
 
     required property Item wrapper
 
+    function refresh() {
+        kb.refresh();
+    }
+
     spacing: Appearance.spacing.small
     width: Config.bar.sizes.kbLayoutWidth
+
+    Component.onCompleted: kb.start()
 
     KbLayoutModel {
         id: kb
     }
-
-    function refresh() {
-        kb.refresh();
-    }
-    Component.onCompleted: kb.start()
 
     StyledText {
         Layout.topMargin: Appearance.padding.normal
@@ -37,6 +38,7 @@ ColumnLayout {
 
     ListView {
         id: list
+
         model: kb.visibleModel
 
         Layout.fillWidth: true
@@ -87,30 +89,32 @@ ColumnLayout {
         delegate: Item {
             required property int layoutIndex
             required property string label
+            readonly property bool isDisabled: layoutIndex > 3
 
             width: list.width
             height: Math.max(36, rowText.implicitHeight + Appearance.padding.small * 2)
-
-            readonly property bool isDisabled: layoutIndex > 3
+            ToolTip.visible: isDisabled && layer.containsMouse
+            ToolTip.text: "XKB limitation: maximum 4 layouts allowed"
 
             StateLayer {
                 id: layer
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                implicitHeight: parent.height - 4
-
-                radius: Appearance.rounding.full
-                enabled: !isDisabled
 
                 function onClicked(): void {
                     if (!isDisabled)
                         kb.switchTo(layoutIndex);
                 }
+
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                implicitHeight: parent.height - 4
+                radius: Appearance.rounding.full
+                enabled: !isDisabled
             }
 
             StyledText {
                 id: rowText
+
                 anchors.verticalCenter: layer.verticalCenter
                 anchors.left: layer.left
                 anchors.right: layer.right
@@ -120,9 +124,6 @@ ColumnLayout {
                 elide: Text.ElideRight
                 opacity: isDisabled ? 0.4 : 1.0
             }
-
-            ToolTip.visible: isDisabled && layer.containsMouse
-            ToolTip.text: "XKB limitation: maximum 4 layouts allowed"
         }
     }
 
@@ -163,16 +164,18 @@ ColumnLayout {
         }
 
         Connections {
-            target: kb
             function onActiveLabelChanged() {
                 if (!activeRow.visible)
                     return;
                 popIn.restart();
             }
+
+            target: kb
         }
 
         SequentialAnimation {
             id: popIn
+
             running: false
 
             ParallelAnimation {

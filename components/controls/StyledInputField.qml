@@ -43,6 +43,7 @@ Item {
 
         MouseArea {
             id: inputHover
+
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.IBeamCursor
@@ -52,6 +53,7 @@ Item {
 
         StyledTextField {
             id: inputField
+
             anchors.centerIn: parent
             width: parent.width - Appearance.padding.normal
             horizontalAlignment: root.horizontalAlignment

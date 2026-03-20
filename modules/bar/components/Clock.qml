@@ -19,6 +19,7 @@ StyledRect {
 
     Column {
         id: layout
+
         anchors.centerIn: parent
         spacing: Appearance.spacing.small
 
@@ -34,7 +35,7 @@ StyledRect {
                 color: root.colour
             }
         }
-        
+
         StyledText {
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -51,7 +52,7 @@ StyledRect {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: Config.bar.clock.showDate
             height: visible ? 1 : 0
-            
+
             width: parent.width * 0.8
             color: root.colour
             opacity: 0.2

@@ -204,11 +204,11 @@ StyledRect {
                     radius: Appearance.rounding.full
 
                     StateLayer {
-                        color: root.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : Colours.palette.m3onSurface
-
                         function onClicked(): void {
                             root.toggleExpand(!root.expanded);
                         }
+
+                        color: root.urgency === NotificationUrgency.Critical ? Colours.palette.m3onError : Colours.palette.m3onSurface
                     }
 
                     RowLayout {

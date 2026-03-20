@@ -48,8 +48,6 @@ Scope {
     }
 
     IpcHandler {
-        target: "picker"
-
         function open(): void {
             root.freeze = false;
             root.closing = false;
@@ -77,6 +75,8 @@ Scope {
             root.clipboardOnly = true;
             root.activeAsync = true;
         }
+
+        target: "picker"
     }
 
     CustomShortcut {

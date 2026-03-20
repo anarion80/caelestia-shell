@@ -71,12 +71,12 @@ Row {
                 opacity: parent.containsMouse ? 1 : 0
 
                 StateLayer {
-                    color: Colours.palette.m3onPrimary
-
                     function onClicked(): void {
                         root.visibilities.launcher = false;
                         root.facePicker.open();
                     }
+
+                    color: Colours.palette.m3onPrimary
                 }
 
                 MaterialIcon {
