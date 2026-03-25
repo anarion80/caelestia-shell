@@ -1,18 +1,18 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Layouts
 import qs.components
 import qs.components.controls
 import qs.services
 import qs.config
 import qs.utils
-import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root
 
     required property Brightness.Monitor monitor
-    required property var visibilities
+    required property DrawerVisibilities visibilities
 
     required property real volume
     required property bool muted

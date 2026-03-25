@@ -1,10 +1,10 @@
+import QtQuick
+import QtQuick.Shapes
+import Caelestia.Services
 import qs.components
 import qs.services
 import qs.config
 import qs.utils
-import Caelestia.Services
-import QtQuick
-import QtQuick.Shapes
 
 Item {
     id: root
@@ -213,7 +213,7 @@ Item {
         anchors.margins: Appearance.padding.large * 2
 
         playing: Players.active?.isPlaying ?? false
-        speed: Audio.beatTracker.bpm / Appearance.anim.mediaGifSpeedAdjustment
+        speed: Audio.beatTracker.bpm / Appearance.anim.mediaGifSpeedAdjustment // qmllint disable unresolved-type
         source: Paths.absolutePath(Config.paths.mediaGif)
         asynchronous: true
         fillMode: AnimatedImage.PreserveAspectFit

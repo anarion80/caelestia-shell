@@ -3,17 +3,17 @@ pragma ComponentBehavior: Bound
 import ".."
 import "../components"
 import "."
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Widgets
 import qs.components
+import qs.components.containers
 import qs.components.controls
 import qs.components.effects
-import qs.components.containers
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root

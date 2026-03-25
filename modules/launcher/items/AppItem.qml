@@ -1,17 +1,17 @@
-import "../services"
+import QtQuick
+import Quickshell
+import Quickshell.Widgets
 import qs.components
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
+import qs.modules.launcher.services
 
 Item {
     id: root
 
     required property DesktopEntry modelData
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
 
     implicitHeight: Config.launcher.sizes.itemHeight
 
@@ -78,7 +78,7 @@ Item {
             asynchronous: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            active: modelData && Strings.testRegexList(Config.launcher.favouriteApps, modelData.id)
+            active: root.modelData && Strings.testRegexList(Config.launcher.favouriteApps, root.modelData.id)
 
             sourceComponent: MaterialIcon {
                 text: "favorite"

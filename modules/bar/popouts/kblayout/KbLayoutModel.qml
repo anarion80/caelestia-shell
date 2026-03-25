@@ -1,25 +1,20 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-
-import Quickshell
 import Quickshell.Io
-
-import qs.config
 import Caelestia
+import qs.config
+
+// TODO: handle this better later
 
 Item {
     id: model
 
-    visible: false
-
-    ListModel {
-        id: _visibleModel
-    }
     property alias visibleModel: _visibleModel
-
     property string activeLabel: ""
     property int activeIndex: -1
+    property var _xkbMap: ({})
+    property bool _notifiedLimit: false
 
     function start() {
         _xkbXmlBase.running = true;
@@ -126,21 +121,24 @@ Item {
         return code.toUpperCase() + " - " + code;
     }
 
+    visible: false
+
+    ListModel {
+        id: _visibleModel
+    }
+
     ListModel {
         id: _layoutsModel
     }
-
-    property var _xkbMap: ({})
-    property bool _notifiedLimit: false
 
     Process {
         id: _xkbXmlBase
 
         command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/base.xml"]
         stdout: StdioCollector {
-            onStreamFinished: _buildXmlMap(text)
+            onStreamFinished: model._buildXmlMap(text)
         }
-        onRunningChanged: if (!running && (typeof exitCode !== "undefined") && exitCode !== 0)
+        onRunningChanged: if (!running && (typeof _xkbXmlBase.exitCode !== "undefined") && _xkbXmlBase.exitCode !== 0) // qmllint disable missing-property
             _xkbXmlEvdev.running = true
     }
 
@@ -149,7 +147,7 @@ Item {
 
         command: ["xmllint", "--xpath", "//layout/configItem[name and description]", "/usr/share/X11/xkb/rules/evdev.xml"]
         stdout: StdioCollector {
-            onStreamFinished: _buildXmlMap(text)
+            onStreamFinished: model._buildXmlMap(text)
         }
     }
 
@@ -163,7 +161,7 @@ Item {
                     const j = JSON.parse(text);
                     const raw = (j?.str || j?.value || "").toString().trim();
                     if (raw.length) {
-                        _setLayouts(raw);
+                        model._setLayouts(raw);
                         _fetchActiveLayouts.running = true;
                         return;
                     }
@@ -184,7 +182,7 @@ Item {
                     const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
                     const raw = (kb?.layout || "").trim();
                     if (raw.length)
-                        _setLayouts(raw);
+                        model._setLayouts(raw);
                 } catch (e) {}
                 _fetchActiveLayouts.running = true;
             }
@@ -202,14 +200,14 @@ Item {
                     const kb = dev?.keyboards?.find(k => k.main) || dev?.keyboards?.[0];
                     const idx = kb?.active_layout_index ?? -1;
 
-                    activeIndex = idx >= 0 ? idx : -1;
-                    activeLabel = (idx >= 0 && idx < _layoutsModel.count) ? _layoutsModel.get(idx).label : "";
+                    model.activeIndex = idx >= 0 ? idx : -1;
+                    model.activeLabel = (idx >= 0 && idx < _layoutsModel.count) ? _layoutsModel.get(idx).label : "";
                 } catch (e) {
-                    activeIndex = -1;
-                    activeLabel = "";
+                    model.activeIndex = -1;
+                    model.activeLabel = "";
                 }
 
-                _rebuildVisible();
+                model._rebuildVisible();
             }
         }
     }

@@ -4,19 +4,19 @@ import ".."
 import "../components"
 import "./sections"
 import "../../launcher/services"
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Widgets
+import Caelestia.Models
 import qs.components
+import qs.components.containers
 import qs.components.controls
 import qs.components.effects
-import qs.components.containers
 import qs.components.images
 import qs.services
 import qs.config
 import qs.utils
-import Caelestia.Models
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root

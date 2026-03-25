@@ -1,8 +1,8 @@
+import QtQuick
+import Quickshell
 import qs.components
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
 
 StyledRect {
     id: root

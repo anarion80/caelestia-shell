@@ -1,10 +1,10 @@
+import QtQuick
+import QtQuick.Effects
+import Quickshell
 import qs.components
 import qs.components.containers
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
-import QtQuick.Effects
 
 StyledListView {
     id: root

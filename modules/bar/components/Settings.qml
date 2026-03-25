@@ -1,9 +1,8 @@
+import QtQuick
 import qs.components
-import qs.modules.controlcenter
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
+import qs.modules.controlcenter
 
 Item {
     id: root

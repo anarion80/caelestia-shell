@@ -1,9 +1,9 @@
+import QtQuick
+import QtQuick.Layouts
 import qs.components
 import qs.components.controls
 import qs.services
 import qs.config
-import QtQuick
-import QtQuick.Layouts
 
 StyledRect {
     id: root

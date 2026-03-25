@@ -1,8 +1,8 @@
 pragma Singleton
 
+import QtQuick
 import Quickshell
 import Quickshell.Io
-import QtQuick
 
 Singleton {
     id: root
@@ -46,7 +46,7 @@ Singleton {
 
         running: true
         command: ["pidof", "gpu-screen-recorder"]
-        onExited: code => {
+        onExited: code => { // qmllint disable signal-handler-parameters
             props.running = code === 0;
 
             if (code === 0) {
@@ -77,6 +77,6 @@ Singleton {
             props.elapsed++;
         }
 
-        target: Time
+        target: Time // qmllint disable incompatible-type
     }
 }

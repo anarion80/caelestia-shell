@@ -2,16 +2,16 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import "."
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
 import qs.components
+import qs.components.containers
 import qs.components.controls
 import qs.components.effects
-import qs.components.containers
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root
@@ -105,6 +105,7 @@ Item {
         color: Colours.tPalette.m3surface
         opacity: root.session.network.showPasswordDialog && !root.isClosing ? 1 : 0
         scale: root.session.network.showPasswordDialog && !root.isClosing ? 1 : 0.7
+        Keys.onEscapePressed: closeDialog()
 
         Behavior on opacity {
             Anim {}
@@ -134,8 +135,6 @@ Item {
                 to: 0.7
             }
         }
-
-        Keys.onEscapePressed: closeDialog()
 
         ColumnLayout {
             id: content

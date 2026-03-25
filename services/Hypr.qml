@@ -1,13 +1,13 @@
 pragma Singleton
 
-import qs.components.misc
-import qs.config
-import Caelestia
-import Caelestia.Internal
+import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
-import QtQuick
+import Caelestia
+import Caelestia.Internal
+import qs.components.misc
+import qs.config
 
 Singleton {
     id: root
@@ -207,7 +207,9 @@ Singleton {
         target: "hypr"
     }
 
+    // qmllint disable unresolved-type
     CustomShortcut {
+        // qmllint enable unresolved-type
         name: "refreshDevices"
         description: "Reload devices"
         onPressed: extras.refreshDevices()

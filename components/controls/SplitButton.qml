@@ -1,8 +1,8 @@
 import ".."
-import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Layouts
+import qs.services
+import qs.config
 
 Row {
     id: root

@@ -1,11 +1,12 @@
 pragma Singleton
 
-import qs.config
-import qs.utils
-import Caelestia.Models
+import QtQuick
 import Quickshell
 import Quickshell.Io
-import QtQuick
+import Caelestia.Models
+import qs.services
+import qs.config
+import qs.utils
 
 Searcher {
     id: root

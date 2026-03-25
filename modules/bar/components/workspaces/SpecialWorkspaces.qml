@@ -1,21 +1,21 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Hyprland
 import qs.components
 import qs.components.effects
 import qs.services
-import qs.utils
 import qs.config
-import Quickshell
-import Quickshell.Hyprland
-import QtQuick
-import QtQuick.Layouts
+import qs.utils
 
 Item {
     id: root
 
     required property ShellScreen screen
     readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
-    readonly property string activeSpecial: (Config.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject?.specialWorkspace?.name ?? ""
+    readonly property string activeSpecial: (Config.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? ""
 
     layer.enabled: true
     layer.effect: OpacityMask {
@@ -106,151 +106,14 @@ Item {
         highlightFollowsCurrentItem: false
         highlight: Item {
             x: view.currentItem?.x ?? 0
-            implicitWidth: view.currentItem?.size ?? 0
+            implicitWidth: (view.currentItem as SpecialWsDelegate)?.size ?? 0
 
             Behavior on x {
                 Anim {}
             }
         }
 
-        delegate: RowLayout {
-            id: ws
-
-            required property HyprlandWorkspace modelData
-            readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Appearance.padding.small : 0)
-            property int wsId
-            property string icon
-            property bool hasWindows
-
-            anchors.top: view.contentItem.top
-            anchors.bottom: view.contentItem.bottom
-
-            spacing: 0
-
-            Component.onCompleted: {
-                wsId = modelData.id;
-                icon = Icons.getSpecialWsIcon(modelData.name);
-                hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && modelData.lastIpcObject.windows > 0;
-            }
-
-            // Hacky thing cause modelData gets destroyed before the remove anim finishes
-            Connections {
-                function onIdChanged(): void {
-                    if (ws.modelData)
-                        ws.wsId = ws.modelData.id;
-                }
-
-                function onNameChanged(): void {
-                    if (ws.modelData)
-                        ws.icon = Icons.getSpecialWsIcon(ws.modelData.name);
-                }
-
-                function onLastIpcObjectChanged(): void {
-                    if (ws.modelData)
-                        ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
-                }
-
-                target: ws.modelData
-            }
-
-            Connections {
-                function onShowWindowsOnSpecialWorkspacesChanged(): void {
-                    if (ws.modelData)
-                        ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
-                }
-
-                target: Config.bar.workspaces
-            }
-
-            Loader {
-                id: label
-
-                asynchronous: true
-
-                Layout.alignment: Qt.AlignVCenter | Qt.AlightLeft
-                Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
-
-                sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
-
-                Component {
-                    id: iconComp
-
-                    MaterialIcon {
-                        fill: 1
-                        text: ws.icon
-                        horizontalAlignment: Qt.AlignHCenter
-                    }
-                }
-
-                Component {
-                    id: letterComp
-
-                    StyledText {
-                        text: ws.icon
-                        horizontalAlignment: Qt.AlignHCenter
-                    }
-                }
-            }
-
-            Loader {
-                id: windows
-
-                asynchronous: true
-
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-                Layout.preferredWidth: implicitWidth
-
-                visible: active
-                active: ws.hasWindows
-
-                sourceComponent: Row {
-                    spacing: 0
-
-                    add: Transition {
-                        Anim {
-                            properties: "scale"
-                            from: 0
-                            to: 1
-                            easing.bezierCurve: Appearance.anim.curves.standardDecel
-                        }
-                    }
-
-                    move: Transition {
-                        Anim {
-                            properties: "scale"
-                            to: 1
-                            easing.bezierCurve: Appearance.anim.curves.standardDecel
-                        }
-                        Anim {
-                            properties: "x,y"
-                        }
-                    }
-
-                    Repeater {
-                        model: ScriptModel {
-                            values: {
-                                const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId);
-                                const maxIcons = Config.bar.workspaces.maxWindowIcons;
-                                return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
-                            }
-                        }
-
-                        MaterialIcon {
-                            required property var modelData
-
-                            grade: 0
-                            text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
-                            color: Colours.palette.m3onSurfaceVariant
-                        }
-                    }
-                }
-
-                Behavior on Layout.preferredWidth {
-                    Anim {}
-                }
-            }
-        }
+        delegate: SpecialWsDelegate {}
 
         add: Transition {
             Anim {
@@ -310,7 +173,7 @@ Item {
                 anchors.bottom: parent.bottom
 
                 x: (view.currentItem?.x ?? 0) - view.contentX
-                implicitWidth: view.currentItem?.size ?? 0
+                implicitWidth: (view.currentItem as SpecialWsDelegate)?.size ?? 0
 
                 color: Colours.palette.m3tertiary
                 radius: Appearance.rounding.full
@@ -359,11 +222,150 @@ Item {
             if (Math.abs(event.x - startX) > drag.threshold)
                 return;
 
-            const ws = view.itemAt(event.x, event.y);
+            const ws = view.itemAt(event.x, event.y) as SpecialWsDelegate;
             if (ws?.modelData)
                 Hypr.dispatch(`togglespecialworkspace ${ws.modelData.name.slice(8)}`);
             else
                 Hypr.dispatch("togglespecialworkspace special");
+        }
+    }
+
+    component SpecialWsDelegate: RowLayout {
+        id: ws
+
+        required property HyprlandWorkspace modelData
+        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Appearance.padding.small : 0)
+        property int wsId
+        property string icon
+        property bool hasWindows
+
+        anchors.top: view.contentItem.top
+        anchors.bottom: view.contentItem.bottom
+
+        spacing: 0
+
+        Component.onCompleted: {
+            wsId = modelData.id;
+            icon = Icons.getSpecialWsIcon(modelData.name);
+            hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && modelData.lastIpcObject.windows > 0;
+        }
+
+        // Hacky thing cause modelData gets destroyed before the remove anim finishes
+        Connections {
+            function onIdChanged(): void {
+                if (ws.modelData)
+                    ws.wsId = ws.modelData.id;
+            }
+
+            function onNameChanged(): void {
+                if (ws.modelData)
+                    ws.icon = Icons.getSpecialWsIcon(ws.modelData.name);
+            }
+
+            function onLastIpcObjectChanged(): void {
+                if (ws.modelData)
+                    ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
+            }
+
+            target: ws.modelData
+        }
+
+        Connections {
+            function onShowWindowsOnSpecialWorkspacesChanged(): void {
+                if (ws.modelData)
+                    ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
+            }
+
+            target: Config.bar.workspaces
+        }
+
+        Loader {
+            id: label
+
+            asynchronous: true
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
+
+            sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
+
+            Component {
+                id: iconComp
+
+                MaterialIcon {
+                    fill: 1
+                    text: ws.icon
+                    horizontalAlignment: Qt.AlignHCenter
+                }
+            }
+
+            Component {
+                id: letterComp
+
+                StyledText {
+                    text: ws.icon
+                    horizontalAlignment: Qt.AlignHCenter
+                }
+            }
+        }
+
+        Loader {
+            id: windows
+
+            asynchronous: true
+
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
+            Layout.preferredWidth: implicitWidth
+
+            visible: active
+            active: ws.hasWindows
+
+            sourceComponent: Row {
+                spacing: 0
+
+                add: Transition {
+                    Anim {
+                        properties: "scale"
+                        from: 0
+                        to: 1
+                        easing.bezierCurve: Appearance.anim.curves.standardDecel
+                    }
+                }
+
+                move: Transition {
+                    Anim {
+                        properties: "scale"
+                        to: 1
+                        easing.bezierCurve: Appearance.anim.curves.standardDecel
+                    }
+                    Anim {
+                        properties: "x,y"
+                    }
+                }
+
+                Repeater {
+                    model: ScriptModel {
+                        values: {
+                            const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId);
+                            const maxIcons = Config.bar.workspaces.maxWindowIcons;
+                            return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
+                        }
+                    }
+
+                    MaterialIcon {
+                        required property var modelData
+
+                        grade: 0
+                        text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
+                        color: Colours.palette.m3onSurfaceVariant
+                    }
+                }
+            }
+
+            Behavior on Layout.preferredHeight {
+                Anim {}
+            }
         }
     }
 }

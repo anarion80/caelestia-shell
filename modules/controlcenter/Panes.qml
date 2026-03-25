@@ -7,13 +7,13 @@ import "appearance"
 import "taskbar"
 import "launcher"
 import "dashboard"
+import QtQuick
+import QtQuick.Layouts
+import Quickshell.Widgets
 import qs.components
 import qs.services
 import qs.config
 import qs.modules.controlcenter
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Layouts
 
 ClippingRectangle {
     id: root

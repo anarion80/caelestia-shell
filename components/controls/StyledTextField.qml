@@ -1,10 +1,10 @@
 pragma ComponentBehavior: Bound
 
 import ".."
-import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Controls
+import qs.services
+import qs.config
 
 TextField {
     id: root

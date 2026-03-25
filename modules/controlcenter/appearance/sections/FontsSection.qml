@@ -2,13 +2,13 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import "../../components"
-import qs.components
-import qs.components.controls
-import qs.components.containers
-import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Layouts
+import qs.components
+import qs.components.containers
+import qs.components.controls
+import qs.services
+import qs.config
 
 CollapsibleSection {
     id: root
@@ -55,6 +55,7 @@ CollapsibleSection {
                     radius: Appearance.rounding.normal
                     border.width: isCurrent ? 1 : 0
                     border.color: Colours.palette.m3primary
+                    implicitHeight: fontFamilySansRow.implicitHeight + Appearance.padding.normal * 2
 
                     StateLayer {
                         function onClicked(): void {
@@ -93,8 +94,6 @@ CollapsibleSection {
                             }
                         }
                     }
-
-                    implicitHeight: fontFamilySansRow.implicitHeight + Appearance.padding.normal * 2
                 }
             }
         }
@@ -137,6 +136,7 @@ CollapsibleSection {
                     radius: Appearance.rounding.normal
                     border.width: isCurrent ? 1 : 0
                     border.color: Colours.palette.m3primary
+                    implicitHeight: fontFamilyMonoRow.implicitHeight + Appearance.padding.normal * 2
 
                     StateLayer {
                         function onClicked(): void {
@@ -175,8 +175,6 @@ CollapsibleSection {
                             }
                         }
                     }
-
-                    implicitHeight: fontFamilyMonoRow.implicitHeight + Appearance.padding.normal * 2
                 }
             }
         }
@@ -221,6 +219,7 @@ CollapsibleSection {
                     radius: Appearance.rounding.normal
                     border.width: isCurrent ? 1 : 0
                     border.color: Colours.palette.m3primary
+                    implicitHeight: fontFamilyMaterialRow.implicitHeight + Appearance.padding.normal * 2
 
                     StateLayer {
                         function onClicked(): void {
@@ -259,8 +258,6 @@ CollapsibleSection {
                             }
                         }
                     }
-
-                    implicitHeight: fontFamilyMaterialRow.implicitHeight + Appearance.padding.normal * 2
                 }
             }
         }

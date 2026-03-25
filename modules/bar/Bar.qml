@@ -1,19 +1,20 @@
 pragma ComponentBehavior: Bound
 
-import qs.services
-import qs.config
 import "popouts" as BarPopouts
 import "components"
 import "components/workspaces"
-import Quickshell
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
+import qs.components
+import qs.services
+import qs.config
 
 RowLayout {
     id: root
 
     required property ShellScreen screen
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
     readonly property int hPadding: Appearance.padding.large
 
@@ -22,9 +23,9 @@ RowLayout {
             return;
 
         for (let i = 0; i < repeater.count; i++) {
-            const item = repeater.itemAt(i);
-            if (item?.enabled && item.id === "tray") {
-                item.item.expanded = false;
+            const loader = repeater.itemAt(i) as WrappedLoader;
+            if (loader?.enabled && loader.id === "tray") {
+                (loader.item as Tray).expanded = false;
             }
         }
     }
@@ -42,11 +43,9 @@ RowLayout {
 
         const id = ch.id;
         const left = ch.x;
-        const item = ch.item;
-        const itemWidth = item.implicitWidth;
 
         if (id === "statusIcons" && Config.bar.popouts.statusIcons) {
-            const items = item.items;
+            const items = (ch.item as StatusIcons).items;
             const icon = items.childAt(mapToItem(items, x, 0).x, items.height / 2);
             if (icon) {
                 popouts.currentName = icon.name;
@@ -54,9 +53,10 @@ RowLayout {
                 popouts.hasCurrent = true;
             }
         } else if (id === "tray" && Config.bar.popouts.tray) {
-            if (!Config.bar.tray.compact || (item.expanded && !item.expandIcon.contains(mapToItem(item.expandIcon, x, item.implicitHeight / 2)))) {
-                const index = Math.floor(((x - left - item.padding * 2 + item.spacing) / item.layout.implicitWidth) * item.items.count);
-                const trayItem = item.items.itemAt(index);
+            const tray = ch.item as Tray;
+            if (!Config.bar.tray.compact || (tray.expanded && !tray.expandIcon.contains(mapToItem(tray.expandIcon, x, tray.implicitHeight / 2)))) {
+                const index = Math.floor(((x - left - tray.padding * 2 + tray.spacing) / tray.layout.implicitWidth) * tray.items.count);
+                const trayItem = tray.items.itemAt(index);
                 if (trayItem) {
                     popouts.currentName = `traymenu${index}`;
                     popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
@@ -66,15 +66,15 @@ RowLayout {
                 }
             } else {
                 popouts.hasCurrent = false;
-                item.expanded = true;
+                tray.expanded = true;
             }
         } else if (id === "activeWindow" && Config.bar.popouts.activeWindow && Config.bar.activeWindow.showOnHover) {
             popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = item.mapToItem(root, itemWidth / 2, 0).x;
+            popouts.currentCenter = (ch.item as Item).mapToItem(root, (ch.item as Item).implicitWidth / 2, 0).x ?? 0;
             popouts.hasCurrent = true;
         } else if (id === "mail") {
             popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = item.mapToItem(root, itemWidth / 2, 0).x;
+            popouts.currentCenter = (ch.item as Item).mapToItem(root, (ch.item as Item).implicitWidth / 2, 0).x ?? 0;
             popouts.hasCurrent = true;
         }
     }
@@ -138,7 +138,6 @@ RowLayout {
             DelegateChoice {
                 roleValue: "activeWindow"
                 delegate: WrappedLoader {
-                    Layout.fillWidth: true
                     sourceComponent: ActiveWindow {
                         bar: root
                         monitor: Brightness.getMonitorForScreen(root.screen)

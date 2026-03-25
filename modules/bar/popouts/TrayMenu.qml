@@ -1,17 +1,17 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Controls
+import Quickshell
+import Quickshell.Widgets
 import qs.components
 import qs.services
 import qs.config
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Controls
 
 StackView {
     id: root
 
-    required property Item popouts
+    required property PopoutState popouts
     required property QsMenuHandle trayItem
 
     implicitWidth: currentItem?.implicitWidth ?? 0
@@ -25,6 +25,12 @@ StackView {
     pushExit: NoAnim {}
     popEnter: NoAnim {}
     popExit: NoAnim {}
+
+    Component {
+        id: subMenuComp
+
+        SubMenu {}
+    }
 
     component NoAnim: Transition {
         NumberAnimation {
@@ -220,11 +226,5 @@ StackView {
                 }
             }
         }
-    }
-
-    Component {
-        id: subMenuComp
-
-        SubMenu {}
     }
 }

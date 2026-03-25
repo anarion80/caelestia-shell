@@ -1,8 +1,10 @@
+pragma ComponentBehavior: Bound
+
+import Quickshell
+import QtQuick
 import qs.components
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
 
 Column {
     id: root
@@ -11,7 +13,7 @@ Column {
 
     Repeater {
         model: ScriptModel {
-            values: Mail.unreadEmails.slice(0,5)
+            values: MailService.unreadEmails.slice(0,5)
         }
 
         Row {

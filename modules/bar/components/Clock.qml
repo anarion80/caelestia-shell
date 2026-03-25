@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
 import qs.components
 import qs.services
 import qs.config
-import QtQuick
 
 StyledRect {
     id: root

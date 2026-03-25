@@ -1,15 +1,15 @@
 pragma ComponentBehavior: Bound
 
 import ".."
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Quickshell
 import qs.components
 import qs.components.controls
 import qs.components.effects
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 ColumnLayout {
     id: root
@@ -98,6 +98,7 @@ ColumnLayout {
                 required property int index
 
                 width: ListView.view ? ListView.view.width : undefined
+                implicitHeight: rowLayout.implicitHeight + Appearance.padding.normal * 2
 
                 color: Qt.alpha(Colours.tPalette.m3surfaceContainer, (root.session && root.session.vpn && root.session.vpn.active === modelData) ? Colours.tPalette.m3surfaceContainer.a : 0)
                 radius: Appearance.rounding.normal
@@ -258,8 +259,6 @@ ColumnLayout {
                         }
                     }
                 }
-
-                implicitHeight: rowLayout.implicitHeight + Appearance.padding.normal * 2
             }
         }
     }

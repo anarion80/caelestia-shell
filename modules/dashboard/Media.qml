@@ -1,21 +1,21 @@
 pragma ComponentBehavior: Bound
 
-import qs.components
-import qs.components.controls
-import qs.services
-import qs.utils
-import qs.config
-import Caelestia.Services
-import Quickshell
-import Quickshell.Services.Mpris
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
+import Quickshell
+import Quickshell.Services.Mpris
+import Caelestia.Services
+import qs.components
+import qs.components.controls
+import qs.services
+import qs.config
+import qs.utils
 
 Item {
     id: root
 
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
     readonly property bool needsKeyboard: lyricMenuOpen
 
     readonly property real nonAnimHeight: Math.max(cover.implicitHeight + Config.dashboard.sizes.mediaVisualiserSize * 2, lyricMenuOpen ? lyricMenu.implicitHeight : details.implicitHeight, bongocat.implicitHeight) + Appearance.padding.large * 2

@@ -1,21 +1,21 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Shapes
+import Quickshell
+import Quickshell.Widgets
+import Quickshell.Services.Notifications
 import qs.components
 import qs.components.effects
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import Quickshell.Widgets
-import Quickshell.Services.Notifications
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Shapes
 
 StyledRect {
     id: root
 
-    required property Notifs.Notif modelData
+    required property NotifData modelData
     readonly property bool hasImage: modelData.image.length > 0
     readonly property bool hasAppIcon: modelData.appIcon.length > 0
     readonly property int bodyTextFormat: /[<*_`#\[\]]/.test(modelData.body) ? Text.MarkdownText : Text.PlainText
@@ -85,7 +85,7 @@ StyledRect {
                 return;
 
             const actions = root.modelData.actions;
-            if (actions?.length === 1)
+            if (actions.length === 1)
                 actions[0].invoke();
         }
 

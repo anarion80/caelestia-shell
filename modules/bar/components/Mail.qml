@@ -1,9 +1,11 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import Quickshell
 import qs.components
 import qs.components.misc
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
 
 Item {
     id: root
@@ -32,7 +34,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         Ref {
-            service: Mail
+            service: MailService
         }
 
         MaterialIcon {
@@ -52,7 +54,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             verticalAlignment: StyledText.AlignVCenter
-            text: qsTr("%1").arg(Mail.unreadEmails.length ?? "N/A")
+            text: qsTr("%1").arg(MailService.unreadEmails.length ?? "N/A")
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             color: Colours.palette.m3tertiary

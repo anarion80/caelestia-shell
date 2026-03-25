@@ -1,14 +1,14 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Widgets
 import qs.components
 import qs.components.containers
 import qs.components.effects
 import qs.services
 import qs.config
-import Quickshell
-import Quickshell.Widgets
-import QtQuick
-import QtQuick.Layouts
 
 ColumnLayout {
     id: root

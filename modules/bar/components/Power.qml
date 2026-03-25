@@ -1,13 +1,12 @@
+import QtQuick
 import qs.components
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
 
 Item {
     id: root
 
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
 
     implicitWidth: icon.implicitHeight + Appearance.padding.small * 2
     implicitHeight: icon.implicitHeight
