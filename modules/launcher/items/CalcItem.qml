@@ -1,10 +1,10 @@
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Caelestia
 import qs.components
 import qs.services
 import qs.config
-import Caelestia
-import Quickshell
-import QtQuick
-import QtQuick.Layouts
 
 Item {
     id: root

@@ -1,16 +1,16 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import Quickshell
 import qs.components
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import QtQuick
 
 Column {
     id: root
 
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
 
     padding: Appearance.padding.large
     spacing: Appearance.spacing.large

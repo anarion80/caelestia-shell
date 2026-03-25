@@ -1,15 +1,15 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import Quickshell
 import qs.components
 import qs.config
-import Quickshell
-import QtQuick
 
 Item {
     id: root
 
     required property ShellScreen screen
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
     required property var panels
 
     readonly property bool shouldBeActive: visibilities.launcher && Config.launcher.enabled

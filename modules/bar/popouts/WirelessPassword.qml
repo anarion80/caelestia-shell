@@ -1,22 +1,22 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
 import qs.components
 import qs.components.controls
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import QtQuick
-import QtQuick.Layouts
 
 ColumnLayout {
     id: root
 
-    required property Item wrapper
+    required property PopoutState popouts
     property var network: null
     property bool isClosing: false
 
-    readonly property bool shouldBeVisible: root.wrapper.currentName === "wirelesspassword"
+    readonly property bool shouldBeVisible: root.popouts.currentName === "wirelesspassword"
 
     function checkConnectionStatus(): void {
         if (!root.shouldBeVisible || !connectButton.connecting) {
@@ -64,8 +64,8 @@ ColumnLayout {
         connectionMonitor.stop();
 
         // Return to network popout
-        if (root.wrapper.currentName === "wirelesspassword") {
-            root.wrapper.currentName = "network";
+        if (root.popouts.currentName === "wirelesspassword") {
+            root.popouts.currentName = "network";
         }
     }
 
@@ -94,7 +94,7 @@ ColumnLayout {
 
     Connections {
         function onCurrentNameChanged() {
-            if (root.wrapper.currentName === "wirelesspassword") {
+            if (root.popouts.currentName === "wirelesspassword") {
                 // Update network when popout becomes active
                 Qt.callLater(() => {
                     // Try to get network from parent Content's networkPopout
@@ -112,7 +112,7 @@ ColumnLayout {
             }
         }
 
-        target: root.wrapper
+        target: root.popouts
     }
 
     Timer {
@@ -267,6 +267,13 @@ ColumnLayout {
                 focus: true
                 activeFocusOnTab: true
 
+                Component.onCompleted: {
+                    if (root.shouldBeVisible) {
+                        // Use Timer for actual delay to ensure focus works correctly
+                        passwordFocusTimer.start();
+                    }
+                }
+
                 Keys.onPressed: event => {
                     // Ensure we have focus when receiving keyboard input
                     if (!activeFocus) {
@@ -315,13 +322,6 @@ ColumnLayout {
                     interval: 50
                     onTriggered: {
                         passwordContainer.forceActiveFocus();
-                    }
-                }
-
-                Component.onCompleted: {
-                    if (root.shouldBeVisible) {
-                        // Use Timer for actual delay to ensure focus works correctly
-                        passwordFocusTimer.start();
                     }
                 }
 
@@ -578,8 +578,8 @@ ColumnLayout {
                     connectButton.connecting = false;
                     connectButton.text = qsTr("Connect");
                     // Return to network popout on successful connection
-                    if (root.wrapper.currentName === "wirelesspassword") {
-                        root.wrapper.currentName = "network";
+                    if (root.popouts.currentName === "wirelesspassword") {
+                        root.popouts.currentName = "network";
                     }
                     closeDialog();
                 }

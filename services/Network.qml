@@ -1,8 +1,8 @@
 pragma Singleton
 
+import QtQuick
 import Quickshell
 import Quickshell.Io
-import QtQuick
 import qs.services
 
 Singleton {
@@ -313,6 +313,12 @@ Singleton {
         }
     }
 
+    Component {
+        id: apComp
+
+        AccessPoint {}
+    }
+
     component AccessPoint: QtObject {
         required property var lastIpcObject
         readonly property string ssid: lastIpcObject.ssid
@@ -322,11 +328,5 @@ Singleton {
         readonly property bool active: lastIpcObject.active
         readonly property string security: lastIpcObject.security
         readonly property bool isSecure: security.length > 0
-    }
-
-    Component {
-        id: apComp
-
-        AccessPoint {}
     }
 }

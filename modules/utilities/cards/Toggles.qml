@@ -1,18 +1,19 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Layouts
+import Quickshell.Bluetooth
 import qs.components
 import qs.components.controls
 import qs.services
 import qs.config
-import qs.modules.controlcenter
-import Quickshell
-import Quickshell.Bluetooth
-import QtQuick
-import QtQuick.Layouts
+import qs.modules.bar.popouts as BarPopouts
 
 StyledRect {
     id: root
 
-    required property var visibilities
-    required property Item popouts
+    required property DrawerVisibilities visibilities
+    required property BarPopouts.Wrapper popouts
 
     readonly property var quickToggles: {
         const seenIds = new Set();
@@ -54,17 +55,17 @@ StyledRect {
             font.pointSize: Appearance.font.size.normal
         }
 
-        ToggleRow {
+        QuickToggleRow {
             rowModel: root.needExtraRow ? root.quickToggles.slice(0, root.splitIndex) : root.quickToggles
         }
 
-        ToggleRow {
+        QuickToggleRow {
             visible: root.needExtraRow
             rowModel: root.needExtraRow ? root.quickToggles.slice(root.splitIndex) : []
         }
     }
 
-    component ToggleRow: RowLayout {
+    component QuickToggleRow: RowLayout {
         property var rowModel: []
 
         Layout.fillWidth: true
@@ -88,9 +89,9 @@ StyledRect {
                     roleValue: "bluetooth"
                     delegate: Toggle {
                         icon: "bluetooth"
-                        checked: Bluetooth.defaultAdapter?.enabled ?? false
+                        checked: Bluetooth.defaultAdapter?.enabled ?? false // qmllint disable unresolved-type
                         onClicked: {
-                            const adapter = Bluetooth.defaultAdapter;
+                            const adapter = Bluetooth.defaultAdapter; // qmllint disable unresolved-type
                             if (adapter)
                                 adapter.enabled = !adapter.enabled;
                         }

@@ -2,14 +2,14 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import "../components"
+import QtQuick
+import QtQuick.Layouts
+import Quickshell.Bluetooth
 import qs.components
 import qs.components.controls
 import qs.components.effects
 import qs.services
 import qs.config
-import Quickshell.Bluetooth
-import QtQuick
-import QtQuick.Layouts
 
 ColumnLayout {
     id: root

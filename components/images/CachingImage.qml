@@ -1,7 +1,7 @@
-import qs.utils
-import Caelestia.Internal
-import Quickshell
 import QtQuick
+import Quickshell
+import Caelestia.Internal
+import qs.utils
 
 Image {
     id: root

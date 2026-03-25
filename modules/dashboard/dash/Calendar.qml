@@ -1,13 +1,13 @@
 pragma ComponentBehavior: Bound
 
-import qs.components
-import qs.components.effects
-import qs.components.controls
-import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import qs.components
+import qs.components.controls
+import qs.components.effects
+import qs.services
+import qs.config
 
 CustomMouseArea {
     id: root

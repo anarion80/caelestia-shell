@@ -1,16 +1,17 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import Quickshell
 import qs.components
 import qs.config
-import Quickshell
-import QtQuick
+import qs.modules.bar.popouts as BarPopouts
 
 Item {
     id: root
 
-    required property var visibilities
+    required property DrawerVisibilities visibilities
     required property Item sidebar
-    required property Item popouts
+    required property BarPopouts.Wrapper popouts
 
     readonly property PersistentProperties props: PersistentProperties {
         property bool recordingListExpanded: false

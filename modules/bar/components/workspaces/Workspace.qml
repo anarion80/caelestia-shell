@@ -1,10 +1,12 @@
-import qs.components
-import qs.services
-import qs.utils
-import qs.config
-import Quickshell
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
+import qs.components
+import qs.services
+import qs.config
+import qs.utils
 
 ColumnLayout {
     id: root
@@ -90,7 +92,8 @@ ColumnLayout {
             Repeater {
                 model: ScriptModel {
                     values: {
-                        const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === root.ws);
+                        const ws = root.ws;
+                        const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws);
                         const maxIcons = Config.bar.workspaces.maxWindowIcons;
                         return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                     }

@@ -1,17 +1,16 @@
 pragma ComponentBehavior: Bound
 
-import "services"
+import QtQuick
 import qs.components
 import qs.components.controls
 import qs.services
 import qs.config
-import Quickshell
-import QtQuick
+import qs.modules.launcher.services
 
 Item {
     id: root
 
-    required property PersistentProperties visibilities
+    required property DrawerVisibilities visibilities
     required property var panels
     required property real maxHeight
 

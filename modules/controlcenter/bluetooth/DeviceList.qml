@@ -2,16 +2,16 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import "../components"
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Bluetooth
 import qs.components
-import qs.components.controls
 import qs.components.containers
+import qs.components.controls
 import qs.services
 import qs.config
 import qs.utils
-import Quickshell
-import Quickshell.Bluetooth
-import QtQuick
-import QtQuick.Layouts
 
 DeviceList {
     id: root

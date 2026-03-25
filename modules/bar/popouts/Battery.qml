@@ -1,10 +1,10 @@
 pragma ComponentBehavior: Bound
 
+import QtQuick
+import Quickshell.Services.UPower
 import qs.components
 import qs.services
 import qs.config
-import Quickshell.Services.UPower
-import QtQuick
 
 Column {
     id: root
@@ -42,7 +42,7 @@ Column {
 
         active: PowerProfiles.degradationReason !== PerformanceDegradationReason.None
 
-        height: active ? (item?.implicitHeight ?? 0) : 0
+        height: active ? ((item as Item)?.implicitHeight ?? 0) : 0
 
         sourceComponent: StyledRect {
             implicitWidth: child.implicitWidth + Appearance.padding.normal * 2

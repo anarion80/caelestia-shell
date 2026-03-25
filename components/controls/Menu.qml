@@ -2,10 +2,10 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import "../effects"
-import qs.services
-import qs.config
 import QtQuick
 import QtQuick.Layouts
+import qs.services
+import qs.config
 
 Elevation {
     id: root
