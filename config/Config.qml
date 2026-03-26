@@ -363,7 +363,8 @@ Singleton {
             smartScheme: services.smartScheme,
             defaultPlayer: services.defaultPlayer,
             playerAliases: services.playerAliases,
-            showLyrics: services.showLyrics
+            showLyrics: services.showLyrics,
+            lyricsBackend: services.lyricsBackend
         };
     }
 
