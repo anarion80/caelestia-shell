@@ -16,6 +16,7 @@ RowLayout {
     required property ShellScreen screen
     required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
+    required property bool fullscreen
     readonly property int hPadding: Appearance.padding.large
 
     function closeTray(): void {
@@ -132,12 +133,15 @@ RowLayout {
                 delegate: WrappedLoader {
                     sourceComponent: Workspaces {
                         screen: root.screen
+                        fullscreen: root.fullscreen
                     }
                 }
             }
             DelegateChoice {
                 roleValue: "activeWindow"
                 delegate: WrappedLoader {
+                    Layout.fillWidth: true
+                    visible: !root.fullscreen
                     sourceComponent: ActiveWindow {
                         bar: root
                         monitor: Brightness.getMonitorForScreen(root.screen)
@@ -147,24 +151,28 @@ RowLayout {
             DelegateChoice {
                 roleValue: "tray"
                 delegate: WrappedLoader {
+                    visible: !root.fullscreen
                     sourceComponent: Tray {}
                 }
             }
             DelegateChoice {
                 roleValue: "mail"
                 delegate: WrappedLoader {
+                    visible: !root.fullscreen
                     sourceComponent: Mail {}
                 }
             }
             DelegateChoice {
                 roleValue: "clock"
                 delegate: WrappedLoader {
+                    visible: !root.fullscreen
                     sourceComponent: Clock {}
                 }
             }
             DelegateChoice {
                 roleValue: "statusIcons"
                 delegate: WrappedLoader {
+                    visible: !root.fullscreen
                     sourceComponent: StatusIcons {}
                 }
             }
@@ -180,7 +188,7 @@ RowLayout {
     }
 
     component WrappedLoader: Loader {
-        required property bool enabled
+        required enabled
         required property string id
         required property int index
 

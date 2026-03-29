@@ -13,12 +13,13 @@ Item {
     required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
     required property bool disabled
+    required property bool fullscreen
 
     readonly property int clampedHeight: Math.max(Config.border.minThickness, implicitHeight)
     readonly property int padding: Math.max(Appearance.padding.smaller, Config.border.thickness)
     readonly property int contentHeight: Config.bar.sizes.innerHeight + padding * 2
     readonly property int exclusiveZone: !disabled && (Config.bar.persistent || visibilities.bar) ? contentHeight : Config.border.thickness
-    readonly property bool shouldBeVisible: !disabled && (Config.bar.persistent || visibilities.bar || isHovered)
+    readonly property bool shouldBeVisible: !fullscreen && !disabled && (Config.bar.persistent || visibilities.bar || isHovered)
     property bool isHovered
 
     function closeTray(): void {
@@ -33,8 +34,9 @@ Item {
         (content.item as Bar)?.handleWheel(x, angleDelta);
     }
 
-    visible: height > Config.border.thickness
-    implicitHeight: Config.border.thickness
+    clip: true
+    visible: height > 0
+    implicitHeight: fullscreen ? 0 : Config.border.thickness
 
     states: State {
         name: "visible"
@@ -83,6 +85,7 @@ Item {
             screen: root.screen
             visibilities: root.visibilities
             popouts: root.popouts // qmllint disable incompatible-type
+            fullscreen: root.fullscreen
         }
     }
 }
