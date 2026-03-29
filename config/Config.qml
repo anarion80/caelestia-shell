@@ -207,7 +207,9 @@ Singleton {
                 showIcon: bar.clock.showIcon
             },
             mail: {
-                enabled: bar.mail.enabled
+                enabled: bar.mail.enabled,
+                fetchCommand: bar.mail.fetchCommand,
+                clickCommand: bar.mail.clickCommand
             },
             entries: bar.entries,
             excludedScreens: bar.excludedScreens

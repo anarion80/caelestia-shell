@@ -3,17 +3,16 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import qs.config
 
 Singleton {
     id: root
 
     property list<string> unreadEmails: []
-    readonly property int unreadEmailsCount: unreadEmails.length ?? null
 
     property int refCount
- 
-    reloadableId: "mailText"
 
+    reloadableId: "mailText"
 
     Timer {
         running: root.refCount > 0
@@ -29,18 +28,22 @@ Singleton {
         id: getUnreadEmails
 
         running: true
-        command: ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"]
+        command: Config.bar.mail.fetchCommand
         environment: ({
                 LANG: "C",
                 LC_ALL: "C"
             })
         stdout: StdioCollector {
             onStreamFinished: {
-                const json = JSON.parse(text);
-                const unreadEmails = json
-                  .filter(m => m && m.authors && m.subject)   // safety guard
-                  .map(m => `${m.authors}: ${m.subject}`)   
-                root.unreadEmails = unreadEmails;
+                try {
+                    const json = JSON.parse(text);
+                    const unreadEmails = json.filter(m => m && m.authors && m.subject)   // safety guard
+                    .map(m => `${m.authors}: ${m.subject}`);
+                    root.unreadEmails = unreadEmails;
+                } catch (e) {
+                    console.error("Failed to parse mail output:", e.message);
+                    root.unreadEmails = [];
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ Item {
     StateLayer {
         // Cursed workaround to make the height larger than the parent
         function onClicked(): void {
-            Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
+            Quickshell.execDetached(Config.bar.mail.clickCommand);
         }
 
         anchors.fill: undefined
@@ -56,7 +56,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             verticalAlignment: StyledText.AlignVCenter
-            text: qsTr("%1").arg(MailService.unreadEmails.length ?? "N/A")
+            text: qsTr("%1").arg(MailService.unreadEmails.length)
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             color: Colours.palette.m3tertiary

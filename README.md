@@ -214,6 +214,11 @@ default, you must create it manually.
 > such as modifying the size of individual items or changing constants in the code, there are some other
 > options which can be found in the source files in the `config` directory.
 
+> [!NOTE]
+> The mail component's `fetchCommand` must return JSON with an array of objects containing `authors` and `subject`
+> properties (compatible with `notmuch` JSON output format). If using a different email system, you'll need to
+> write a wrapper script that converts your email system's output to this format.
+
 <details><summary>Example</summary>
 
 ```json
@@ -342,7 +347,9 @@ default, you must create it manually.
             "showIcon": true
         },
         "mail": {
-            "enabled": false
+            "enabled": false,
+            "fetchCommand": ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"],
+            "clickCommand": ["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]
         },
         "dragThreshold": 20,
         "entries": [
@@ -788,6 +795,30 @@ caelestia scheme set -n dynamic
 The launcher pulls wallpapers from `~/Pictures/Wallpapers` by default. You can change this in the config. Additionally,
 the launcher only shows an odd number of wallpapers at one time. If you only have 2 wallpapers, consider getting more
 (or just putting one).
+
+### How do I configure the mail component?
+
+The mail component shows unread email count and launches an email client when clicked. To use it:
+
+1. Enable it in the config: set `"mail": { "enabled": true }` and add `{ "id": "mail", "enabled": true }` to the bar entries array.
+2. Configure the `fetchCommand` to return unread email count. The default uses `notmuch` and expects JSON output with an array of objects containing `authors` and `subject` properties.
+3. Configure the `clickCommand` to launch your preferred email client when the icon is clicked.
+
+Example configuration for different email setups:
+
+- **Notmuch (default)**:
+  ```json
+  "fetchCommand": ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"],
+  "clickCommand": ["alacritty", "-e", "neomutt"]
+  ```
+
+- **Custom script**: Write a script that returns JSON in the expected format:
+  ```json
+  "fetchCommand": ["/path/to/your/email-script.sh"],
+  "clickCommand": ["thunderbird"]
+  ```
+
+The `fetchCommand` must return a JSON array where each object has `authors` and `subject` properties. If the command fails or returns invalid JSON, the mail count will show 0.
 
 ## Credits
 
