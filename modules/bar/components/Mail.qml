@@ -10,13 +10,15 @@ import qs.config
 Item {
     id: root
 
-    implicitWidth: icon.implicitHeight + mailText.implicitHeight + Appearance.padding.small * 2
-    implicitHeight: icon.implicitHeight + mailText.implicitHeight
+    implicitWidth: Config.bar.mail.enabled ? icon.implicitHeight + mailText.implicitHeight + Appearance.padding.small * 2 : 0
+    implicitHeight: Config.bar.mail.enabled ? icon.implicitHeight + mailText.implicitHeight : 0
+    visible: Config.bar.mail.enabled
+    enabled: Config.bar.mail.enabled
 
     StateLayer {
         // Cursed workaround to make the height larger than the parent
         function onClicked(): void {
-          Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
+            Quickshell.execDetached(["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]);
         }
 
         anchors.fill: undefined

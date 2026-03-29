@@ -341,6 +341,9 @@ default, you must create it manually.
             "showDate": false,
             "showIcon": true
         },
+        "mail": {
+            "enabled": false
+        },
         "dragThreshold": 20,
         "entries": [
             {
@@ -366,6 +369,10 @@ default, you must create it manually.
             {
                 "id": "tray",
                 "enabled": true
+            },
+            {
+                "id": "mail",
+                "enabled": false
             },
             {
                 "id": "clock",

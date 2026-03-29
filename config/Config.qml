@@ -206,6 +206,9 @@ Singleton {
                 showDate: bar.clock.showDate,
                 showIcon: bar.clock.showIcon
             },
+            mail: {
+                enabled: bar.mail.enabled
+            },
             entries: bar.entries,
             excludedScreens: bar.excludedScreens
         };

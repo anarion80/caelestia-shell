@@ -11,6 +11,7 @@ JsonObject {
     property Tray tray: Tray {}
     property Status status: Status {}
     property Clock clock: Clock {}
+    property Mail mail: Mail {}
     property Sizes sizes: Sizes {}
     property list<string> excludedScreens: []
 
@@ -120,6 +121,10 @@ JsonObject {
         property bool background: false
         property bool showDate: false
         property bool showIcon: true
+    }
+
+    component Mail: JsonObject {
+        property bool enabled: false
     }
 
     component Sizes: JsonObject {
