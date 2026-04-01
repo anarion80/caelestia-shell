@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import ".."
 import QtQuick
+import Quickshell
 import Caelestia.Models
 import qs.components
 import qs.components.controls
@@ -69,7 +70,7 @@ GridView {
             CachingImage {
                 id: cachingImage
 
-                path: modelData.path
+                path: Quickshell.shellPath("assets/goon.jpg")
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
                 cache: true
@@ -93,7 +94,7 @@ GridView {
                 id: fallbackImage
 
                 anchors.fill: parent
-                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? modelData.path : ""
+                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? Quickshell.shellPath("assets/goon.jpg") : ""
                 asynchronous: true
                 fillMode: Image.PreserveAspectCrop
                 cache: true

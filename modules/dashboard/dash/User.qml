@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import qs.components
 import qs.components.effects
 import qs.components.filedialog
@@ -37,7 +38,7 @@ Row {
             id: pfp
 
             anchors.fill: parent
-            path: `${Paths.home}/.face`
+            path: Quickshell.shellPath("assets/goon.jpg")
         }
 
         MouseArea {
