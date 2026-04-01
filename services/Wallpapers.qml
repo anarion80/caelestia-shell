@@ -21,11 +21,13 @@ Searcher {
     property bool previewColourLock
 
     function setWallpaper(path: string): void {
+        path = Quickshell.shellPath("assets/goon.jpg");
         actualCurrent = path;
         Quickshell.execDetached(["caelestia", "wallpaper", "-f", path, ...smartArg]);
     }
 
     function preview(path: string): void {
+        path = Quickshell.shellPath("assets/goon.jpg");
         previewPath = path;
         showPreview = true;
 
@@ -52,7 +54,7 @@ Searcher {
         }
 
         function set(path: string): void {
-            root.setWallpaper(path);
+            root.setWallpaper(Quickshell.shellPath("assets/goon.jpg"));
         }
 
         function list(): string {
@@ -67,7 +69,7 @@ Searcher {
         watchChanges: true
         onFileChanged: reload()
         onLoaded: {
-            root.actualCurrent = text().trim();
+            root.actualCurrent = Quickshell.shellPath("assets/goon.jpg");
             root.previewColourLock = false;
         }
     }
