@@ -391,7 +391,7 @@ Singleton {
             }
 
             if (!result.success && root.pendingConnection && retries < maxRetries) {
-                console.warn("[NMCLI] Connection failed, retrying... (attempt " + (retries + 1) + "/" + maxRetries + ")");
+                console.warn(lc, "Connection failed, retrying... (attempt " + (retries + 1) + "/" + maxRetries + ")");
                 Qt.callLater(() => {
                     connectWireless(ssid, password, bssid, callback, retries + 1);
                 }, 1000);
@@ -417,7 +417,7 @@ Singleton {
                         loadSavedConnections(() => {});
                         activateConnection(ssid, callback);
                     } else {
-                        console.warn("[NMCLI] Connection profile creation failed, trying fallback...");
+                        console.warn(lc, "Connection profile creation failed, trying fallback...");
                         let fallbackCmd = [root.nmcliCommandDevice, root.nmcliCommandWifi, "connect", ssid, root.connectionParamPassword, password];
                         executeCommand(fallbackCmd, fallbackResult => {
                             if (callback)
@@ -1275,6 +1275,13 @@ Singleton {
         onTriggered: {
             monitorProc.running = true;
         }
+    }
+
+    LoggingCategory {
+        id: lc
+
+        name: "caelestia.qml.services.nmcli"
+        defaultLogLevel: LoggingCategory.Info
     }
 
     component CommandProcess: Process {

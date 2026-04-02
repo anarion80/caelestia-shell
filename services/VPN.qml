@@ -454,7 +454,7 @@ Singleton {
             onStreamFinished: {
                 const error = text.trim();
                 if (error && !error.includes("[#]")) {
-                    console.warn("VPN disconnection error:", error);
+                    console.warn(lc, "Disconnection error:", error);
                 }
             }
         }
@@ -475,5 +475,12 @@ Singleton {
 
         interval: 500
         onTriggered: root.checkStatus()
+    }
+
+    LoggingCategory {
+        id: lc
+
+        name: "caelestia.qml.services.vpn"
+        defaultLogLevel: LoggingCategory.Info
     }
 }
