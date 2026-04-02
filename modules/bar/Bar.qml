@@ -73,7 +73,7 @@ RowLayout {
             popouts.currentName = id.toLowerCase();
             popouts.currentCenter = (ch.item as Item).mapToItem(root, (ch.item as Item).implicitWidth / 2, 0).x ?? 0;
             popouts.hasCurrent = true;
-        } else if (id === "mail") {
+        } else if (id === "mail" && MailService.unreadEmails.length > 0) {
             popouts.currentName = id.toLowerCase();
             popouts.currentCenter = (ch.item as Item).mapToItem(root, (ch.item as Item).implicitWidth / 2, 0).x ?? 0;
             popouts.hasCurrent = true;
@@ -157,7 +157,7 @@ RowLayout {
             DelegateChoice {
                 roleValue: "mail"
                 delegate: WrappedLoader {
-                    visible: !root.fullscreen
+                    visible: !root.fullscreen && Config.bar.mail.enabled
                     sourceComponent: Mail {}
                 }
             }

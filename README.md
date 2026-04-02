@@ -348,6 +348,8 @@ default, you must create it manually.
         },
         "mail": {
             "enabled": false,
+            "showNumber": true,
+            "emailsNumber": 5,
             "fetchCommand": ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"],
             "clickCommand": ["ghostty", "--title=NeomuttFloat", "-e", "neomutt"]
         },
@@ -379,7 +381,7 @@ default, you must create it manually.
             },
             {
                 "id": "mail",
-                "enabled": false
+                "enabled": true
             },
             {
                 "id": "clock",

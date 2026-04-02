@@ -1,17 +1,26 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import qs.components
 import qs.components.misc
 import qs.services
 import qs.config
+import qs.utils
 
-Item {
+StyledRect {
     id: root
 
-    implicitWidth: Config.bar.mail.enabled ? icon.implicitHeight + mailText.implicitHeight + Appearance.padding.small * 2 : 0
-    implicitHeight: Config.bar.mail.enabled ? icon.implicitHeight + mailText.implicitHeight : 0
+    property color colour: Colours.palette.m3secondary
+    readonly property alias items: mailRow
+
+    color: Colours.tPalette.m3surfaceContainer
+    radius: Appearance.rounding.full
+
+    clip: true
+    implicitWidth: Config.bar.mail.enabled ? mailRow.implicitWidth + Appearance.padding.normal * 2 : 0
+    implicitHeight: Config.bar.mail.enabled ? Config.bar.sizes.innerHeight : 0
     visible: Config.bar.mail.enabled
     enabled: Config.bar.mail.enabled
 
@@ -23,43 +32,53 @@ Item {
 
         anchors.fill: undefined
         anchors.centerIn: parent
-        implicitWidth: root.implicitWidth + Appearance.padding.small * 2
-        implicitHeight: icon.implicitHeight + Appearance.padding.small * 2
-
+        implicitWidth: root.implicitWidth
+        implicitHeight: root.implicitHeight
         radius: Appearance.rounding.full
     }
 
-    Row {
-        id: row
+    RowLayout {
+        id: mailRow
 
-        spacing: Appearance.spacing.small
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
+        anchors.rightMargin: Appearance.padding.normal
+
+        spacing: 0
 
         Ref {
             service: MailService
         }
 
-        MaterialIcon {
-            id: icon
+        WrappedLoader {
+            name: "mail"
+            active: root.visible
 
-            animate: true
-
-            text: "mail"
-            color: Colours.palette.m3tertiary
-
-            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: MaterialIcon {
+                animate: true
+                text: Icons.getMailIcon(MailService.unreadEmails.length)
+                color: root.colour
+            }
         }
 
         StyledText {
             id: mailText
 
-            anchors.verticalCenter: parent.verticalCenter
+            visible: Config.bar.mail.showNumber && MailService.unreadEmails.length > 0
 
-            verticalAlignment: StyledText.AlignVCenter
+            Layout.alignment: Qt.AlignVCenter
+
             text: qsTr("%1").arg(MailService.unreadEmails.length)
             font.pointSize: Appearance.font.size.smaller
             font.family: Appearance.font.family.mono
             color: Colours.palette.m3tertiary
         }
+    }
+
+    component WrappedLoader: Loader {
+        required property string name
+
+        asynchronous: true
+        Layout.alignment: Qt.AlignVCenter
+        visible: active
     }
 }

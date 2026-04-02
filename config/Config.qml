@@ -208,6 +208,8 @@ Singleton {
             },
             mail: {
                 enabled: bar.mail.enabled,
+                showNumber: bar.mail.showNumber,
+                emailsShown: bar.mail.emailsShown,
                 fetchCommand: bar.mail.fetchCommand,
                 clickCommand: bar.mail.clickCommand
             },

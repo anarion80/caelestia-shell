@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
-import Quickshell
 import QtQuick
+import Quickshell
 import qs.components
 import qs.services
 import qs.config
@@ -10,10 +10,11 @@ Column {
     id: root
 
     spacing: Appearance.spacing.normal
+    visible: MailService.unreadEmails.length > 0
 
     Repeater {
         model: ScriptModel {
-            values: MailService.unreadEmails.slice(0,5)
+            values: MailService.unreadEmails.slice(0, Math.min(Config.bar.mail.emailsShown, 15))
         }
 
         Row {
@@ -30,12 +31,17 @@ Column {
 
                 text: "mail"
                 color: Colours.palette.m3onSurface
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             StyledText {
-                id: text
-
-                text: qsTr("%1").arg(modelData ?? "None")
+                text: emails.modelData?.author + ": " ?? ""
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            StyledText {
+                text: emails.modelData?.subject ?? ""
+                font.italic: true
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }
