@@ -333,7 +333,7 @@ Singleton {
             const provider = {
                 displayName: p.displayName,
                 enabled: p.enabled,
-                iface: p.iface,
+                interface: p.iface,
                 name: p.name
             };
             if (p.connectCmd && p.connectCmd.length > 0) {

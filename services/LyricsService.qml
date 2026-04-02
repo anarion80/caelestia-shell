@@ -78,8 +78,11 @@ Singleton {
 
     function _doLoadLyrics() {
         const meta = getMetadata();
-        if (!meta)
+        if (!meta) {
+            lyricsModel.clear();
+            root.currentIndex = -1;
             return;
+        }
 
         loading = true;
         lyricsModel.clear();
