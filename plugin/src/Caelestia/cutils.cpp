@@ -6,7 +6,10 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfuturewatcher.h>
+#include <qloggingcategory.h>
 #include <qqmlengine.h>
+
+Q_LOGGING_CATEGORY(lcCUtils, "caelestia.cutils", QtInfoMsg)
 
 namespace caelestia {
 
@@ -32,17 +35,17 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
 
 void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, QJSValue onSaved, QJSValue onFailed) {
     if (!target) {
-        qWarning() << "CUtils::saveItem: a target is required";
+        qCWarning(lcCUtils) << "saveItem: a target is required";
         return;
     }
 
     if (!path.isLocalFile()) {
-        qWarning() << "CUtils::saveItem:" << path << "is not a local file";
+        qCWarning(lcCUtils) << "saveItem:" << path << "is not a local file";
         return;
     }
 
     if (!target->window()) {
-        qWarning() << "CUtils::saveItem: unable to save target" << target << "without a window";
+        qCWarning(lcCUtils) << "saveItem: unable to save target" << target << "without a window";
         return;
     }
 
@@ -82,7 +85,7 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
                         onSaved.call(args);
                     }
                 } else {
-                    qWarning() << "CUtils::saveItem: failed to save" << path;
+                    qCWarning(lcCUtils) << "saveItem: failed to save" << path;
                     if (onFailed.isCallable()) {
                         if (engine) {
                             onFailed.call({ engine->toScriptValue(QVariant::fromValue(path)) });
@@ -99,17 +102,17 @@ void CUtils::saveItem(QQuickItem* target, const QUrl& path, const QRect& rect, Q
 
 bool CUtils::copyFile(const QUrl& source, const QUrl& target, bool overwrite) const {
     if (!source.isLocalFile()) {
-        qWarning() << "CUtils::copyFile: source" << source << "is not a local file";
+        qCWarning(lcCUtils) << "copyFile: source" << source << "is not a local file";
         return false;
     }
     if (!target.isLocalFile()) {
-        qWarning() << "CUtils::copyFile: target" << target << "is not a local file";
+        qCWarning(lcCUtils) << "copyFile: target" << target << "is not a local file";
         return false;
     }
 
     if (overwrite && QFile::exists(target.toLocalFile())) {
         if (!QFile::remove(target.toLocalFile())) {
-            qWarning() << "CUtils::copyFile: overwrite was specified but failed to remove" << target.toLocalFile();
+            qCWarning(lcCUtils) << "copyFile: overwrite was specified but failed to remove" << target.toLocalFile();
             return false;
         }
     }
@@ -119,7 +122,7 @@ bool CUtils::copyFile(const QUrl& source, const QUrl& target, bool overwrite) co
 
 bool CUtils::deleteFile(const QUrl& path) const {
     if (!path.isLocalFile()) {
-        qWarning() << "CUtils::deleteFile: path" << path << "is not a local file";
+        qCWarning(lcCUtils) << "deleteFile: path" << path << "is not a local file";
         return false;
     }
 
@@ -128,7 +131,7 @@ bool CUtils::deleteFile(const QUrl& path) const {
 
 QString CUtils::toLocalFile(const QUrl& url) const {
     if (!url.isLocalFile()) {
-        qWarning() << "CUtils::toLocalFile: given url is not a local file" << url;
+        qCWarning(lcCUtils) << "toLocalFile: given url is not a local file" << url;
         return QString();
     }
 

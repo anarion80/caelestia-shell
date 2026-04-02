@@ -1,8 +1,11 @@
 #include "appdb.hpp"
 
+#include <qloggingcategory.h>
 #include <qsqldatabase.h>
 #include <qsqlquery.h>
 #include <quuid.h>
+
+Q_LOGGING_CATEGORY(lcAppDb, "caelestia.appdb", QtInfoMsg)
 
 namespace caelestia {
 
@@ -180,7 +183,7 @@ void AppDb::setFavouriteApps(const QStringList& favApps) {
         if (re.isValid()) {
             m_favouriteAppsRegex << re;
         } else {
-            qWarning() << "AppDb::setFavouriteApps: Regular expression is not valid: " << re.pattern();
+            qCWarning(lcAppDb) << "setFavouriteApps: regular expression is not valid:" << re.pattern();
         }
     }
 
@@ -218,7 +221,7 @@ void AppDb::incrementFrequency(const QString& id) {
             emit appsChanged();
         }
     } else {
-        qWarning() << "AppDb::incrementFrequency: could not find app with id" << id;
+        qCWarning(lcAppDb) << "incrementFrequency: could not find app with id" << id;
     }
 }
 

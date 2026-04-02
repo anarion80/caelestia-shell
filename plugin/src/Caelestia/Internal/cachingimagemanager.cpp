@@ -6,8 +6,11 @@
 #include <qfileinfo.h>
 #include <qfuturewatcher.h>
 #include <qimagereader.h>
+#include <qloggingcategory.h>
 #include <qpainter.h>
 #include <qtconcurrentrun.h>
+
+Q_LOGGING_CATEGORY(lcCim, "caelestia.internal.cim", QtInfoMsg)
 
 namespace caelestia::internal {
 
@@ -132,7 +135,7 @@ void CachingImageManager::updateSource(const QString& path) {
         emit cachePathChanged();
 
         if (!cache.isLocalFile()) {
-            qWarning() << "CachingImageManager::updateSource: cachePath" << cache << "is not a local file";
+            qCWarning(lcCim) << "updateSource: cachePath" << cache << "is not a local file";
             return;
         }
 
@@ -161,7 +164,7 @@ void CachingImageManager::createCache(
         QImage image(path);
 
         if (image.isNull()) {
-            qWarning() << "CachingImageManager::createCache: failed to read" << path;
+            qCWarning(lcCim) << "createCache: failed to read" << path;
             return;
         }
 
@@ -188,7 +191,7 @@ void CachingImageManager::createCache(
 
         const QString parent = QFileInfo(cache).absolutePath();
         if (!QDir().mkpath(parent) || !image.save(cache)) {
-            qWarning() << "CachingImageManager::createCache: failed to save to" << cache;
+            qCWarning(lcCim) << "createCache: failed to save to" << cache;
         }
     });
 }
@@ -196,7 +199,7 @@ void CachingImageManager::createCache(
 QString CachingImageManager::sha256sum(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "CachingImageManager::sha256sum: failed to open" << path;
+        qCWarning(lcCim) << "sha256sum: failed to open" << path;
         return "";
     }
 

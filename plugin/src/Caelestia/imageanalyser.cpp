@@ -4,7 +4,10 @@
 #include <QtQuick/qquickitemgrabresult.h>
 #include <qfuturewatcher.h>
 #include <qimage.h>
+#include <qloggingcategory.h>
 #include <qquickwindow.h>
+
+Q_LOGGING_CATEGORY(lcImageAnalyser, "caelestia.imageanalyser", QtInfoMsg)
 
 namespace caelestia {
 
@@ -152,7 +155,7 @@ void ImageAnalyser::update() {
 
 void ImageAnalyser::analyse(QPromise<AnalyseResult>& promise, const QImage& image, int rescaleSize) {
     if (image.isNull()) {
-        qWarning() << "ImageAnalyser::analyse: image is null";
+        qCWarning(lcImageAnalyser) << "analyse: image is null";
         return;
     }
 
