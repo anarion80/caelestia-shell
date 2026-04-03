@@ -65,7 +65,7 @@ Item {
         }
 
         CachingImage {
-            path: Quickshell.shellPath("assets/goon.jpg")
+            path: root.modelData.path
             smooth: !root.PathView.view.moving
             cache: true
 

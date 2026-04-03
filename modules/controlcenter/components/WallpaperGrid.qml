@@ -70,7 +70,7 @@ GridView {
             CachingImage {
                 id: cachingImage
 
-                path: Quickshell.shellPath("assets/goon.jpg")
+                path: modelData.path
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
                 cache: true
@@ -94,7 +94,7 @@ GridView {
                 id: fallbackImage
 
                 anchors.fill: parent
-                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? Quickshell.shellPath("assets/goon.jpg") : ""
+                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? modelData.path : ""
                 asynchronous: true
                 fillMode: Image.PreserveAspectCrop
                 cache: true

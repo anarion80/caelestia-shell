@@ -106,7 +106,7 @@ ColumnLayout {
             id: pfp
 
             anchors.fill: parent
-            path: Quickshell.shellPath("assets/goon.jpg")
+            path: `${Paths.home}/.face`
         }
     }
 
