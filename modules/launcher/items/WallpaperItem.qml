@@ -1,5 +1,4 @@
 import QtQuick
-import Quickshell
 import Caelestia.Models
 import qs.components
 import qs.components.effects

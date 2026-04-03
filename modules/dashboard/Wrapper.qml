@@ -46,7 +46,7 @@ Item {
         when: root.visibilities.dashboard && Config.dashboard.enabled
 
         PropertyChanges {
-            root.implicitHeight: content.implicitHeight - bar.implicitHeight // subtract bar height to move the dashboard to the top 
+            root.implicitHeight: content.implicitHeight - bar.implicitHeight // subtract bar height to move the dashboard to the top
         }
     }
 

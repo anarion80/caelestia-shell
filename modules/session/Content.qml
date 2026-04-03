@@ -5,7 +5,6 @@ import Quickshell
 import qs.components
 import qs.services
 import qs.config
-import qs.utils
 
 Column {
     id: root
