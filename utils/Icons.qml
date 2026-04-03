@@ -249,6 +249,7 @@ Singleton {
         if (emails > 1)
             return "stacked_email";
         return "mail";
+    }
 
     function getBatteryIcon(charge: int): string {
         if (charge > 0 && charge < 5)
