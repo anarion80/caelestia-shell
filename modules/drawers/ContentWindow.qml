@@ -211,21 +211,6 @@ StyledWindow {
         PanelBg {
             id: popoutBg
 
-            // Overlap with bar for gradient connection
-            // property real overlap: panels.popouts.isDetached ? 0 : 10 // pixels
-            //
-            // panel: panels.popoutsWrapper
-            // deformAmount: panels.popouts.isDetached ? 0.05 : panels.popouts.hasCurrent ? 0.15 : 0.1
-            // y: bar.implicitHeight - overlap
-            // implicitHeight: panels.popouts.height + overlap
-            //
-            // Behavior on overlap {
-            //     Anim {
-            //         duration: Appearance.anim.durations.expressiveDefaultSpatial
-            //         easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-            //     }
-            // }
-            // Extra height for gradient connection to bar
             property real extraHeight: panels.popouts.isDetached ? 0 : 0.2
 
             panel: panels.popoutsWrapper
