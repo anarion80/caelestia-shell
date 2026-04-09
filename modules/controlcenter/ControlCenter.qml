@@ -25,8 +25,7 @@ Item {
         root: root
     }
 
-    function close(): void {
-    }
+    signal close
 
     implicitWidth: implicitHeight * Config.controlCenter.sizes.ratio
     implicitHeight: screen.height * Config.controlCenter.sizes.heightMult

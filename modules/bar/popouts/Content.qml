@@ -14,8 +14,6 @@ Item {
     readonly property Popout currentPopout: content.children.find(c => c.shouldBeActive) ?? null
     readonly property Item current: currentPopout?.item ?? null
 
-    anchors.centerIn: parent
-
     implicitWidth: (currentPopout?.implicitWidth ?? 0) + Appearance.padding.large * 2
     implicitHeight: (currentPopout?.implicitHeight ?? 0) + Appearance.padding.large * 2
 
@@ -176,8 +174,7 @@ Item {
         required property string name
         readonly property bool shouldBeActive: root.popouts.currentName === name
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
+        anchors.centerIn: parent
 
         opacity: 0
         scale: 0.8
