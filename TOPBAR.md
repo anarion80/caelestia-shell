@@ -1,7 +1,7 @@
 # Top Bar Migration Guide
 
-> [!WARNING] This is AI generated. Check the diff link at the bottom for full
-> change.
+> [!WARNING]
+> This is AI generated. Check the diff link at the bottom for full change.
 
 This document describes the changes required to migrate the Caelestia Shell bar
 from the left side of the screen to the top. The migration involves significant
