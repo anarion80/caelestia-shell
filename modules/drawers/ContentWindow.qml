@@ -145,10 +145,10 @@ StyledWindow {
             anchors.margins: -50 // Make border thicker to smooth out bulge from closed drawers
             group: blobGroup
             radius: root.borderRounding
-            borderLeft: bar.implicitWidth - anchors.margins
+            borderTop: bar.implicitHeight - anchors.margins
             borderRight: root.borderThickness - anchors.margins
-            borderTop: root.borderThickness - anchors.margins
             borderBottom: root.borderThickness - anchors.margins
+            borderLeft: root.borderThickness - anchors.margins
         }
 
         PanelBg {
@@ -211,15 +211,29 @@ StyledWindow {
         PanelBg {
             id: popoutBg
 
-            // Extra width to prevent vertical movement deformation partially detaching panel from bar
-            property real extraWidth: panels.popouts.isDetached ? 0 : 0.2
+            // Overlap with bar for gradient connection
+            // property real overlap: panels.popouts.isDetached ? 0 : 10 // pixels
+            //
+            // panel: panels.popoutsWrapper
+            // deformAmount: panels.popouts.isDetached ? 0.05 : panels.popouts.hasCurrent ? 0.15 : 0.1
+            // y: bar.implicitHeight - overlap
+            // implicitHeight: panels.popouts.height + overlap
+            //
+            // Behavior on overlap {
+            //     Anim {
+            //         duration: Appearance.anim.durations.expressiveDefaultSpatial
+            //         easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            //     }
+            // }
+            // Extra height for gradient connection to bar
+            property real extraHeight: panels.popouts.isDetached ? 0 : 0.2
 
             panel: panels.popoutsWrapper
             deformAmount: panels.popouts.isDetached ? 0.05 : panels.popouts.hasCurrent ? 0.15 : 0.1
-            x: panels.popoutsWrapper.x + panels.popouts.x + bar.implicitWidth - panels.popouts.width * extraWidth
-            implicitWidth: panels.popouts.width * (1 + extraWidth)
+            y: panels.popoutsWrapper.y + panels.popouts.y + bar.implicitHeight - panels.popouts.height * extraHeight
+            implicitHeight: panels.popouts.height * (1 + extraHeight)
 
-            Behavior on extraWidth {
+            Behavior on extraHeight {
                 Anim {
                     duration: Appearance.anim.durations.expressiveDefaultSpatial
                     easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
@@ -282,8 +296,8 @@ StyledWindow {
         BarWrapper {
             id: bar
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             screen: root.screen
             visibilities: visibilities
@@ -300,8 +314,8 @@ StyledWindow {
         property real deformAmount: 0.15
 
         group: blobGroup
-        x: panel.x + bar.implicitWidth
-        y: panel.y + root.borderThickness
+        x: panel.x + root.borderThickness
+        y: panel.y + bar.implicitHeight
         implicitWidth: panel.width
         implicitHeight: panel.height
         radius: Config.border.rounding

@@ -12,10 +12,10 @@ Region {
     required property Panels panels
     required property var win
 
-    x: bar.clampedWidth + win.dragMaskPadding
-    y: Config.border.clampedThickness + win.dragMaskPadding
-    width: win.width - bar.clampedWidth - Config.border.clampedThickness - win.dragMaskPadding * 2
-    height: win.height - Config.border.clampedThickness * 2 - win.dragMaskPadding * 2
+    x: Config.border.clampedThickness + win.dragMaskPadding
+    y: bar.clampedHeight + win.dragMaskPadding
+    width: win.width - Config.border.clampedThickness * 2 - win.dragMaskPadding * 2
+    height: win.height - bar.clampedHeight - Config.border.clampedThickness - win.dragMaskPadding * 2
     intersection: Intersection.Xor
 
     R {
@@ -66,14 +66,14 @@ Region {
 
     R {
         panel: root.panels.popoutsWrapper
-        width: panel.width * (1 - root.panels.popoutsWrapper.offsetScale)
+        height: panel.height * (1 - root.panels.popoutsWrapper.offsetScale)
     }
 
     component R: Region {
         required property Item panel
 
-        x: panel.x + root.bar.implicitWidth
-        y: panel.y + Config.border.thickness
+        x: panel.x + Config.border.thickness
+        y: panel.y + root.bar.implicitHeight
         width: panel.width
         height: panel.height
         intersection: Intersection.Subtract

@@ -91,13 +91,13 @@ RowLayout {
             else if (angleDelta.y < 0 || (Config.bar.workspaces.perMonitorWorkspaces ? mon.activeWorkspace?.id : Hypr.activeWsId) > 1)
                 Hypr.dispatch(`workspace r${angleDelta.y > 0 ? "-" : "+"}1`);
         } else if (x < screen.width / 2 && Config.bar.scrollActions.volume) {
-            // Volume scroll on top half
+            // Volume scroll on left half
             if (angleDelta.y > 0)
                 Audio.incrementVolume();
             else if (angleDelta.y < 0)
                 Audio.decrementVolume();
         } else if (Config.bar.scrollActions.brightness) {
-            // Brightness scroll on bottom half
+            // Brightness scroll on right half
             const monitor = Brightness.getMonitorForScreen(screen);
             if (angleDelta.y > 0)
                 monitor.setBrightness(monitor.brightness + Config.services.brightnessIncrement);

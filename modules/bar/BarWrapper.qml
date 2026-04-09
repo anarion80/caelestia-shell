@@ -77,7 +77,7 @@ Item {
         id: content
 
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         anchors.right: parent.right
 
         active: root.shouldBeVisible || root.visible
