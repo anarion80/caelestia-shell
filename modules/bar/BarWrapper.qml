@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import qs.components
 import qs.config
+import qs.utils
 import qs.modules.bar.popouts as BarPopouts
 
 Item {
@@ -12,8 +13,9 @@ Item {
     required property ShellScreen screen
     required property DrawerVisibilities visibilities
     required property BarPopouts.Wrapper popouts
-    required property bool disabled
     required property bool fullscreen
+
+    readonly property bool disabled: Strings.testRegexList(Config.bar.excludedScreens, screen.name)
 
     readonly property int clampedWidth: Math.max(Config.border.minThickness, implicitWidth)
     readonly property int padding: Math.max(Appearance.padding.smaller, Config.border.thickness)
