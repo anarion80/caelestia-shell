@@ -105,6 +105,7 @@ Singleton {
     FileView {
         id: storage
 
+        printErrors: false
         path: `${Paths.state}/notifs.json`
         onLoaded: {
             const data = JSON.parse(text());
@@ -116,7 +117,7 @@ Singleton {
         onLoadFailed: err => {
             if (err === FileViewError.FileNotFound) {
                 root.loaded = true;
-                setText("[]");
+                Qt.callLater(() => setText("[]"));
             }
         }
     }

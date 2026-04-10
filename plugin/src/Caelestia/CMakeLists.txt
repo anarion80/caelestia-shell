@@ -57,6 +57,7 @@ qml_module(caelestia
         PkgConfig::Qalculate
 )
 
+add_subdirectory(Components)
 add_subdirectory(Internal)
 add_subdirectory(Models)
 add_subdirectory(Services)

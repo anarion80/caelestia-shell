@@ -101,7 +101,7 @@ Item {
                     {
                         isClose: true
                     },
-                    ...root.notif.actions,
+                    ...(root.notif?.actions ?? []),
                     {
                         isCopy: true
                     }
@@ -150,7 +150,7 @@ Item {
                         id: actionInner
 
                         anchors.centerIn: parent
-                        sourceComponent: action.modelData.isClose || action.modelData.isCopy ? iconBtn : root.notif.hasActionIcons ? iconComp : textComp
+                        sourceComponent: action.modelData.isClose || action.modelData.isCopy ? iconBtn : root.notif?.hasActionIcons ? iconComp : textComp
                     }
 
                     Component {

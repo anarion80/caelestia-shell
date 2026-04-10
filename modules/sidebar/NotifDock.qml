@@ -151,18 +151,24 @@ Item {
         id: clearTimer
 
         repeat: true
-        interval: 50
+        triggeredOnStart: true
+        interval: Math.max(15, Math.min(80, 69.8 - 12.3 * Math.log(Notifs.notClosed.length)))
         onTriggered: {
-            let next = null;
-            for (let i = 0; i < notifList.repeater.count; i++) {
-                next = notifList.repeater.itemAt(i);
-                if (!next?.closed) // qmllint disable missing-property
-                    break;
-            }
-            if (next) {
-                next.closeAll(); // qmllint disable missing-property
-            } else {
+            const first = Notifs.notClosed[0];
+            if (!first) {
                 stop();
+                return;
+            }
+
+            const appName = first.appName;
+            let cleared = 0;
+            for (const n of Notifs.notClosed.filter(n => n.appName === appName)) {
+                n.close();
+                cleared++;
+                if (cleared > 30) {
+                    interval = 5;
+                    return;
+                }
             }
         }
     }
