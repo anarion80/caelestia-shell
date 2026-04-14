@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.config
+import Caelestia.Config
 
 Singleton {
     id: root
@@ -14,7 +14,7 @@ Singleton {
     property real cpuTemp
 
     // GPU properties
-    readonly property string gpuType: Config.services.gpuType.toUpperCase() || autoGpuType
+    readonly property string gpuType: GlobalConfig.services.gpuType.toUpperCase() || autoGpuType
     property string autoGpuType: "NONE"
     property string gpuName: ""
     property real gpuPerc
@@ -80,7 +80,7 @@ Singleton {
 
     Timer {
         running: root.refCount > 0
-        interval: Config.dashboard.resourceUpdateInterval
+        interval: GlobalConfig.dashboard.resourceUpdateInterval
         repeat: true
         triggeredOnStart: true
         onTriggered: {
@@ -88,10 +88,6 @@ Singleton {
             meminfo.reload();
             storage.running = true;
             gpuUsage.running = true;
-            gpuTemp.running = true;
-            gpuPowerDraw.running = true;
-            gpuPstate.running = true;
-            gpuFanSpeed.running = true;
             sensors.running = true;
         }
     }
@@ -253,22 +249,9 @@ Singleton {
     }
 
     Process {
-        id: cpuTemp
-
-        running: true
-        command: ["sh", "-c", "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/*/temp1_input"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const temp = text.trim();
-                root.cpuTemp = temp / 1000;
-            }
-        }
-    }
-
-    Process {
         id: gpuTypeCheck
 
-        running: !Config.services.gpuType
+        running: !GlobalConfig.services.gpuType
         command: ["sh", "-c", "if command -v nvidia-smi &>/dev/null && nvidia-smi -L &>/dev/null; then echo NVIDIA; elif ls /sys/class/drm/card*/device/gpu_busy_percent 2>/dev/null | grep -q .; then echo GENERIC; else echo NONE; fi"]
         stdout: StdioCollector {
             onStreamFinished: root.autoGpuType = text.trim()
@@ -297,55 +280,6 @@ Singleton {
         }
     }
 
-    Process {
-        id: gpuTemp
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                root.gpuTemp = data;
-            }
-        }
-    }
-
-    Process {
-        id: gpuPowerDraw
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuPowerDraw = text.trim();
-            }
-        }
-    }
-
-    Process {
-        id: gpuFanSpeed
-
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuFanSpeed = text.trim();
-            }
-        }
-    }
-
-    Process {
-        id: gpuPstate
-
-        running: true
-        command: ["sh", "-c", "nvidia-smi --query-gpu=pstate --format=csv,noheader,nounits"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.gpuPstate = text.trim();
-            }
-        }
-    }
-    
     Process {
         id: sensors
 
@@ -389,8 +323,8 @@ Singleton {
                     }
                 }
 
-              root.gpuTemp = count > 0 ? sum / count : 0;
-          }
+                root.gpuTemp = count > 0 ? sum / count : 0;
+            }
         }
-      }
     }
+}

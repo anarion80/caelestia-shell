@@ -3,16 +3,16 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Caelestia.Config
 import Caelestia.Models
 import qs.services
-import qs.config
 import qs.utils
 
 Searcher {
     id: root
 
     readonly property string currentNamePath: `${Paths.state}/wallpaper/path.txt`
-    readonly property list<string> smartArg: Config.services.smartScheme ? [] : ["--no-smart"]
+    readonly property list<string> smartArg: GlobalConfig.services.smartScheme ? [] : ["--no-smart"]
 
     property bool showPreview: false
     readonly property string current: showPreview ? previewPath : actualCurrent
@@ -21,13 +21,11 @@ Searcher {
     property bool previewColourLock
 
     function setWallpaper(path: string): void {
-        path = Quickshell.shellPath("assets/goon.jpg");
         actualCurrent = path;
         Quickshell.execDetached(["caelestia", "wallpaper", "-f", path, ...smartArg]);
     }
 
     function preview(path: string): void {
-        path = Quickshell.shellPath("assets/goon.jpg");
         previewPath = path;
         showPreview = true;
 
@@ -43,7 +41,7 @@ Searcher {
 
     list: wallpapers.entries
     key: "relativePath"
-    useFuzzy: Config.launcher.useFuzzy.wallpapers
+    useFuzzy: GlobalConfig.launcher.useFuzzy.wallpapers
     extraOpts: useFuzzy ? ({}) : ({
             forward: false
         })
@@ -54,7 +52,7 @@ Searcher {
         }
 
         function set(path: string): void {
-            root.setWallpaper(Quickshell.shellPath("assets/goon.jpg"));
+            root.setWallpaper(path);
         }
 
         function list(): string {
@@ -69,7 +67,7 @@ Searcher {
         watchChanges: true
         onFileChanged: reload()
         onLoaded: {
-            root.actualCurrent = Quickshell.shellPath("assets/goon.jpg");
+            root.actualCurrent = text().trim();
             root.previewColourLock = false;
         }
     }
