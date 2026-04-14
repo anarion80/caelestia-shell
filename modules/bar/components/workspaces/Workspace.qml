@@ -3,9 +3,9 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 import qs.utils
 
 RowLayout {
@@ -18,7 +18,7 @@ RowLayout {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property int size: implicitWidth + (hasWindows ? Appearance.padding.small : 0)
+    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.small : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
@@ -33,7 +33,7 @@ RowLayout {
         id: indicator
 
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
+        Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
 
         animate: true
         text: {
@@ -61,7 +61,7 @@ RowLayout {
 
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: true
-        Layout.leftMargin: -Config.bar.sizes.innerHeight / 10
+        Layout.leftMargin: -Tokens.sizes.bar.innerHeight / 10
 
         visible: active
         active: root.hasWindows
@@ -74,7 +74,7 @@ RowLayout {
                     properties: "scale"
                     from: 0
                     to: 1
-                    easing.bezierCurve: Appearance.anim.curves.standardDecel
+                    easing: Tokens.anim.standardDecel
                 }
             }
 
@@ -82,7 +82,7 @@ RowLayout {
                 Anim {
                     properties: "scale"
                     to: 1
-                    easing.bezierCurve: Appearance.anim.curves.standardDecel
+                    easing: Tokens.anim.standardDecel
                 }
                 Anim {
                     properties: "x,y"
@@ -94,7 +94,7 @@ RowLayout {
                     values: {
                         const ws = root.ws;
                         const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws);
-                        const maxIcons = Config.bar.workspaces.maxWindowIcons;
+                        const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                         return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                     }
                 }

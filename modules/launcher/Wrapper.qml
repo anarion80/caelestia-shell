@@ -2,8 +2,8 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Caelestia.Config
 import qs.components
-import qs.config
 import qs.modules.launcher.services
 
 Item {
@@ -16,7 +16,7 @@ Item {
     readonly property bool shouldBeActive: visibilities.launcher && Config.launcher.enabled
 
     readonly property real maxHeight: {
-        let max = screen.height - Config.border.thickness * 2 - Appearance.spacing.large;
+        let max = screen.height - Config.border.thickness * 2 - Tokens.spacing.large;
         if (visibilities.dashboard)
             max -= panels.dashboard.nonAnimHeight;
         return max;
@@ -41,8 +41,8 @@ Item {
 
     Behavior on offsetScale {
         Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            duration: Tokens.anim.durations.expressiveDefaultSpatial
+            easing: Tokens.anim.expressiveDefaultSpatial
         }
     }
 

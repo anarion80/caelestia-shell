@@ -5,9 +5,9 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Services.UPower
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 import qs.utils
 
 StyledRect {
@@ -17,11 +17,11 @@ StyledRect {
     readonly property alias items: iconColumn
 
     color: Colours.tPalette.m3surfaceContainer
-    radius: Appearance.rounding.full
+    radius: Tokens.rounding.full
 
     clip: true
-    implicitWidth: iconColumn.implicitWidth + Appearance.padding.normal * 2 - (Config.bar.status.showLockStatus && !Hypr.capsLock && !Hypr.numLock ? iconColumn.spacing : 0)
-    implicitHeight: Config.bar.sizes.innerHeight
+    implicitWidth: iconColumn.implicitWidth + Tokens.padding.normal * 2 - (Config.bar.status.showLockStatus && !Hypr.capsLock && !Hypr.numLock ? iconColumn.spacing : 0)
+    implicitHeight: Tokens.sizes.bar.innerHeight
 
     RowLayout {
         id: iconColumn
@@ -29,9 +29,9 @@ StyledRect {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: Appearance.padding.normal
+        anchors.rightMargin: Tokens.padding.normal
 
-        spacing: Appearance.spacing.smaller / 2
+        spacing: Tokens.spacing.smaller / 2
 
         // Lock keys status
         WrappedLoader {
@@ -136,8 +136,7 @@ StyledRect {
                 animate: true
                 text: Hypr.kbLayout
                 color: root.colour
-                font.family: Appearance.font.family.mono
-                font.capitalization: Font.AllUppercase
+                font.family: Tokens.font.family.mono
             }
         }
 
@@ -173,7 +172,7 @@ StyledRect {
             active: Config.bar.status.showBluetooth
 
             sourceComponent: RowLayout {
-                spacing: Appearance.spacing.smaller / 2
+                spacing: Tokens.spacing.smaller / 2
 
                 // Bluetooth icon
                 MaterialIcon {
@@ -212,14 +211,14 @@ StyledRect {
                             Anim {
                                 from: 1
                                 to: 0
-                                duration: Appearance.anim.durations.large
-                                easing.bezierCurve: Appearance.anim.curves.standardAccel
+                                duration: Tokens.anim.durations.large
+                                easing: Tokens.anim.standardAccel
                             }
                             Anim {
                                 from: 0
                                 to: 1
-                                duration: Appearance.anim.durations.large
-                                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                                duration: Tokens.anim.durations.large
+                                easing: Tokens.anim.standardDecel
                             }
                         }
                     }

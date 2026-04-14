@@ -3,9 +3,9 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Caelestia.Components
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 
 LazyListView {
     id: root
@@ -18,7 +18,7 @@ LazyListView {
     anchors.right: parent?.right
     implicitHeight: contentHeight
 
-    spacing: Appearance.spacing.small
+    spacing: Tokens.spacing.small
     readyDelay: 1
     cacheBuffer: 400
     asynchronous: true
@@ -33,7 +33,7 @@ LazyListView {
     useCustomViewport: true
     viewport: Qt.rect(0, container.contentY, width, container.height)
 
-    removeDuration: Appearance.anim.durations.normal
+    removeDuration: Tokens.anim.durations.normal
 
     model: ScriptModel {
         values: {
@@ -129,8 +129,8 @@ LazyListView {
                 enabled: notif.LazyListView.ready
 
                 Anim {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                    duration: Tokens.anim.durations.expressiveDefaultSpatial
+                    easing: Tokens.anim.expressiveDefaultSpatial
                 }
             }
 
@@ -140,15 +140,15 @@ LazyListView {
 
             Behavior on scale {
                 Anim {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                    duration: Tokens.anim.durations.expressiveDefaultSpatial
+                    easing: Tokens.anim.expressiveDefaultSpatial
                 }
             }
 
             Behavior on x {
                 Anim {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                    duration: Tokens.anim.durations.expressiveDefaultSpatial
+                    easing: Tokens.anim.expressiveDefaultSpatial
                 }
             }
         }
@@ -159,7 +159,7 @@ LazyListView {
 
         target: root.container
         property: "contentY"
-        duration: Appearance.anim.durations.expressiveDefaultSpatial
-        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+        duration: Tokens.anim.durations.expressiveDefaultSpatial
+        easing: Tokens.anim.expressiveDefaultSpatial
     }
 }

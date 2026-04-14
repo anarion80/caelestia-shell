@@ -2,9 +2,9 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 
 Item {
     id: root
@@ -66,17 +66,17 @@ Item {
 
             x: (start?.x ?? 0) - 1
             implicitWidth: start && end ? end.x + end.size - start.x + 2 : 0
-            implicitHeight: Config.bar.sizes.innerHeight - Appearance.padding.small * 2 + 2
+            implicitHeight: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2 + 2
 
             color: Colours.layer(Colours.palette.m3surfaceContainerHigh, 2)
-            radius: Appearance.rounding.full
+            radius: Tokens.rounding.full
 
             scale: 0
             Component.onCompleted: scale = 1
 
             Behavior on scale {
                 Anim {
-                    easing.bezierCurve: Appearance.anim.curves.standardDecel
+                    easing: Tokens.anim.standardDecel
                 }
             }
 

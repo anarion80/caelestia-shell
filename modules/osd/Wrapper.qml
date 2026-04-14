@@ -2,9 +2,9 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 
 Item {
     id: root
@@ -46,8 +46,8 @@ Item {
 
     Behavior on offsetScale {
         Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            duration: Tokens.anim.durations.expressiveDefaultSpatial
+            easing: Tokens.anim.expressiveDefaultSpatial
         }
     }
 
@@ -87,7 +87,7 @@ Item {
     Timer {
         id: timer
 
-        interval: Config.osd.hideDelay
+        interval: root.Config.osd.hideDelay
         onTriggered: {
             if (!root.hovered)
                 root.visibilities.osd = false;

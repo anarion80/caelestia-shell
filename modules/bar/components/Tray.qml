@@ -3,9 +3,9 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 
 StyledRect {
     id: root
@@ -14,8 +14,8 @@ StyledRect {
     readonly property alias items: items
     readonly property alias expandIcon: expandIcon
 
-    readonly property int padding: Config.bar.tray.background ? Appearance.padding.normal : Appearance.padding.small
-    readonly property int spacing: Config.bar.tray.background ? Appearance.spacing.small : 0
+    readonly property int padding: Config.bar.tray.background ? Tokens.padding.normal : Tokens.padding.small
+    readonly property int spacing: Config.bar.tray.background ? Tokens.spacing.small : 0
 
     property bool expanded
 
@@ -29,10 +29,10 @@ StyledRect {
     visible: height > 0
 
     implicitWidth: nonAnimWidth
-    implicitHeight: Config.bar.sizes.innerHeight
+    implicitHeight: Tokens.sizes.bar.innerHeight
 
     color: Qt.alpha(Colours.tPalette.m3surfaceContainer, (Config.bar.tray.background && items.count > 0) ? Colours.tPalette.m3surfaceContainer.a : 0)
-    radius: Appearance.rounding.full
+    radius: Tokens.rounding.full
 
     Row {
         id: layout
@@ -40,7 +40,7 @@ StyledRect {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: root.padding
-        spacing: Appearance.spacing.small
+        spacing: Tokens.spacing.small
 
         opacity: root.expanded || !Config.bar.tray.compact ? 1 : 0
 
@@ -49,7 +49,7 @@ StyledRect {
                 properties: "scale"
                 from: 0
                 to: 1
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing: Tokens.anim.standardDecel
             }
         }
 
@@ -57,7 +57,7 @@ StyledRect {
             Anim {
                 properties: "scale"
                 to: 1
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing: Tokens.anim.standardDecel
             }
             Anim {
                 properties: "x,y"
@@ -68,7 +68,7 @@ StyledRect {
             id: items
 
             model: ScriptModel {
-                values: SystemTray.items.values.filter(i => !Config.bar.tray.hiddenIcons.includes(i.id))
+                values: SystemTray.items.values.filter(i => !GlobalConfig.bar.tray.hiddenIcons.includes(i.id))
             }
 
             TrayItem {}
@@ -90,7 +90,7 @@ StyledRect {
         active: Config.bar.tray.compact && items.count > 0
 
         sourceComponent: Item {
-            implicitWidth: expandIconInner.implicitWidth - Appearance.padding.small * 2
+            implicitWidth: expandIconInner.implicitWidth - Tokens.padding.small * 2
             implicitHeight: expandIconInner.implicitHeight
 
             MaterialIcon {
@@ -98,10 +98,10 @@ StyledRect {
 
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: Config.bar.tray.background ? Appearance.padding.small : -Appearance.padding.small
+                anchors.rightMargin: Config.bar.tray.background ? Tokens.padding.small : -Tokens.padding.small
                 text: "expand_less"
-                font.pointSize: Appearance.font.size.large
-                rotation: root.expanded ? 90 : -90
+                font.pointSize: Tokens.font.size.large
+                rotation: root.expanded ? 180 : 0
 
                 Behavior on rotation {
                     Anim {}
@@ -116,8 +116,8 @@ StyledRect {
 
     Behavior on implicitWidth {
         Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            duration: Tokens.anim.durations.expressiveDefaultSpatial
+            easing: Tokens.anim.expressiveDefaultSpatial
         }
     }
 }

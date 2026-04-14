@@ -1,8 +1,10 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
+import Caelestia.Config
 import qs.components
 import qs.components.effects
 import qs.services
-import qs.config
 
 StyledRect {
     id: root
@@ -43,8 +45,8 @@ StyledRect {
     clip: true
     x: offset + mask.x
     implicitWidth: size
-    implicitHeight: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
-    radius: Appearance.rounding.full
+    implicitHeight: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
+    radius: Tokens.rounding.full
     color: Colours.palette.m3primary
 
     Colouriser {
@@ -61,38 +63,38 @@ StyledRect {
     }
 
     Behavior on leading {
-        enabled: Config.bar.workspaces.activeTrail
+        enabled: root.Config.bar.workspaces.activeTrail
 
         EAnim {}
     }
 
     Behavior on trailing {
-        enabled: Config.bar.workspaces.activeTrail
+        enabled: root.Config.bar.workspaces.activeTrail
 
         EAnim {
-            duration: Appearance.anim.durations.normal * 2
+            duration: Tokens.anim.durations.normal * 2
         }
     }
 
     Behavior on currentSize {
-        enabled: Config.bar.workspaces.activeTrail
+        enabled: root.Config.bar.workspaces.activeTrail
 
         EAnim {}
     }
 
     Behavior on offset {
-        enabled: !Config.bar.workspaces.activeTrail
+        enabled: !root.Config.bar.workspaces.activeTrail
 
         EAnim {}
     }
 
     Behavior on size {
-        enabled: !Config.bar.workspaces.activeTrail
+        enabled: !root.Config.bar.workspaces.activeTrail
 
         EAnim {}
     }
 
     component EAnim: Anim {
-        easing.bezierCurve: Appearance.anim.curves.emphasized
+        easing: Tokens.anim.emphasized
     }
 }

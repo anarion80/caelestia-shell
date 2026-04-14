@@ -3,12 +3,12 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import Caelestia.Config
 import qs.components.containers
 import qs.services
-import qs.config
 
 Variants {
-    model: Config.background.enabled ? Screens.screens : []
+    model: Screens.screens.filter(s => GlobalConfig.forScreen(s.name).background.enabled)
 
     StyledWindow {
         id: win
@@ -18,8 +18,8 @@ Variants {
         screen: modelData
         name: "background"
         WlrLayershell.exclusionMode: ExclusionMode.Ignore
-        WlrLayershell.layer: Config.background.wallpaperEnabled ? WlrLayer.Background : WlrLayer.Bottom
-        color: Config.background.wallpaperEnabled ? "black" : "transparent"
+        WlrLayershell.layer: contentItem.Config.background.wallpaperEnabled ? WlrLayer.Background : WlrLayer.Bottom
+        color: contentItem.Config.background.wallpaperEnabled ? "black" : "transparent"
         surfaceFormat.opaque: false
 
         anchors.top: true
@@ -56,8 +56,8 @@ Variants {
             asynchronous: true
             active: Config.background.desktopClock.enabled
 
-            anchors.margins: Appearance.padding.large * 2
-            anchors.topMargin: Appearance.padding.large * 2 + Config.bar.sizes.innerHeight + Math.max(Appearance.padding.smaller, Config.border.thickness)
+            anchors.margins: Tokens.padding.large * 2
+            anchors.topMargin: Tokens.padding.large * 2 + Tokens.sizes.bar.innerHeight + Math.max(Tokens.padding.smaller, Config.border.thickness)
 
             state: Config.background.desktopClock.position
             states: [
@@ -146,8 +146,8 @@ Variants {
 
             transitions: Transition {
                 AnchorAnimation {
-                    duration: Appearance.anim.durations.expressiveDefaultSpatial
-                    easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                    duration: Tokens.anim.durations.expressiveDefaultSpatial
+                    easing: Tokens.anim.expressiveDefaultSpatial
                 }
             }
 

@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 import qs.utils
 
 Item {
@@ -86,8 +86,8 @@ Item {
         id: metrics
 
         text: root.windowTitle
-        font.pointSize: Appearance.font.size.smaller
-        font.family: Appearance.font.family.mono
+        font.pointSize: root.Tokens.font.size.smaller
+        font.family: root.Tokens.font.family.mono
         elide: Qt.ElideRight
         elideWidth: root.maxWidth - icon.width
 
@@ -101,8 +101,8 @@ Item {
 
     Behavior on implicitWidth {
         Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            duration: Tokens.anim.durations.expressiveDefaultSpatial
+            easing: Tokens.anim.expressiveDefaultSpatial
         }
     }
 
@@ -111,21 +111,23 @@ Item {
 
         anchors.verticalCenter: icon.verticalCenter
         anchors.left: icon.right
-        anchors.leftMargin: Appearance.spacing.small
+        anchors.leftMargin: Tokens.spacing.small
 
         font.pointSize: metrics.font.pointSize
         font.family: metrics.font.family
         color: root.colour
         opacity: root.current === this ? 1 : 0
 
-        transform: Translate {
-            x: Config.bar.activeWindow.inverted ? -text.implicitWidth + text.implicitHeight : 0
-        }
-        // Rotation {
-        //     angle: Config.bar.activeWindow.inverted ? 270 : 90
-        //     origin.x: text.implicitHeight / 2
-        //     origin.y: text.implicitHeight / 2
-        // }
+        transform: [
+            Translate {
+                x: root.Config.bar.activeWindow.inverted ? -text.implicitWidth + text.implicitHeight : 0
+            },
+            // Rotation {
+            //     angle: root.Config.bar.activeWindow.inverted ? 270 : 90
+            //     origin.x: text.implicitHeight / 2
+            //     origin.y: text.implicitHeight / 2
+            // }
+        ]
 
         width: implicitWidth
         height: implicitHeight

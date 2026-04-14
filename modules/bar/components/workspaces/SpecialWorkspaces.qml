@@ -4,10 +4,10 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
+import Caelestia.Config
 import qs.components
 import qs.components.effects
 import qs.services
-import qs.config
 import qs.utils
 
 Item {
@@ -15,7 +15,7 @@ Item {
 
     required property ShellScreen screen
     readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
-    readonly property string activeSpecial: (Config.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? ""
+    readonly property string activeSpecial: (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? ""
 
     layer.enabled: true
     layer.effect: OpacityMask {
@@ -31,7 +31,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: Appearance.rounding.full
+            radius: Tokens.rounding.full
 
             gradient: Gradient {
                 orientation: Gradient.Horizontal
@@ -60,7 +60,7 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
 
-            radius: Appearance.rounding.full
+            radius: Tokens.rounding.full
             implicitWidth: parent.width / 2
             opacity: view.contentX > 0 ? 0 : 1
 
@@ -74,9 +74,9 @@ Item {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
-            radius: Appearance.rounding.full
+            radius: Tokens.rounding.full
             implicitWidth: parent.width / 2
-            opacity: view.contentX < view.contentWidth - parent.width + Appearance.padding.small ? 0 : 1
+            opacity: view.contentX < view.contentWidth - parent.width + Tokens.padding.small ? 0 : 1
 
             Behavior on opacity {
                 Anim {}
@@ -88,7 +88,7 @@ Item {
         id: view
 
         anchors.fill: parent
-        spacing: Appearance.spacing.normal
+        spacing: Tokens.spacing.normal
         interactive: false
         orientation: ListView.Horizontal
 
@@ -96,7 +96,7 @@ Item {
         onCurrentIndexChanged: currentIndex = Qt.binding(() => model.values.findIndex(w => w.name === root.activeSpecial))
 
         model: ScriptModel {
-            values: Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && (!Config.bar.workspaces.perMonitorWorkspaces || w.monitor === root.monitor))
+            values: Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && (!GlobalConfig.bar.workspaces.perMonitorWorkspaces || w.monitor === root.monitor))
         }
 
         preferredHighlightBegin: 0
@@ -120,7 +120,7 @@ Item {
                 properties: "scale"
                 from: 0
                 to: 1
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing: Tokens.anim.standardDecel
             }
         }
 
@@ -128,12 +128,12 @@ Item {
             Anim {
                 property: "scale"
                 to: 0.5
-                duration: Appearance.anim.durations.small
+                duration: Tokens.anim.durations.small
             }
             Anim {
                 property: "opacity"
                 to: 0
-                duration: Appearance.anim.durations.small
+                duration: Tokens.anim.durations.small
             }
         }
 
@@ -141,7 +141,7 @@ Item {
             Anim {
                 properties: "scale"
                 to: 1
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing: Tokens.anim.standardDecel
             }
             Anim {
                 properties: "x,y"
@@ -152,7 +152,7 @@ Item {
             Anim {
                 properties: "scale"
                 to: 1
-                easing.bezierCurve: Appearance.anim.curves.standardDecel
+                easing: Tokens.anim.standardDecel
             }
             Anim {
                 properties: "x,y"
@@ -176,7 +176,7 @@ Item {
                 implicitWidth: (view.currentItem as SpecialWsDelegate)?.size ?? 0
 
                 color: Colours.palette.m3tertiary
-                radius: Appearance.rounding.full
+                radius: Tokens.rounding.full
 
                 Colouriser {
                     source: view
@@ -193,13 +193,13 @@ Item {
 
                 Behavior on x {
                     Anim {
-                        easing.bezierCurve: Appearance.anim.curves.emphasized
+                        easing: Tokens.anim.emphasized
                     }
                 }
 
                 Behavior on implicitWidth {
                     Anim {
-                        easing.bezierCurve: Appearance.anim.curves.emphasized
+                        easing: Tokens.anim.emphasized
                     }
                 }
             }
@@ -214,7 +214,7 @@ Item {
         drag.target: view.contentItem
         drag.axis: Drag.XAxis
         drag.maximumX: 0
-        drag.minimumX: Math.min(0, view.width - view.contentWidth - Appearance.padding.small)
+        drag.minimumX: Math.min(0, view.width - view.contentWidth - Tokens.padding.small)
 
         onPressed: event => startX = event.x
 
@@ -234,7 +234,7 @@ Item {
         id: ws
 
         required property HyprlandWorkspace modelData
-        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Appearance.padding.small : 0)
+        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Tokens.padding.small : 0)
         property int wsId
         property string icon
         property bool hasWindows
@@ -264,7 +264,7 @@ Item {
 
             function onLastIpcObjectChanged(): void {
                 if (ws.modelData)
-                    ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
+                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
             }
 
             target: ws.modelData
@@ -273,10 +273,10 @@ Item {
         Connections {
             function onShowWindowsOnSpecialWorkspacesChanged(): void {
                 if (ws.modelData)
-                    ws.hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
+                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
             }
 
-            target: Config.bar.workspaces
+            target: root.Config.bar.workspaces
         }
 
         Loader {
@@ -285,7 +285,7 @@ Item {
             asynchronous: true
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.small * 2
+            Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
 
             sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
 
@@ -329,7 +329,7 @@ Item {
                         properties: "scale"
                         from: 0
                         to: 1
-                        easing.bezierCurve: Appearance.anim.curves.standardDecel
+                        easing: Tokens.anim.standardDecel
                     }
                 }
 
@@ -337,7 +337,7 @@ Item {
                     Anim {
                         properties: "scale"
                         to: 1
-                        easing.bezierCurve: Appearance.anim.curves.standardDecel
+                        easing: Tokens.anim.standardDecel
                     }
                     Anim {
                         properties: "x,y"
@@ -348,7 +348,7 @@ Item {
                     model: ScriptModel {
                         values: {
                             const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId);
-                            const maxIcons = Config.bar.workspaces.maxWindowIcons;
+                            const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                             return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                         }
                     }
