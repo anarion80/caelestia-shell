@@ -28,7 +28,7 @@ Singleton {
         id: getUnreadEmails
 
         running: true
-        command: Config.bar.mail.fetchCommand
+        command: GlobalConfig.bar.mail.fetchCommand
         // qmllint disable incompatible-type
         environment: ({
                 LANG: "C.UTF-8",

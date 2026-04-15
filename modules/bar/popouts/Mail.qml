@@ -9,12 +9,12 @@ import Caelestia.Config
 Column {
     id: root
 
-    spacing: Appearance.spacing.normal
+    spacing: Tokens.spacing.normal
     visible: MailService.unreadEmails.length > 0
 
     Repeater {
         model: ScriptModel {
-            values: MailService.unreadEmails.slice(0, Math.min(Config.bar.mail.emailsShown, 15))
+            values: MailService.unreadEmails.slice(0, Math.min(GlobalConfig.bar.mail.emailsShown, 15))
         }
 
         Row {
@@ -22,7 +22,7 @@ Column {
 
             required property var modelData
 
-            spacing: Appearance.spacing.small
+            spacing: Tokens.spacing.small
 
             MaterialIcon {
                 id: icon
