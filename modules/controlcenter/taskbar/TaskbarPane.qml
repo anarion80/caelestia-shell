@@ -38,6 +38,9 @@ Item {
     property bool trayBackground: Config.bar.tray.background ?? false
     property bool trayCompact: Config.bar.tray.compact ?? false
     property bool trayRecolour: Config.bar.tray.recolour ?? false
+    property bool mailEnabled: Config.bar.mail.enabled ?? false
+    property bool mailShowNumber: Config.bar.mail.showNumber ?? false
+    property int mailEmailsShown: Config.bar.mail.emailsShown ?? 5
     property int workspacesShown: Config.bar.workspaces.shown ?? 5
     property bool workspacesActiveIndicator: Config.bar.workspaces.activeIndicator ?? true
     property bool workspacesOccupiedBg: Config.bar.workspaces.occupiedBg ?? false
@@ -73,6 +76,9 @@ Item {
         GlobalConfig.bar.tray.background = root.trayBackground;
         GlobalConfig.bar.tray.compact = root.trayCompact;
         GlobalConfig.bar.tray.recolour = root.trayRecolour;
+        GlobalConfig.bar.mail.enabled = root.mailEnabled;
+        GlobalConfig.bar.mail.showNumber = root.mailShowNumber;
+        GlobalConfig.bar.mail.emailsShown = root.mailEmailsShown;
         GlobalConfig.bar.workspaces.shown = root.workspacesShown;
         GlobalConfig.bar.workspaces.activeIndicator = root.workspacesActiveIndicator;
         GlobalConfig.bar.workspaces.occupiedBg = root.workspacesOccupiedBg;
@@ -746,6 +752,120 @@ Item {
                                         }
                                     }
                                 ]
+                            }
+                        }
+
+                        SectionContainer {
+                            Layout.fillWidth: true
+                            alignTop: true
+
+                            StyledText {
+                                text: qsTr("Mail")
+                                font.pointSize: Tokens.font.size.normal
+                            }
+
+                            StyledRect {
+                                Layout.fillWidth: true
+                                implicitHeight: mailEnabledRow.implicitHeight + Tokens.padding.large * 2
+                                radius: Tokens.rounding.normal
+                                color: Colours.layer(Colours.palette.m3surfaceContainer, 2)
+
+                                Behavior on implicitHeight {
+                                    Anim {}
+                                }
+
+                                RowLayout {
+                                    id: mailEnabledRow
+
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.margins: Tokens.padding.large
+                                    spacing: Tokens.spacing.normal
+
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: qsTr("Enabled")
+                                    }
+
+                                    StyledSwitch {
+                                        checked: root.mailEnabled
+                                        onToggled: {
+                                            root.mailEnabled = checked;
+                                            root.saveConfig();
+                                        }
+                                    }
+                                }
+                            }
+
+                            StyledRect {
+                                Layout.fillWidth: true
+                                implicitHeight: mailShowNumberRow.implicitHeight + Tokens.padding.large * 2
+                                radius: Tokens.rounding.normal
+                                color: Colours.layer(Colours.palette.m3surfaceContainer, 2)
+
+                                Behavior on implicitHeight {
+                                    Anim {}
+                                }
+
+                                RowLayout {
+                                    id: mailShowNumberRow
+
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.margins: Tokens.padding.large
+                                    spacing: Tokens.spacing.normal
+
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: qsTr("Show count")
+                                    }
+
+                                    StyledSwitch {
+                                        checked: root.mailShowNumber
+                                        onToggled: {
+                                            root.mailShowNumber = checked;
+                                            root.saveConfig();
+                                        }
+                                    }
+                                }
+                            }
+
+                            StyledRect {
+                                Layout.fillWidth: true
+                                implicitHeight: mailEmailsShownRow.implicitHeight + Tokens.padding.large * 2
+                                radius: Tokens.rounding.normal
+                                color: Colours.layer(Colours.palette.m3surfaceContainer, 2)
+
+                                Behavior on implicitHeight {
+                                    Anim {}
+                                }
+
+                                RowLayout {
+                                    id: mailEmailsShownRow
+
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.margins: Tokens.padding.large
+                                    spacing: Tokens.spacing.normal
+
+                                    StyledText {
+                                        Layout.fillWidth: true
+                                        text: qsTr("Emails shown")
+                                    }
+
+                                    CustomSpinBox {
+                                        min: 1
+                                        max: 15
+                                        value: root.mailEmailsShown
+                                        onValueModified: value => {
+                                            root.mailEmailsShown = value;
+                                            root.saveConfig();
+                                        }
+                                    }
+                                }
                             }
                         }
 
