@@ -96,22 +96,20 @@ Item {
 
                     Behavior on opacity {
                         Anim {
-                            duration: Tokens.anim.durations.small
+                            type: Anim.StandardSmall
                         }
                     }
                 }
 
                 Behavior on implicitWidth {
                     Anim {
-                        duration: Tokens.anim.durations.expressiveDefaultSpatial
-                        easing: Tokens.anim.expressiveDefaultSpatial
+                        type: Anim.DefaultSpatial
                     }
                 }
 
                 Behavior on implicitHeight {
                     Anim {
-                        duration: Tokens.anim.durations.expressiveDefaultSpatial
-                        easing: Tokens.anim.expressiveDefaultSpatial
+                        type: Anim.DefaultSpatial
                     }
                 }
             }
@@ -156,13 +154,12 @@ Item {
         transitions: Transition {
             Anim {
                 property: "opacity"
-                duration: Tokens.anim.durations.small
+                type: Anim.StandardSmall
             }
 
             Anim {
                 properties: "implicitWidth,implicitHeight"
-                duration: Tokens.anim.durations.expressiveDefaultSpatial
-                easing: Tokens.anim.expressiveDefaultSpatial
+                type: Anim.DefaultSpatial
             }
         }
 

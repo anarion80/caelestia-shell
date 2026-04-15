@@ -132,8 +132,7 @@ LazyListView {
                 enabled: notif.LazyListView.ready
 
                 Anim {
-                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                    easing: Tokens.anim.expressiveDefaultSpatial
+                    type: Anim.DefaultSpatial
                 }
             }
 
@@ -147,8 +146,7 @@ LazyListView {
 
             Behavior on x {
                 Anim {
-                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                    easing: Tokens.anim.expressiveDefaultSpatial
+                    type: Anim.DefaultSpatial
                 }
             }
         }

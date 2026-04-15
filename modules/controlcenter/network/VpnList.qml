@@ -378,15 +378,13 @@ ColumnLayout {
                     property: "opacity"
                     from: 0
                     to: 1
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.emphasized
+                    type: Anim.Emphasized
                 }
                 Anim {
                     property: "scale"
                     from: 0.7
                     to: 1
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.emphasized
+                    type: Anim.Emphasized
                 }
             }
         }
@@ -397,15 +395,13 @@ ColumnLayout {
                     property: "opacity"
                     from: 1
                     to: 0
-                    duration: Tokens.anim.durations.small
-                    easing: Tokens.anim.emphasized
+                    type: Anim.EmphasizedSmall
                 }
                 Anim {
                     property: "scale"
                     from: 1
                     to: 0.7
-                    duration: Tokens.anim.durations.small
-                    easing: Tokens.anim.emphasized
+                    type: Anim.EmphasizedSmall
                 }
             }
         }
@@ -431,8 +427,7 @@ ColumnLayout {
 
             Behavior on implicitHeight {
                 Anim {
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.emphasized
+                    type: Anim.Emphasized
                 }
             }
         }
@@ -442,8 +437,7 @@ ColumnLayout {
 
             Behavior on implicitHeight {
                 Anim {
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.emphasized
+                    type: Anim.Emphasized
                 }
             }
 
@@ -457,8 +451,7 @@ ColumnLayout {
 
                 Behavior on opacity {
                     Anim {
-                        duration: Tokens.anim.durations.small
-                        easing: Tokens.anim.emphasized
+                        type: Anim.EmphasizedSmall
                     }
                 }
 
@@ -577,8 +570,7 @@ ColumnLayout {
 
                 Behavior on opacity {
                     Anim {
-                        duration: Tokens.anim.durations.small
-                        easing: Tokens.anim.emphasized
+                        type: Anim.EmphasizedSmall
                     }
                 }
 
@@ -815,8 +807,7 @@ ColumnLayout {
                     target: selectionContent
                     property: "opacity"
                     to: 0
-                    duration: Tokens.anim.durations.small
-                    easing: Tokens.anim.emphasized
+                    type: Anim.EmphasizedSmall
                 }
             }
 
@@ -831,8 +822,7 @@ ColumnLayout {
                     target: formContent
                     property: "opacity"
                     to: 1
-                    duration: Tokens.anim.durations.small
-                    easing: Tokens.anim.emphasized
+                    type: Anim.EmphasizedSmall
                 }
             }
         }

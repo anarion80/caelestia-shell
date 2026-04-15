@@ -147,9 +147,8 @@ Column {
             ]
 
             transitions: Transition {
-                AnchorAnimation {
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.emphasized
+                AnchorAnim {
+                    type: AnchorAnim.Emphasized
                 }
             }
         }

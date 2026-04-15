@@ -236,15 +236,13 @@ CustomMouseArea {
 
                 Behavior on x {
                     Anim {
-                        duration: Tokens.anim.durations.expressiveDefaultSpatial
-                        easing: Tokens.anim.expressiveDefaultSpatial
+                        type: Anim.DefaultSpatial
                     }
                 }
 
                 Behavior on y {
                     Anim {
-                        duration: Tokens.anim.durations.expressiveDefaultSpatial
-                        easing: Tokens.anim.expressiveDefaultSpatial
+                        type: Anim.DefaultSpatial
                     }
                 }
             }

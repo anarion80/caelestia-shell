@@ -86,7 +86,7 @@ Row {
 
                 Behavior on Layout.preferredWidth {
                     Anim {
-                        easing: Tokens.anim.emphasized
+                        type: Anim.Emphasized
                     }
                 }
             }

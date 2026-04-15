@@ -140,7 +140,7 @@ Slider {
 
     Behavior on value {
         Anim {
-            duration: Tokens.anim.durations.large
+            type: Anim.StandardLarge
         }
     }
 }

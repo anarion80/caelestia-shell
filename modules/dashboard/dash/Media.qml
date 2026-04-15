@@ -20,7 +20,7 @@ Item {
 
     Behavior on playerProgress {
         Anim {
-            duration: Tokens.anim.durations.large
+            type: Anim.StandardLarge
         }
     }
 

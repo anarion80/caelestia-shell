@@ -34,7 +34,7 @@ Item {
 
         Behavior on opacity {
             Anim {
-                duration: Tokens.anim.durations.extraLarge
+                type: Anim.StandardExtraLarge
             }
         }
     }
@@ -193,15 +193,13 @@ Item {
 
         Behavior on Layout.preferredWidth {
             Anim {
-                duration: Tokens.anim.durations.expressiveFastSpatial
-                easing: Tokens.anim.expressiveFastSpatial
+                type: Anim.FastSpatial
             }
         }
 
         Behavior on radius {
             Anim {
-                duration: Tokens.anim.durations.expressiveFastSpatial
-                easing: Tokens.anim.expressiveFastSpatial
+                type: Anim.FastSpatial
             }
         }
     }
