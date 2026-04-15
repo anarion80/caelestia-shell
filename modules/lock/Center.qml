@@ -415,10 +415,4 @@ ColumnLayout {
         duration: Tokens.anim.durations.small
         easing.type: Easing.Linear
     }
-}   component FlashAnim: NumberAnimation {
-        target: message
-        property: "opacity"
-        duration: Tokens.anim.durations.small
-        easing.type: Easing.Linear
-    }
 }
