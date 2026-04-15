@@ -101,8 +101,7 @@ StyledRect {
 
             Behavior on implicitHeight {
                 Anim {
-                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                    easing: Tokens.anim.expressiveDefaultSpatial
+                    type: Anim.DefaultSpatial
                 }
             }
 
@@ -285,9 +284,8 @@ StyledRect {
                         target: summary
                         property: "maximumLineCount"
                     }
-                    AnchorAnimation {
-                        duration: Tokens.anim.durations.normal
-                        easing: Tokens.anim.standard
+                    AnchorAnim {
+                        type: AnchorAnim.Standard
                     }
                 }
 
@@ -328,9 +326,8 @@ StyledRect {
                 }
 
                 transitions: Transition {
-                    AnchorAnimation {
-                        duration: Tokens.anim.durations.normal
-                        easing: Tokens.anim.standard
+                    AnchorAnim {
+                        type: AnchorAnim.Standard
                     }
                 }
             }

@@ -120,7 +120,7 @@ Item {
 
             Behavior on implicitWidth {
                 Anim {
-                    easing: Tokens.anim.emphasized
+                    type: Anim.Emphasized
                 }
             }
         }

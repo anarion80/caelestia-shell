@@ -170,8 +170,6 @@ Item {
                     target: ripple
                     property: "opacity"
                     to: 0
-                    duration: Tokens.anim.durations.normal
-                    easing: Tokens.anim.standard
                 }
             }
 

@@ -101,8 +101,7 @@ Item {
 
     Behavior on implicitWidth {
         Anim {
-            duration: Tokens.anim.durations.expressiveDefaultSpatial
-            easing: Tokens.anim.expressiveDefaultSpatial
+            type: Anim.DefaultSpatial
         }
     }
 

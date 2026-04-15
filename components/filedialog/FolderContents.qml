@@ -120,8 +120,7 @@ Item {
                 properties: "opacity,scale"
                 from: 0
                 to: 1
-                duration: Tokens.anim.durations.expressiveDefaultSpatial
-                easing: Tokens.anim.expressiveDefaultSpatial
+                type: Anim.DefaultSpatial
             }
         }
 
@@ -144,8 +143,7 @@ Item {
             }
             Anim {
                 properties: "x,y"
-                duration: Tokens.anim.durations.expressiveDefaultSpatial
-                easing: Tokens.anim.expressiveDefaultSpatial
+                type: Anim.DefaultSpatial
             }
         }
     }

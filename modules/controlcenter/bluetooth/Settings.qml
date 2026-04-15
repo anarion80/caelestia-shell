@@ -170,8 +170,7 @@ ColumnLayout {
 
                         Behavior on scale {
                             Anim {
-                                duration: Tokens.anim.durations.expressiveFastSpatial
-                                easing: Tokens.anim.expressiveFastSpatial
+                                type: Anim.FastSpatial
                             }
                         }
                     }
@@ -250,15 +249,13 @@ ColumnLayout {
 
                         Behavior on scale {
                             Anim {
-                                duration: Tokens.anim.durations.expressiveFastSpatial
-                                easing: Tokens.anim.expressiveFastSpatial
+                                type: Anim.FastSpatial
                             }
                         }
 
                         Behavior on implicitHeight {
                             Anim {
-                                duration: Tokens.anim.durations.expressiveDefaultSpatial
-                                easing: Tokens.anim.expressiveDefaultSpatial
+                                type: Anim.DefaultSpatial
                             }
                         }
                     }
@@ -313,9 +310,8 @@ ColumnLayout {
                     }
 
                     transitions: Transition {
-                        AnchorAnimation {
-                            duration: Tokens.anim.durations.normal
-                            easing: Tokens.anim.standard
+                        AnchorAnim {
+                            type: AnchorAnim.Standard
                         }
                         Anim {
                             properties: "implicitHeight,opacity,padding"
@@ -404,8 +400,7 @@ ColumnLayout {
 
                     Behavior on scale {
                         Anim {
-                            duration: Tokens.anim.durations.expressiveFastSpatial
-                            easing: Tokens.anim.expressiveFastSpatial
+                            type: Anim.FastSpatial
                         }
                     }
                 }

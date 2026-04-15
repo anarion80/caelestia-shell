@@ -61,7 +61,7 @@ Item {
 
     Behavior on playerProgress {
         Anim {
-            duration: Tokens.anim.durations.large
+            type: Anim.StandardLarge
         }
     }
 
@@ -505,8 +505,7 @@ Item {
 
         Behavior on Layout.preferredWidth {
             Anim {
-                duration: Tokens.anim.durations.expressiveFastSpatial
-                easing: Tokens.anim.expressiveFastSpatial
+                type: Anim.FastSpatial
             }
         }
     }

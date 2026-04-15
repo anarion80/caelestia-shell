@@ -236,15 +236,13 @@ StyledRect {
 
                             Behavior on rotation {
                                 Anim {
-                                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                                    easing: Tokens.anim.expressiveDefaultSpatial
+                                    type: Anim.DefaultSpatial
                                 }
                             }
 
                             Behavior on Layout.topMargin {
                                 Anim {
-                                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                                    easing: Tokens.anim.expressiveDefaultSpatial
+                                    type: Anim.DefaultSpatial
                                 }
                             }
                         }

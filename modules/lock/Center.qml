@@ -397,13 +397,13 @@ ColumnLayout {
                     target: message
                     property: "scale"
                     to: 0.7
-                    duration: Tokens.anim.durations.large
+                    type: Anim.StandardLarge
                 }
                 Anim {
                     target: message
                     property: "opacity"
                     to: 0
-                    duration: Tokens.anim.durations.large
+                    type: Anim.StandardLarge
                 }
             }
         }

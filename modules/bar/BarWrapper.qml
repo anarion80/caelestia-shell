@@ -57,8 +57,7 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
-                duration: Tokens.anim.durations.expressiveDefaultSpatial
-                easing: Tokens.anim.expressiveDefaultSpatial
+                type: Anim.DefaultSpatial
             }
         },
         Transition {
@@ -68,7 +67,7 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
-                easing: Tokens.anim.emphasized
+                type: Anim.Emphasized
             }
         }
     ]

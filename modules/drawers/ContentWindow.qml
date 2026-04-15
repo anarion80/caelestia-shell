@@ -73,22 +73,19 @@ StyledWindow {
 
     Behavior on borderThickness {
         Anim {
-            duration: Tokens.anim.durations.expressiveDefaultSpatial
-            easing: Tokens.anim.expressiveDefaultSpatial
+            type: Anim.DefaultSpatial
         }
     }
 
     Behavior on borderRounding {
         Anim {
-            duration: Tokens.anim.durations.expressiveDefaultSpatial
-            easing: Tokens.anim.expressiveDefaultSpatial
+            type: Anim.DefaultSpatial
         }
     }
 
     Behavior on shadowOpacity {
         Anim {
-            duration: Tokens.anim.durations.expressiveDefaultSpatial
-            easing: Tokens.anim.expressiveDefaultSpatial
+            type: Anim.DefaultSpatial
         }
     }
 
@@ -218,8 +215,7 @@ StyledWindow {
 
             Behavior on extraHeight {
                 Anim {
-                    duration: Tokens.anim.durations.expressiveDefaultSpatial
-                    easing: Tokens.anim.expressiveDefaultSpatial
+                    type: Anim.DefaultSpatial
                 }
             }
         }

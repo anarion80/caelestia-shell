@@ -128,12 +128,12 @@ Item {
             Anim {
                 property: "scale"
                 to: 0.5
-                duration: Tokens.anim.durations.small
+                type: Anim.StandardSmall
             }
             Anim {
                 property: "opacity"
                 to: 0
-                duration: Tokens.anim.durations.small
+                type: Anim.StandardSmall
             }
         }
 
@@ -193,13 +193,13 @@ Item {
 
                 Behavior on x {
                     Anim {
-                        easing: Tokens.anim.emphasized
+                        type: Anim.Emphasized
                     }
                 }
 
                 Behavior on implicitWidth {
                     Anim {
-                        easing: Tokens.anim.emphasized
+                        type: Anim.Emphasized
                     }
                 }
             }

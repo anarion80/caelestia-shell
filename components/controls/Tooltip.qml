@@ -100,8 +100,7 @@ Popup {
             property: "opacity"
             from: 0
             to: 1
-            duration: Tokens.anim.durations.expressiveFastSpatial
-            easing: Tokens.anim.expressiveFastSpatial
+            type: Anim.FastSpatial
         }
     }
 
@@ -110,8 +109,7 @@ Popup {
             property: "opacity"
             from: 1
             to: 0
-            duration: Tokens.anim.durations.expressiveFastSpatial
-            easing: Tokens.anim.expressiveFastSpatial
+            type: Anim.FastSpatial
         }
     }
 

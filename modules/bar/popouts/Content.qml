@@ -199,7 +199,7 @@ Item {
                 SequentialAnimation {
                     Anim {
                         properties: "opacity,scale"
-                        duration: Tokens.anim.durations.small
+                        type: Anim.StandardSmall
                     }
                     PropertyAction {
                         target: popout
