@@ -6,7 +6,7 @@ import Quickshell
 import qs.components
 import qs.components.misc
 import qs.services
-import qs.config
+import Caelestia.Config
 import qs.utils
 
 StyledRect {
@@ -16,11 +16,11 @@ StyledRect {
     readonly property alias items: mailRow
 
     color: Colours.tPalette.m3surfaceContainer
-    radius: Appearance.rounding.full
+    radius: Tokens.rounding.full
 
     clip: true
-    implicitWidth: Config.bar.mail.enabled ? mailRow.implicitWidth + Appearance.padding.normal * 2 : 0
-    implicitHeight: Config.bar.mail.enabled ? Config.bar.sizes.innerHeight : 0
+    implicitWidth: Config.bar.mail.enabled ? mailRow.implicitWidth + Tokens.padding.normal * 2 : 0
+    implicitHeight: Config.bar.mail.enabled ? Tokens.sizes.bar.innerHeight : 0
     visible: Config.bar.mail.enabled
     enabled: Config.bar.mail.enabled
 
@@ -34,14 +34,14 @@ StyledRect {
         anchors.centerIn: parent
         implicitWidth: root.implicitWidth
         implicitHeight: root.implicitHeight
-        radius: Appearance.rounding.full
+        radius: Tokens.rounding.full
     }
 
     RowLayout {
         id: mailRow
 
         anchors.centerIn: parent
-        anchors.rightMargin: Appearance.padding.normal
+        anchors.rightMargin: Tokens.padding.normal
 
         spacing: 0
 
@@ -68,8 +68,8 @@ StyledRect {
             Layout.alignment: Qt.AlignVCenter
 
             text: qsTr("%1").arg(MailService.unreadEmails.length)
-            font.pointSize: Appearance.font.size.smaller
-            font.family: Appearance.font.family.mono
+            font.pointSize: Tokens.font.size.smaller
+            font.family: Tokens.font.family.mono
             color: Colours.palette.m3tertiary
         }
     }

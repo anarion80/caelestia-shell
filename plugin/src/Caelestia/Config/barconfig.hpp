@@ -123,6 +123,22 @@ public:
         : ConfigObject(parent) {}
 };
 
+class BarMail : public ConfigObject {
+    Q_OBJECT
+    QML_ANONYMOUS
+
+    CONFIG_PROPERTY(bool, enabled, false)
+    CONFIG_PROPERTY(bool, showNumber, false)
+    CONFIG_PROPERTY(int, emailsShown, 5)
+    CONFIG_GLOBAL_PROPERTY(QStringList, fetchCommand,
+        { "notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash" })
+    CONFIG_GLOBAL_PROPERTY(QStringList, clickCommand, { "ghostty", "--title=NeomuttFloat", "-e", "neomutt" })
+
+public:
+    explicit BarMail(QObject* parent = nullptr)
+        : ConfigObject(parent) {}
+};
+
 class BarConfig : public ConfigObject {
     Q_OBJECT
     QML_ANONYMOUS
@@ -137,6 +153,7 @@ class BarConfig : public ConfigObject {
     CONFIG_SUBOBJECT(BarTray, tray)
     CONFIG_SUBOBJECT(BarStatus, status)
     CONFIG_SUBOBJECT(BarClock, clock)
+    CONFIG_SUBOBJECT(BarMail, mail)
     CONFIG_PROPERTY(QVariantList, entries,
         {
             vmap({ { u"id"_s, u"logo"_s }, { u"enabled"_s, true } }),
@@ -146,6 +163,7 @@ class BarConfig : public ConfigObject {
             vmap({ { u"id"_s, u"spacer"_s }, { u"enabled"_s, true } }),
             vmap({ { u"id"_s, u"tray"_s }, { u"enabled"_s, true } }),
             vmap({ { u"id"_s, u"clock"_s }, { u"enabled"_s, true } }),
+            vmap({ { u"id"_s, u"mail"_s }, { u"enabled"_s, true } }),
             vmap({ { u"id"_s, u"statusIcons"_s }, { u"enabled"_s, true } }),
             vmap({ { u"id"_s, u"power"_s }, { u"enabled"_s, true } }),
         })
@@ -160,7 +178,8 @@ public:
         , m_activeWindow(new BarActiveWindow(this))
         , m_tray(new BarTray(this))
         , m_status(new BarStatus(this))
-        , m_clock(new BarClock(this)) {}
+        , m_clock(new BarClock(this))
+        , m_mail(new BarMail(this)) {}
 };
 
 } // namespace caelestia::config
