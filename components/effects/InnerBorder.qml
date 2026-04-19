@@ -1,9 +1,9 @@
 pragma ComponentBehavior: Bound
 
-import ".."
 import QtQuick
 import QtQuick.Effects
 import Caelestia.Config
+import qs.components
 import qs.services
 
 StyledRect {

@@ -363,13 +363,10 @@ ColumnLayout {
                 }
 
                 StateLayer {
-                    function onClicked(): void {
-                        passwordContainer.forceActiveFocus();
-                    }
-
                     hoverEnabled: false
                     cursorShape: Qt.IBeamCursor
                     radius: Tokens.rounding.normal
+                    onClicked: passwordContainer.forceActiveFocus()
                 }
 
                 StyledText {

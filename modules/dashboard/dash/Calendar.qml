@@ -51,11 +51,8 @@ CustomMouseArea {
                 StateLayer {
                     id: prevMonthStateLayer
 
-                    function onClicked(): void {
-                        root.dashState.currentDate = new Date(root.currYear, root.currMonth - 1, 1);
-                    }
-
                     radius: Tokens.rounding.full
+                    onClicked: root.dashState.currentDate = new Date(root.currYear, root.currMonth - 1, 1)
                 }
 
                 MaterialIcon {
@@ -76,7 +73,7 @@ CustomMouseArea {
                 implicitHeight: monthYearDisplay.implicitHeight + Tokens.padding.small * 2
 
                 StateLayer {
-                    function onClicked(): void {
+                    onClicked: {
                         root.dashState.currentDate = new Date();
                     }
 
@@ -111,7 +108,7 @@ CustomMouseArea {
                 StateLayer {
                     id: nextMonthStateLayer
 
-                    function onClicked(): void {
+                    onClicked: {
                         root.dashState.currentDate = new Date(root.currYear, root.currMonth + 1, 1);
                     }
 

@@ -239,7 +239,7 @@ StyledFlickable {
                                         scale: root.session.bt.editingDeviceName ? 1 : 0.5
 
                                         StateLayer {
-                                            function onClicked(): void {
+                                            onClicked: {
                                                 root.session.bt.editingDeviceName = false;
                                                 deviceNameEdit.text = Qt.binding(() => root.device?.name ?? "");
                                             }
@@ -276,7 +276,7 @@ StyledFlickable {
                                         color: Qt.alpha(Colours.palette.m3primary, root.session.bt.editingDeviceName ? 1 : 0)
 
                                         StateLayer {
-                                            function onClicked(): void {
+                                            onClicked: {
                                                 root.session.bt.editingDeviceName = !root.session.bt.editingDeviceName;
                                                 if (root.session.bt.editingDeviceName)
                                                     deviceNameEdit.forceActiveFocus();
@@ -527,7 +527,7 @@ StyledFlickable {
                 ]
 
                 StateLayer {
-                    function onClicked(): void {
+                    onClicked: {
                         root.session.bt.fabMenuOpen = false;
 
                         const name = fabMenuItem.modelData.name;
@@ -624,7 +624,7 @@ StyledFlickable {
             StateLayer {
                 id: fabState
 
-                function onClicked(): void {
+                onClicked: {
                     root.session.bt.fabMenuOpen = !root.session.bt.fabMenuOpen;
                 }
 
