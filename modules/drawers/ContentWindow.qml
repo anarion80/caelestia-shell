@@ -17,6 +17,7 @@ StyledWindow {
     id: root
 
     readonly property alias bar: bar
+    readonly property alias interactionWrapper: interactions
 
     readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
     readonly property bool hasSpecialWorkspace: (monitor?.lastIpcObject.specialWorkspace?.name.length ?? 0) > 0
@@ -229,6 +230,8 @@ StyledWindow {
     }
 
     Interactions {
+        id: interactions
+
         screen: root.screen
         popouts: panels.popouts
         visibilities: visibilities
@@ -300,6 +303,6 @@ StyledWindow {
         implicitWidth: panel.width
         implicitHeight: panel.height
         radius: Tokens.rounding.large
-        deformScale: deformAmount / 10000
+        deformScale: (deformAmount * Config.appearance.deformScale) / 10000
     }
 }

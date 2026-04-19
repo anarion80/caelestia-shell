@@ -1,4 +1,3 @@
-import ".."
 import QtQuick
 import QtQuick.Layouts
 import Caelestia.Config
@@ -62,15 +61,14 @@ ColumnLayout {
         }
 
         StateLayer {
-            function onClicked(): void {
-                root.toggleRequested();
-                root.expanded = !root.expanded;
-            }
-
             anchors.fill: parent
             color: Colours.palette.m3onSurface
             radius: Tokens.rounding.normal
             showHoverBackground: false
+            onClicked: {
+                root.toggleRequested();
+                root.expanded = !root.expanded;
+            }
         }
     }
 

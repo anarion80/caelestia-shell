@@ -131,7 +131,7 @@ ColumnLayout {
                     implicitHeight: adapterPicker.implicitHeight + Tokens.padding.smaller * 2
 
                     StateLayer {
-                        function onClicked(): void {
+                        onClicked: {
                             adapterPickerButton.expanded = !adapterPickerButton.expanded;
                         }
 
@@ -209,7 +209,7 @@ ColumnLayout {
                                     implicitHeight: adapterInner.implicitHeight + Tokens.padding.normal * 2
 
                                     StateLayer {
-                                        function onClicked(): void {
+                                        onClicked: {
                                             adapterPickerButton.expanded = false;
                                             root.session.bt.currentAdapter = adapter.modelData;
                                         }
@@ -376,7 +376,7 @@ ColumnLayout {
                     scale: root.session.bt.editingAdapterName ? 1 : 0.5
 
                     StateLayer {
-                        function onClicked(): void {
+                        onClicked: {
                             root.session.bt.editingAdapterName = false;
                             adapterNameEdit.text = Qt.binding(() => root.session.bt.currentAdapter?.name ?? "");
                         }
@@ -413,7 +413,7 @@ ColumnLayout {
                     color: Qt.alpha(Colours.palette.m3primary, root.session.bt.editingAdapterName ? 1 : 0)
 
                     StateLayer {
-                        function onClicked(): void {
+                        onClicked: {
                             root.session.bt.editingAdapterName = !root.session.bt.editingAdapterName;
                             if (root.session.bt.editingAdapterName)
                                 adapterNameEdit.forceActiveFocus();

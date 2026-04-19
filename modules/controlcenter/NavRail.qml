@@ -59,7 +59,7 @@ Item {
                 StateLayer {
                     id: normalWinState
 
-                    function onClicked(): void {
+                    onClicked: {
                         root.session.root.close();
                         WindowFactory.create(null, {
                             active: root.session.active,
@@ -173,7 +173,7 @@ Item {
             implicitHeight: icon.implicitHeight + Tokens.padding.small
 
             StateLayer {
-                function onClicked(): void {
+                onClicked: {
                     // Prevent tab switching during initial opening animation to avoid blank pages
                     if (!root.initialOpeningComplete) {
                         return;

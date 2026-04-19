@@ -288,7 +288,7 @@ Item {
                 }
 
                 StateLayer {
-                    function onClicked(): void {
+                    onClicked: {
                         passwordContainer.forceActiveFocus();
                     }
 

@@ -115,12 +115,9 @@ Column {
         }
 
         StateLayer {
-            function onClicked(): void {
-                Quickshell.execDetached(button.command);
-            }
-
             radius: parent.radius
             color: button.activeFocus ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
+            onClicked: Quickshell.execDetached(button.command)
         }
 
         MaterialIcon {
