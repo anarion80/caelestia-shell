@@ -42,6 +42,29 @@ Singleton {
     signal configReloaded
 
     function dispatch(request: string): void {
+        if (Hyprland.usingLua) {
+            const spaceIdx = request.indexOf(" ");
+            if (spaceIdx !== -1) {
+                const cmd = request.substring(0, spaceIdx);
+                const args = request.substring(spaceIdx + 1);
+
+                if (cmd === "workspace") {
+                    const ws = workspaces.values.find(w => w.name === args || w.id.toString() === args);
+                    if (ws) {
+                        ws.activate();
+                        return;
+                    }
+                } else if (cmd === "togglespecialworkspace") {
+                    Hyprland.dispatch(`hl.dsp.workspace.toggle_special("${args}")`);
+                    return;
+                } else if (cmd === "movetoworkspace") {
+                    const commaIdx = args.indexOf(",");
+                    const wsId = commaIdx !== -1 ? args.substring(0, commaIdx) : args;
+                    Hyprland.dispatch(`hl.dsp.window.move({ workspace = ${wsId} })`);
+                    return;
+                }
+            }
+        }
         Hyprland.dispatch(request);
     }
 
@@ -122,8 +145,6 @@ Singleton {
     Connections {
         function onRawEvent(event: HyprlandEvent): void {
             const n = event.name;
-            if (n.endsWith("v2"))
-                return;
 
             if (n === "configreloaded") {
                 root.configReloaded();
