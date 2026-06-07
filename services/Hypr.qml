@@ -48,22 +48,18 @@ Singleton {
                 const cmd = request.substring(0, spaceIdx);
                 const args = request.substring(spaceIdx + 1);
 
-                if (cmd === "workspace") {
-                    const ws = workspaces.values.find(w => w.name === args || w.id.toString() === args);
-                    if (ws) {
-                        ws.activate();
-                        return;
-                    }
-                } else if (cmd === "togglespecialworkspace") {
-                    Hyprland.dispatch(`hl.dsp.workspace.toggle_special("${args}")`);
-                    return;
-                } else if (cmd === "movetoworkspace") {
-                    const commaIdx = args.indexOf(",");
-                    const wsId = commaIdx !== -1 ? args.substring(0, commaIdx) : args;
-                    Hyprland.dispatch(`hl.dsp.window.move({ workspace = ${wsId} })`);
+            if (cmd === "workspace") {
+                const ws = workspaces.values.find(w => w.name === args || w.id.toString() === args);
+                if (ws) {
+                    ws.activate();
                     return;
                 }
             }
+            }
+
+            dispatchProc.command = ["hyprctl", "dispatch", request];
+            dispatchProc.running = true;
+            return;
         }
         Hyprland.dispatch(request);
     }
@@ -235,6 +231,10 @@ Singleton {
         description: "Reload devices"
         onPressed: extras.refreshDevices()
         onReleased: extras.refreshDevices()
+    }
+
+    Process {
+        id: dispatchProc
     }
 
     HyprExtras {
