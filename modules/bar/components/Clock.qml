@@ -42,7 +42,7 @@ StyledRect {
             visible: Config.bar.clock.showDate
 
             verticalAlignment: StyledText.AlignVCenter
-            text: Time.format("ddd d") + ","
+            text: Time.format("ddd d")
             font: Tokens.font.body.small
             color: root.colour
         }
@@ -58,7 +58,7 @@ StyledRect {
             Layout.alignment: Qt.AlignVCenter
             text: Time.hourStr
             font: {
-                const scale = text === "11" ? 1.15 : Math.min(1.05, Math.max(hourMetrics.width, minMetrics.width) / hourMetrics.width);
+                const scale = text === "11" ? 1.15 : Math.min(1.05, Math.max(hourMetrics.height, minMetrics.height) / hourMetrics.width);
                 return root.font.width(scale * 100).letterSpacing(scale).build();
             }
             color: root.colour
@@ -72,11 +72,11 @@ StyledRect {
         }
 
         StyledText {
-            Layout.topMargin: -parent.spacing - 4
+            Layout.rightMargin: -parent.spacing - 4
             Layout.alignment: Qt.AlignVCenter
             text: Time.minuteStr
             font: {
-                const scale = text === "11" ? 1.15 : Math.min(1.05, Math.max(hourMetrics.width, minMetrics.width) / minMetrics.width);
+                const scale = text === "11" ? 1.15 : Math.min(1.05, Math.max(hourMetrics.height, minMetrics.height) / minMetrics.width);
                 return root.font.width(scale * 100).letterSpacing(scale).build();
             }
             color: root.colour
@@ -90,7 +90,7 @@ StyledRect {
         }
 
         Loader {
-            Layout.topMargin: -parent.spacing - 4
+            Layout.rightMargin: -parent.spacing - 4
             Layout.alignment: Qt.AlignVCenter
             asynchronous: true
             active: GlobalConfig.services.useTwelveHourClock
