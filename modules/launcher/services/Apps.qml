@@ -11,16 +11,17 @@ Searcher {
     function launch(entry: DesktopEntry): void {
         appDb.incrementFrequency(entry.id);
 
+        const wd = entry.workingDirectory || Quickshell.env("HOME");
+
         if (entry.runInTerminal)
             Quickshell.execDetached({
                 command: ["app2unit", "--", ...GlobalConfig.general.apps.terminal, `${Quickshell.shellDir}/assets/wrap_term_launch.sh`, ...entry.command],
-                workingDirectory: entry.workingDirectory
+                workingDirectory: wd
             });
         else
             Quickshell.execDetached({
-                // command: ["app2unit", "--", ...entry.command],
                 command: ["gtk-launch", entry.id],
-                workingDirectory: entry.workingDirectory
+                workingDirectory: wd
             });
     }
 
