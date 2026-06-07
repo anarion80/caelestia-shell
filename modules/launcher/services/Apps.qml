@@ -18,7 +18,8 @@ Searcher {
             });
         else
             Quickshell.execDetached({
-                command: ["app2unit", "--", ...entry.command],
+                // command: ["app2unit", "--", ...entry.command],
+                command: ["gtk-launch", entry.id],
                 workingDirectory: entry.workingDirectory
             });
     }
