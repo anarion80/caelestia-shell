@@ -20,7 +20,7 @@ Searcher {
             });
         else
             Quickshell.execDetached({
-                command: ["gtk-launch", entry.id],
+                command: entry.command,
                 workingDirectory: wd
             });
     }
