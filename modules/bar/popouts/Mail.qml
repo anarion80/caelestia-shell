@@ -9,7 +9,7 @@ import Caelestia.Config
 Column {
     id: root
 
-    spacing: Tokens.spacing.normal
+    spacing: Tokens.spacing.medium
     visible: MailService.unreadEmails.length > 0
 
     Repeater {

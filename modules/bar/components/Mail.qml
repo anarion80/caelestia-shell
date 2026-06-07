@@ -19,7 +19,7 @@ StyledRect {
     radius: Tokens.rounding.full
 
     clip: true
-    implicitWidth: Config.bar.mail.enabled ? mailRow.implicitWidth + Tokens.padding.normal * 2 : 0
+    implicitWidth: Config.bar.mail.enabled ? mailRow.implicitWidth + Tokens.padding.medium * 2 : 0
     implicitHeight: Config.bar.mail.enabled ? Tokens.sizes.bar.innerHeight : 0
     visible: Config.bar.mail.enabled
     enabled: Config.bar.mail.enabled
@@ -41,7 +41,7 @@ StyledRect {
         id: mailRow
 
         anchors.centerIn: parent
-        anchors.rightMargin: Tokens.padding.normal
+        anchors.rightMargin: Tokens.padding.medium
 
         spacing: 0
 
@@ -68,8 +68,7 @@ StyledRect {
             Layout.alignment: Qt.AlignVCenter
 
             text: qsTr("%1").arg(MailService.unreadEmails.length)
-            font.pointSize: Tokens.font.size.smaller
-            font.family: Tokens.font.family.mono
+            font: Tokens.font.body.small
             color: Colours.palette.m3tertiary
         }
     }
