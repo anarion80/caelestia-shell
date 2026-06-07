@@ -18,7 +18,7 @@ Item {
     readonly property bool disabled: Strings.testRegexList(Config.bar.excludedScreens, screen.name)
 
     readonly property int clampedHeight: Math.max(Config.border.minThickness, implicitHeight)
-    readonly property int padding: Math.max(Tokens.padding.smaller, Config.border.thickness)
+    readonly property int padding: Math.max(Tokens.padding.small, Config.border.thickness)
     readonly property int contentHeight: Tokens.sizes.bar.innerHeight + padding * 2
     readonly property int exclusiveZone: !disabled && (Config.bar.persistent || visibilities.bar) ? contentHeight : Config.border.thickness
     readonly property bool shouldBeVisible: !fullscreen && !disabled && (Config.bar.persistent || visibilities.bar || isHovered)
@@ -37,7 +37,7 @@ Item {
     }
 
     clip: true
-    visible: height > 0
+    visible: height > Config.border.thickness
     implicitHeight: fullscreen ? 0 : Config.border.thickness
 
     states: State {
@@ -57,7 +57,6 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
-                type: Anim.DefaultSpatial
             }
         },
         Transition {
@@ -79,7 +78,7 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
 
-        active: root.shouldBeVisible || root.visible
+        active: root.shouldBeVisible
 
         sourceComponent: Bar {
             height: root.contentHeight

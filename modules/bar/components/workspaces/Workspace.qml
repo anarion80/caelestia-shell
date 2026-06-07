@@ -18,7 +18,7 @@ RowLayout {
 
     readonly property bool isWorkspace: true // Flag for finding workspace children
     // Unanimated prop for others to use as reference
-    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.small : 0)
+    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
 
     readonly property int ws: groupOffset + index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
@@ -33,7 +33,7 @@ RowLayout {
         id: indicator
 
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
+        Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small
 
         animate: true
         text: {
@@ -51,7 +51,8 @@ RowLayout {
             return root.activeWsId === root.ws ? activeLabel : root.isOccupied ? occupiedLabel : label;
         }
         color: Config.bar.workspaces.occupiedBg || root.isOccupied || root.activeWsId === root.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
-        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignHCenter
+        font.family: "Rubik" // Hard code rubik for now since google sans doesn't play well with certain unicode symbols apparently
     }
 
     Loader {

@@ -39,6 +39,8 @@ StyledWindow {
     readonly property real shadowOpacity: 0.7 * (1 - fsTransitionProg)
     readonly property real borderLayoutThickness: hasFullscreen ? 0 : contentItem.Config.border.thickness
 
+    property color surfaceColour: Colours.tPalette.m3surface
+
     readonly property int dragMaskPadding: {
         if (focusGrab.active || panels.popouts.isDetached)
             return 0;
@@ -63,7 +65,7 @@ StyledWindow {
     name: "drawers"
     WlrLayershell.exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: fsTransitionProg > 0 && contentItem.Config.general.showOverFullscreen ? WlrLayer.Overlay : WlrLayer.Top
-    WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session || panels.dashboard.needsKeyboard ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
     mask: hasFullscreen ? emptyRegion : regions
 
@@ -74,6 +76,10 @@ StyledWindow {
 
     Behavior on fsTransitionProg {
         Anim {}
+    }
+
+    Behavior on surfaceColour {
+        CAnim {}
     }
 
     Region {
@@ -117,17 +123,19 @@ StyledWindow {
 
     StyledRect {
         anchors.fill: parent
-        opacity: visibilities.session && Config.session.enabled ? 0.5 : 0
+        opacity: (visibilities.session && Config.session.enabled) || panels.popouts.detachedMode !== "" ? 0.5 : 0
         color: Colours.palette.m3scrim
 
         Behavior on opacity {
-            Anim {}
+            Anim {
+                type: Anim.SlowEffects
+            }
         }
     }
 
     Item {
         anchors.fill: parent
-        opacity: Colours.transparency.enabled ? Colours.transparency.base : 1
+        opacity: root.surfaceColour.a
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
@@ -138,12 +146,8 @@ StyledWindow {
         BlobGroup {
             id: blobGroup
 
-            color: Colours.palette.m3surface
+            color: root.surfaceColour
             smoothing: root.contentItem.Config.border.smoothing
-
-            Behavior on color {
-                CAnim {}
-            }
         }
 
         BlobInvertedRect {
@@ -225,9 +229,7 @@ StyledWindow {
             implicitHeight: panels.popouts.height * (1 + extraHeight)
 
             Behavior on extraHeight {
-                Anim {
-                    type: Anim.DefaultSpatial
-                }
+                Anim {}
             }
         }
     }
@@ -311,7 +313,7 @@ StyledWindow {
         y: panel.y + bar.implicitHeight
         implicitWidth: panel.width
         implicitHeight: panel.height
-        radius: Tokens.rounding.large
+        radius: Tokens.rounding.extraLarge
         deformScale: (deformAmount * Config.appearance.deformScale) / 10000
     }
 }

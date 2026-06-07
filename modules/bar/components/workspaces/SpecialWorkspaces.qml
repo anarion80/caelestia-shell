@@ -18,7 +18,7 @@ Item {
     readonly property string activeSpecial: (GlobalConfig.bar.workspaces.perMonitorWorkspaces ? monitor : Hypr.focusedMonitor)?.lastIpcObject.specialWorkspace?.name ?? ""
 
     layer.enabled: true
-    layer.effect: OpacityMask {
+    layer.effect: Mask {
         maskSource: mask
     }
 
@@ -65,7 +65,9 @@ Item {
             opacity: view.contentX > 0 ? 0 : 1
 
             Behavior on opacity {
-                Anim {}
+                Anim {
+                    type: Anim.DefaultEffects
+                }
             }
         }
 
@@ -76,10 +78,12 @@ Item {
 
             radius: Tokens.rounding.full
             implicitWidth: parent.width / 2
-            opacity: view.contentX < view.contentWidth - parent.width + Tokens.padding.small ? 0 : 1
+            opacity: view.contentX < view.contentWidth - parent.width + Tokens.padding.extraSmall ? 0 : 1
 
             Behavior on opacity {
-                Anim {}
+                Anim {
+                    type: Anim.DefaultEffects
+                }
             }
         }
     }
@@ -88,7 +92,7 @@ Item {
         id: view
 
         anchors.fill: parent
-        spacing: Tokens.spacing.normal
+        spacing: Tokens.spacing.medium
         interactive: false
         orientation: ListView.Horizontal
 
@@ -214,7 +218,7 @@ Item {
         drag.target: view.contentItem
         drag.axis: Drag.XAxis
         drag.maximumX: 0
-        drag.minimumX: Math.min(0, view.width - view.contentWidth - Tokens.padding.small)
+        drag.minimumX: Math.min(0, view.width- view.contentWidth - Tokens.padding.extraSmall)
 
         onPressed: event => startX = event.x
 
@@ -234,7 +238,7 @@ Item {
         id: ws
 
         required property HyprlandWorkspace modelData
-        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Tokens.padding.small : 0)
+        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Tokens.padding.extraSmall : 0)
         property int wsId
         property string icon
         property bool hasWindows
@@ -285,7 +289,7 @@ Item {
             asynchronous: true
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small * 2
+            Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small
 
             sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
 

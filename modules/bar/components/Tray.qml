@@ -14,7 +14,7 @@ StyledRect {
     readonly property alias items: items
     readonly property alias expandIcon: expandIcon
 
-    readonly property int padding: Config.bar.tray.background ? Tokens.padding.normal : Tokens.padding.small
+    readonly property int padding: Config.bar.tray.background ? Tokens.padding.medium : Tokens.padding.extraSmall
     readonly property int spacing: Config.bar.tray.background ? Tokens.spacing.small : 0
 
     property bool expanded
@@ -75,7 +75,9 @@ StyledRect {
         }
 
         Behavior on opacity {
-            Anim {}
+            Anim {
+                type: Anim.DefaultEffects
+            }
         }
     }
 
@@ -90,7 +92,7 @@ StyledRect {
         active: Config.bar.tray.compact && items.count > 0
 
         sourceComponent: Item {
-            implicitWidth: expandIconInner.implicitWidth - Tokens.padding.small * 2
+            implicitWidth: expandIconInner.implicitWidth - Tokens.padding.small
             implicitHeight: expandIconInner.implicitHeight
 
             MaterialIcon {
@@ -98,9 +100,9 @@ StyledRect {
 
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: Config.bar.tray.background ? Tokens.padding.small : -Tokens.padding.small
+                anchors.rightMargin: Config.bar.tray.background ? Tokens.padding.extraSmall : -Tokens.padding.extraSmall
                 text: "expand_less"
-                font.pointSize: Tokens.font.size.large
+                fontStyle: Tokens.font.icon.large
                 rotation: root.expanded ? 180 : 0
 
                 Behavior on rotation {
@@ -115,8 +117,6 @@ StyledRect {
     }
 
     Behavior on implicitWidth {
-        Anim {
-            type: Anim.DefaultSpatial
-        }
+        Anim {}
     }
 }

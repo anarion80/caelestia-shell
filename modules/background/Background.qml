@@ -57,8 +57,8 @@ Variants {
             asynchronous: true
             active: Config.background.desktopClock.enabled
 
-            anchors.margins: Tokens.padding.large * 2
-            anchors.topMargin: Tokens.padding.large * 2 + Tokens.sizes.bar.innerHeight + Math.max(Tokens.padding.smaller, Config.border.thickness)
+            anchors.margins: Tokens.padding.extraLargeIncreased
+            anchors.topMargin: Tokens.padding.extraLargeIncreased + Tokens.sizes.bar.innerHeight + Math.max(Tokens.padding.small, Config.border.thickness)
 
             state: Config.background.desktopClock.position
             states: [
