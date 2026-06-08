@@ -55,7 +55,10 @@ StyledRect {
         }
 
         StyledText {
+            id: hourText
+
             Layout.alignment: Qt.AlignVCenter
+            Layout.rightMargin: 0
             text: Time.hourStr
             font: {
                 const scale = text === "11" ? 1.15 : Math.min(1.05, Math.max(hourMetrics.height, minMetrics.height) / hourMetrics.width);
@@ -72,6 +75,16 @@ StyledRect {
         }
 
         StyledText {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.leftMargin: -parent.spacing
+            Layout.rightMargin: -parent.spacing
+            text: ":"
+            font: root.font.build()
+            color: root.colour
+        }
+
+        StyledText {
+            Layout.leftMargin: -parent.spacing
             Layout.rightMargin: -parent.spacing - 4
             Layout.alignment: Qt.AlignVCenter
             text: Time.minuteStr
