@@ -434,7 +434,7 @@ For example, to disable the bar on DP-1:
             "maxWindowIcons": 5,
             "activeTrail": false,
             "perMonitorWorkspaces": true,
-            "label": "  ",
+            "label": "  ",
             "occupiedLabel": "󰮯",
             "activeLabel": "󰮯",
             "capitalisation": "preserve",
