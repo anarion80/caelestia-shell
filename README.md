@@ -511,11 +511,121 @@ For example, to disable the bar on DP-1:
           "italic": false,
           "vaxes": { "ROND": 25 }
         },
-        "small": {
-          "size": 11,
-          "weight": 400,
-          "italic": false,
-          "vaxes": { "ROND": 25 }
+        "workspaces": {
+          "shown": 5,
+          "activeIndicator": true,
+          "occupiedBg": false,
+          "showWindows": true,
+          "showWindowsOnSpecialWorkspaces": true,
+          "maxWindowIcons": 5,
+          "activeTrail": false,
+          "perMonitorWorkspaces": true,
+          "label": "  ",
+          "occupiedLabel": "󰮯",
+          "activeLabel": "󰮯",
+          "capitalisation": "preserve",
+          "specialWorkspaceIcons": [
+            {
+              "name": "steam",
+              "icon": "sports_esports"
+            }
+          ],
+          "windowIcons": [
+            {
+              "regex": "steam(_app_(default|[0-9]+))?",
+              "icon": "sports_esports"
+            }
+          ]
+        },
+        "activeWindow": {
+          "compact": false,
+          "inverted": false,
+          "showOnHover": true
+        },
+        "tray": {
+          "background": false,
+          "recolour": false,
+          "compact": false,
+          "iconSubs": [],
+          "hiddenIcons": []
+        },
+        "status": {
+          "showAudio": false,
+          "showMicrophone": false,
+          "showKbLayout": false,
+          "showNetwork": true,
+          "showWifi": true,
+          "showBluetooth": true,
+          "showBattery": true,
+          "showLockStatus": true
+        },
+        "clock": {
+          "background": false,
+          "showDate": false,
+          "showIcon": true
+        },
+        "entries": [
+          {
+            "id": "logo",
+            "enabled": true
+          },
+          {
+            "id": "workspaces",
+            "enabled": true
+          },
+          {
+            "id": "spacer",
+            "enabled": true
+          },
+          {
+            "id": "activeWindow",
+            "enabled": true
+          },
+          {
+            "id": "spacer",
+            "enabled": true
+          },
+          {
+            "id": "tray",
+            "enabled": true
+          },
+          {
+            "id": "clock",
+            "enabled": true
+          },
+          {
+            "id": "statusIcons",
+            "enabled": true
+          },
+          {
+            "id": "power",
+            "enabled": true
+          }
+        ],
+        "excludedScreens": []
+      },
+      "border": {
+        "thickness": 10,
+        "rounding": 25,
+        "smoothing": 20
+      },
+      "dashboard": {
+        "enabled": true,
+        "showOnHover": true,
+        "showDashboard": true,
+        "showMedia": true,
+        "showPerformance": true,
+        "showWeather": true,
+        "mediaUpdateInterval": 500,
+        "resourceUpdateInterval": 1000,
+        "dragThreshold": 50,
+        "performance": {
+          "showBattery": true,
+          "showGpu": true,
+          "showCpu": true,
+          "showMemory": true,
+          "showStorage": true,
+          "showNetwork": true
         }
       },
       "mono": {
