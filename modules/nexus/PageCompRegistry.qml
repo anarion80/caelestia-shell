@@ -115,6 +115,9 @@ QtObject {
                 Component {
                     BarClock {}
                 }
+                Component {
+                    BarMail {}
+                }
             }
         },
         Component {
