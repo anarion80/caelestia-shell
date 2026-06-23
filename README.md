@@ -83,7 +83,6 @@ Dependencies:
   version, not the latest tagged version
 - [`ddcutil`](https://github.com/rockowitz/ddcutil)
 - [`brightnessctl`](https://github.com/Hummer12007/brightnessctl)
-- [`app2unit`](https://github.com/Vladimir-csp/app2unit)
 - [`libcava`](https://github.com/LukashonakV/cava)
 - [`networkmanager`](https://networkmanager.dev)
 - [`lm-sensors`](https://github.com/lm-sensors/lm-sensors)
@@ -463,11 +462,24 @@ For example, to disable the bar on DP-1:
           "italic": false,
           "vaxes": { "ROND": 25 }
         },
-        "medium": {
-          "size": 16,
-          "weight": 500,
-          "italic": false,
-          "vaxes": { "ROND": 25 }
+        "idle": {
+            "lockBeforeSleep": true,
+            "inhibitWhenAudio": true,
+            "timeouts": [
+                {
+                    "timeout": 180,
+                    "idleAction": "lock"
+                },
+                {
+                    "timeout": 300,
+                    "idleAction": "dpms off",
+                    "returnAction": "dpms on"
+                },
+                {
+                    "timeout": 600,
+                    "idleAction": ["suspendThenHibernate"]
+                }
+            ]
         },
         "small": {
           "size": 14,
@@ -642,20 +654,242 @@ For example, to disable the bar on DP-1:
           "italic": false,
           "vaxes": {}
         },
-        "large": { "size": 24, "weight": 400, "italic": false, "vaxes": {} },
-        "medium": { "size": 18, "weight": 400, "italic": false, "vaxes": {} },
-        "small": { "size": 15, "weight": 400, "italic": false, "vaxes": {} }
-      }
+        "actions": [
+            {
+                "name": "Calculator",
+                "icon": "calculate",
+                "description": "Do simple math equations (powered by Qalc)",
+                "command": ["autocomplete", "calc"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Scheme",
+                "icon": "palette",
+                "description": "Change the current colour scheme",
+                "command": ["autocomplete", "scheme"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Wallpaper",
+                "icon": "image",
+                "description": "Change the current wallpaper",
+                "command": ["autocomplete", "wallpaper"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Variant",
+                "icon": "colors",
+                "description": "Change the current scheme variant",
+                "command": ["autocomplete", "variant"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Random",
+                "icon": "casino",
+                "description": "Switch to a random wallpaper",
+                "command": ["caelestia", "wallpaper", "-r"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Light",
+                "icon": "light_mode",
+                "description": "Change the scheme to light mode",
+                "command": ["setMode", "light"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Dark",
+                "icon": "dark_mode",
+                "description": "Change the scheme to dark mode",
+                "command": ["setMode", "dark"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Shutdown",
+                "icon": "power_settings_new",
+                "description": "Shutdown the system",
+                "command": ["poweroff"],
+                "enabled": true,
+                "dangerous": true
+            },
+            {
+                "name": "Reboot",
+                "icon": "cached",
+                "description": "Reboot the system",
+                "command": ["reboot"],
+                "enabled": true,
+                "dangerous": true
+            },
+            {
+                "name": "Logout",
+                "icon": "exit_to_app",
+                "description": "Log out of the current session",
+                "command": ["logout"],
+                "enabled": true,
+                "dangerous": true
+            },
+            {
+                "name": "Lock",
+                "icon": "lock",
+                "description": "Lock the current session",
+                "command": ["loginctl", "lock-session"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Sleep",
+                "icon": "bedtime",
+                "description": "Suspend then hibernate",
+                "command": ["suspendThenHibernate"],
+                "enabled": true,
+                "dangerous": false
+            },
+            {
+                "name": "Settings",
+                "icon": "settings",
+                "description": "Configure the shell",
+                "command": ["caelestia", "shell", "nexus", "open"],
+                "enabled": true,
+                "dangerous": false
+            }
+        ]
     },
     "anim": {
       "durations": {
         "scale": 1
       }
     },
-    "transparency": {
-      "enabled": false,
-      "base": 0.85,
-      "layers": 0.4
+    "nexus": {
+        "wallpapersPerRow": 4,
+        "networkRescanInterval": 15000
+    },
+    "notifs": {
+        "expire": true,
+        "fullscreen": "on",
+        "defaultExpireTimeout": 5000,
+        "fullscreenExpireTimeout": 2000,
+        "clearThreshold": 0.3,
+        "expandThreshold": 20,
+        "actionOnClick": false,
+        "groupPreviewNum": 3,
+        "openExpanded": false
+    },
+    "osd": {
+        "enabled": true,
+        "hideDelay": 2000,
+        "enableBrightness": true,
+        "enableMicrophone": false
+    },
+    "services": {
+        "weatherLocation": "",
+        "useFahrenheit": false,
+        "useFahrenheitPerformance": false,
+        "useTwelveHourClock": false,
+        "gpuType": "",
+        "visualiserBars": 60,
+        "audioIncrement": 0.1,
+        "brightnessIncrement": 0.1,
+        "maxVolume": 1.0,
+        "smartScheme": true,
+        "defaultPlayer": "Spotify",
+        "playerAliases": [{ "from": "com.github.th_ch.youtube_music", "to": "YT Music" }],
+        "lyricsBackend": "Auto"
+    },
+    "session": {
+        "enabled": true,
+        "dragThreshold": 30,
+        "vimKeybinds": false,
+        "icons": {
+            "logout": "logout",
+            "shutdown": "power_settings_new",
+            "hibernate": "downloading",
+            "reboot": "cached"
+        },
+        "commands": {
+            "logout": ["logout"],
+            "shutdown": ["poweroff"],
+            "hibernate": ["hibernate"],
+            "reboot": ["reboot"]
+        }
+    },
+    "sidebar": {
+        "enabled": true,
+        "dragThreshold": 80
+    },
+    "utilities": {
+        "enabled": true,
+        "maxToasts": 4,
+        "toasts": {
+            "fullscreen": "off",
+            "configLoaded": true,
+            "chargingChanged": true,
+            "gameModeChanged": true,
+            "dndChanged": true,
+            "audioOutputChanged": true,
+            "audioInputChanged": true,
+            "capsLockChanged": true,
+            "numLockChanged": true,
+            "kbLayoutChanged": true,
+            "kbLimit": true,
+            "vpnChanged": true,
+            "nowPlaying": false
+        },
+        "vpn": {
+            "enabled": false,
+            "provider": [
+                {
+                    "name": "wireguard",
+                    "interface": "your-connection-name",
+                    "displayName": "Wireguard (Your VPN)",
+                    "enabled": false
+                }
+            ]
+        },
+        "quickToggles": [
+            {
+                "id": "wifi",
+                "enabled": true
+            },
+            {
+                "id": "bluetooth",
+                "enabled": true
+            },
+            {
+                "id": "mic",
+                "enabled": true
+            },
+            {
+                "id": "settings",
+                "enabled": true
+            },
+            {
+                "id": "gameMode",
+                "enabled": true
+            },
+            {
+                "id": "dnd",
+                "enabled": true
+            },
+            {
+                "id": "vpn",
+                "enabled": false
+            }
+        ]
+    },
+    "paths": {
+        "wallpaperDir": "~/Pictures/Wallpapers",
+        "lyricsDir": "~/Music/lyrics/",
+        "sessionGif": "root:/assets/kurukuru.gif",
+        "mediaGif": "root:/assets/bongocat.gif",
+        "noNotifsPic": "root:/assets/dino.png",
+        "lockNoNotifsPic": "root:/assets/dino.png"
     }
   },
   "general": {
