@@ -59,13 +59,13 @@ StyledRect {
                     font: root.font.build()
                     color: root.colour
                 }
-            }
-        }
 
-        StyledRect {
-            Layout.fillHeight: true
-            implicitWidth: 1
-            color: Colours.palette.m3outlineVariant
+                StyledRect {
+                    Layout.fillHeight: true
+                    implicitWidth: 1
+                    color: Colours.palette.m3outlineVariant
+                }
+            }
         }
 
         StyledText {
