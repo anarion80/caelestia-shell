@@ -44,32 +44,28 @@ StyledRect {
             visible: active
 
             sourceComponent: RowLayout {
-                spacing: layout.spacing - 4
+                spacing: layout.spacing
 
                 StyledText {
                     Layout.alignment: Qt.AlignVCenter
                     text: Time.format("ddd")
-                    font: Tokens.font.body.builders.small.scale(0.9).build()
+                    font: root.font.build()
                     color: root.colour
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignVCenter
                     text: Time.format("d")
-                    font: root.font.scale(1.1).build()
+                    font: root.font.build()
                     color: root.colour
                 }
-
-                StyledRect {
-                    Layout.fillWidth: true
-                    Layout.leftMargin: -Tokens.padding.extraSmall
-                    Layout.rightMargin: -Tokens.padding.extraSmall
-                    Layout.topMargin: 4
-                    Layout.bottomMargin: Tokens.padding.extraSmall / 2
-                    implicitHeight: 1
-                    color: Colours.palette.m3outlineVariant
-                }
             }
+        }
+
+        StyledRect {
+            Layout.fillHeight: true
+            implicitWidth: 1
+            color: Colours.palette.m3outlineVariant
         }
 
         StyledText {
