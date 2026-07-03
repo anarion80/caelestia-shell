@@ -14,7 +14,7 @@ ColumnLayout {
     id: root
 
     required property ShellScreen screen
-    required property DrawerVisibilities visibilities
+    required property ScreenState screenState
     required property BarPopouts.Wrapper popouts
     required property bool fullscreen
     readonly property int vPadding: Tokens.padding.large
@@ -121,13 +121,17 @@ ColumnLayout {
             DelegateChoice {
                 roleValue: "logo"
                 delegate: WrappedLoader {
-                    sourceComponent: OsIcon {}
+                    sourceComponent: OsIcon {
+                        objectName: "taskbarLogo"
+                    }
                 }
             }
             DelegateChoice {
                 roleValue: "workspaces"
                 delegate: WrappedLoader {
                     sourceComponent: Workspaces {
+                        objectName: "taskbarWorkspaces"
+
                         screen: root.screen
                         fullscreen: root.fullscreen
                     }
@@ -139,6 +143,8 @@ ColumnLayout {
                     Layout.fillWidth: true
                     visible: !root.fullscreen
                     sourceComponent: ActiveWindow {
+                        objectName: "taskbarActiveWindow"
+
                         bar: root
                         monitor: Brightness.getMonitorForScreen(root.screen)
                     }
@@ -148,28 +154,36 @@ ColumnLayout {
                 roleValue: "tray"
                 delegate: WrappedLoader {
                     visible: !root.fullscreen
-                    sourceComponent: Tray {}
+                    sourceComponent: Tray {
+                        objectName: "taskbarTray"
+                    }
                 }
             }
             DelegateChoice {
                 roleValue: "clock"
                 delegate: WrappedLoader {
                     visible: !root.fullscreen
-                    sourceComponent: Clock {}
+                    sourceComponent: Clock {
+                        objectName: "taskbarClock"
+                    }
                 }
             }
             DelegateChoice {
                 roleValue: "statusIcons"
                 delegate: WrappedLoader {
                     visible: !root.fullscreen
-                    sourceComponent: StatusIcons {}
+                    sourceComponent: StatusIcons {
+                        objectName: "taskbarStatusIcons"
+                    }
                 }
             }
             DelegateChoice {
                 roleValue: "power"
                 delegate: WrappedLoader {
                     sourceComponent: Power {
-                        visibilities: root.visibilities
+                        objectName: "taskbarPowerButton"
+
+                        screenState: root.screenState
                     }
                 }
             }
