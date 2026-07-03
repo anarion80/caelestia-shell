@@ -47,6 +47,8 @@ StyledRect {
                 spacing: layout.spacing
 
                 StyledText {
+                    id: dateText
+
                     Layout.alignment: Qt.AlignVCenter
                     text: Time.format("ddd")
                     font: root.font.build()
@@ -61,9 +63,10 @@ StyledRect {
                 }
 
                 StyledRect {
-                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignVCenter
                     implicitWidth: 1
-                    color: Colours.palette.m3outlineVariant
+                    implicitHeight: dateText.implicitHeight
+                    color: Qt.alpha(root.colour, 0.5)
                 }
             }
         }
