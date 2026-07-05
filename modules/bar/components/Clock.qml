@@ -61,14 +61,15 @@ StyledRect {
                     font: root.font.build()
                     color: root.colour
                 }
-
-                StyledRect {
-                    Layout.alignment: Qt.AlignVCenter
-                    implicitWidth: 1
-                    implicitHeight: dateText.implicitHeight
-                    color: Qt.alpha(root.colour, 0.5)
-                }
             }
+        }
+
+        StyledRect {
+            visible: Config.bar.clock.showDate
+            Layout.alignment: Qt.AlignVCenter
+            implicitWidth: 1
+            implicitHeight: hourMetrics.height
+            color: Qt.alpha(root.colour, 0.5)
         }
 
         StyledText {
