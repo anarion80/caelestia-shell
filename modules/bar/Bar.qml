@@ -111,7 +111,7 @@ RowLayout {
         id: repeater
 
         model: ScriptModel {
-            values: root.Config.bar.entries.filter(e => e.enabled ?? true)
+            values: root.Config.bar.entries.values.filter(e => e.enabled)
         }
 
         DelegateChooser {
