@@ -182,19 +182,46 @@ void ConfigList::populate(const QJsonArray& arr) {
         return;
 
     const auto old = m_items;
+    QList<bool> reused(old.size(), false);
+
     m_items.clear();
     m_items.reserve(arr.size());
 
-    // Reuse elements that didn't change, recreating one resets the delegate bound to it
+    // Reuse elements that didn't change, recreating one resets the delegate bound to it.
+    // Matched by content, not position, so a reorder moves elements instead of rebuilding them
     for (int i = 0; i < arr.size(); ++i) {
-        if (i < old.size() && current.at(i) == arr.at(i))
-            m_items.append(old.at(i));
-        else
+        auto match = i < old.size() && !reused.at(i) && current.at(i) == arr.at(i) ? i : -1;
+
+        for (int j = 0; match < 0 && j < old.size(); ++j)
+            if (!reused.at(j) && current.at(j) == arr.at(i))
+                match = j;
+
+        // Content matching can't see an edited value, so fall back to identity and update in
+        // place. Only after an exact match failed, so an unchanged element is never rebuilt
+        auto update = false;
+        for (int j = 0; match < 0 && j < old.size(); ++j) {
+            if (!reused.at(j) && sameElement(old.at(j), current.at(j), arr.at(i))) {
+                match = j;
+                update = true;
+            }
+        }
+
+        if (match < 0) {
             appendItem(arr.at(i));
+            continue;
+        }
+
+        reused[match] = true;
+
+        // Quiet, a synced value is not a user edit and would mark the list loaded
+        if (update)
+            old.at(match)->loadFromJsonQuietly(arr.at(i));
+
+        m_items.append(old.at(match));
     }
 
     for (int i = 0; i < old.size(); ++i)
-        if (i >= arr.size() || current.at(i) != arr.at(i))
+        if (!reused.at(i))
             destroyItem(old.at(i));
 
     if (m_items.size() != old.size())
@@ -204,6 +231,26 @@ void ConfigList::populate(const QJsonArray& arr) {
 
     // Persistence is gated on m_loaded, not on silence, so defaults still serialise to nothing
     notifyChanged();
+}
+
+bool ConfigList::sameElement(const ConfigObject* item, const QJsonValue& current, const QJsonValue& json) {
+    const auto keys = item->identityKeys();
+    if (keys.isEmpty())
+        return false;
+
+    const auto currentObj = current.toObject();
+    const auto newObj = json.toObject();
+
+    // Same keys, so an update never leaves a dropped key at its old value
+    if (currentObj.keys() != newObj.keys())
+        return false;
+
+    // An element missing its identity keys has no identity to match on
+    for (const auto& key : keys)
+        if (!newObj.contains(key) || currentObj.value(key) != newObj.value(key))
+            return false;
+
+    return true;
 }
 
 void ConfigList::appendItem(const QJsonValue& json) {
