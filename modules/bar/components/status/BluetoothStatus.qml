@@ -22,7 +22,13 @@ Item {
         }
     }
 
-    ColumnLayout {
+    Behavior on implicitWidth {
+        Anim {
+            type: Anim.DefaultEffects
+        }
+    }
+
+    RowLayout {
         id: layout
 
         spacing: Tokens.spacing.medium / 2

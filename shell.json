@@ -90,13 +90,36 @@
     ],
     "persistent": true,
     "showOnHover": true,
-    "status": {
-      "showAudio": false,
-      "showBattery": true,
-      "showBluetooth": true,
-      "showKbLayout": false,
-      "showNetwork": true
-    },
+    "statusIcons": [
+      {
+        "id": "lockStatus",
+        "enabled": true
+      },
+      {
+        "id": "audio",
+        "enabled": false
+      },
+      {
+        "id": "microphone",
+        "enabled": false
+      },
+      {
+        "id": "kbLayout",
+        "enabled": false
+      },
+      {
+        "id": "network",
+        "enabled": true
+      },
+      {
+        "id": "bluetooth",
+        "enabled": true
+      },
+      {
+        "id": "battery",
+        "enabled": true
+      }
+    ],
     "tray": {
       "background": false,
       "recolour": false

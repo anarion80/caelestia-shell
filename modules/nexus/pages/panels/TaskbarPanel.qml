@@ -92,9 +92,9 @@ PageBase {
         NavRow {
             last: true
             icon: "mail"
-            label: qsTr("Mail")
-            status: qsTr("Indicator, unread count")
-            onClicked: root.nState.openSubPage(10)
+            text: qsTr("Mail")
+            subtext: qsTr("Indicator, unread count")
+            onClicked: root.nState.openSubPage(11)
         }
 
         // Scroll actions
