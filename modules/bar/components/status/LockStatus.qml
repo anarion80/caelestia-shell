@@ -1,9 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
+import Caelestia.Config
 import qs.components
 import qs.services
 
-ColumnLayout {
+Item {
     id: root
 
     required property color colour
@@ -13,7 +14,10 @@ ColumnLayout {
     property real capsHeight: Hypr.capsLock ? capslockIcon.implicitHeight : 0
     property real numHeight: Hypr.numLock ? numlockIcon.implicitHeight : 0
 
-    spacing: Math.round(gap)
+    // Fixed slot height: this entry must never change size, otherwise the
+    // status icon row re-lays-out and pushes the other icons when locks toggle.
+    implicitWidth: column.implicitWidth
+    implicitHeight: Tokens.sizes.bar.innerHeight
 
     Behavior on gap {
         Anim {
@@ -33,60 +37,68 @@ ColumnLayout {
         }
     }
 
-    Item {
-        implicitWidth: capslockIcon.implicitWidth
-        implicitHeight: Math.round(root.capsHeight)
+    ColumnLayout {
+        id: column
 
-        MaterialIcon {
-            id: capslockIcon
+        anchors.centerIn: parent
 
-            anchors.centerIn: parent
+        spacing: Math.round(root.gap)
 
-            scale: Hypr.capsLock ? 1 : 0.5
-            opacity: Hypr.capsLock ? 1 : 0
+        Item {
+            implicitWidth: capslockIcon.implicitWidth
+            implicitHeight: Math.round(root.capsHeight)
 
-            text: "keyboard_capslock_badge"
-            color: root.colour
-            fill: 1
-            grade: 25
+            MaterialIcon {
+                id: capslockIcon
 
-            Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
+                anchors.centerIn: parent
+
+                scale: Hypr.capsLock ? 1 : 0.5
+                opacity: Hypr.capsLock ? 1 : 0
+
+                text: "keyboard_capslock_badge"
+                color: root.colour
+                fill: 1
+                grade: 25
+
+                Behavior on opacity {
+                    Anim {
+                        type: Anim.DefaultEffects
+                    }
                 }
-            }
 
-            Behavior on scale {
-                Anim {}
+                Behavior on scale {
+                    Anim {}
+                }
             }
         }
-    }
 
-    Item {
-        implicitWidth: numlockIcon.implicitWidth
-        implicitHeight: Math.round(root.numHeight)
+        Item {
+            implicitWidth: numlockIcon.implicitWidth
+            implicitHeight: Math.round(root.numHeight)
 
-        MaterialIcon {
-            id: numlockIcon
+            MaterialIcon {
+                id: numlockIcon
 
-            anchors.centerIn: parent
+                anchors.centerIn: parent
 
-            scale: Hypr.numLock ? 1 : 0.5
-            opacity: Hypr.numLock ? 1 : 0
+                scale: Hypr.numLock ? 1 : 0.5
+                opacity: Hypr.numLock ? 1 : 0
 
-            text: "looks_one"
-            color: root.colour
-            fill: 1
-            grade: 25
+                text: "looks_one"
+                color: root.colour
+                fill: 1
+                grade: 25
 
-            Behavior on opacity {
-                Anim {
-                    type: Anim.DefaultEffects
+                Behavior on opacity {
+                    Anim {
+                        type: Anim.DefaultEffects
+                    }
                 }
-            }
 
-            Behavior on scale {
-                Anim {}
+                Behavior on scale {
+                    Anim {}
+                }
             }
         }
     }
