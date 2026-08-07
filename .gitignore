@@ -10,3 +10,4 @@ devenv.local.nix
 .direnv
 .cache/
 logs
+.omo
