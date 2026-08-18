@@ -453,14 +453,17 @@ For example, to disable the bar on DP-1:
           "base": 0.85,
           "layers": 0.4
         }
-      },
-      "title": {
-        "family": "GoogleSansFlex",
-        "large": {
-          "size": 22,
-          "weight": 500,
-          "italic": false,
-          "vaxes": { "ROND": 25 }
+    },
+    "general": {
+        "logo": "",
+        "showOverFullscreen": false,
+        "mediaGifSpeedAdjustment": 300,
+        "sessionGifSpeed": 0.7,
+        "apps": {
+            "terminal": ["foot"],
+            "audio": ["pwvucontrol"],
+            "playback": ["mpv"],
+            "explorer": ["thunar"]
         },
         "idle": {
             "lockBeforeSleep": true,
