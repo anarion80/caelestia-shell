@@ -34,9 +34,10 @@ StyledRect {
     }
 
     // Entries that can shrink to nothing, spacing included.
-    // The lockStatus slot has a constant size now (see LockStatus.qml), so it is
-    // never collapsed: collapsing it would shift firstPresent/lastPresent and
-    // animate the neighbouring entries' margins, pushing the row on lock toggles.
+    // The lockStatus slot has a constant height now (its width extends into the
+    // bar's spacer, see LockStatus.qml), so it is never collapsed: collapsing it
+    // would shift firstPresent/lastPresent and animate the neighbouring entries'
+    // margins, pushing the row on lock toggles.
     function collapsed(entry: var): bool {
         return false;
     }
@@ -73,7 +74,6 @@ StyledRect {
                     delegate: EntryWrapper {
                         LockStatus {
                             colour: root.colour
-                            parentSpacing: root.spacing
                         }
                     }
                 }

@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Caelestia.Config
 import qs.components
 import qs.services
@@ -8,97 +7,94 @@ Item {
     id: root
 
     required property color colour
-    required property int parentSpacing
 
-    property real gap: Hypr.capsLock && Hypr.numLock ? parentSpacing : 0
-    property real capsHeight: Hypr.capsLock ? capslockIcon.implicitHeight : 0
-    property real numHeight: Hypr.numLock ? numlockIcon.implicitHeight : 0
+    // The caps lock icon takes the first slot, the num lock icon the second.
+    // Slots extend leftward (into the bar's fill-width spacer) as locks toggle
+    // on; both whole icons are shown side by side when both locks are on.
+    property real capsWidth: Hypr.capsLock ? capslockIcon.implicitWidth : 0
+    property real numWidth: Hypr.numLock ? numlockIcon.implicitWidth : 0
 
-    // Fixed slot height: this entry must never change size, otherwise the
+    // Fixed slot height: this entry must never change height, otherwise the
     // status icon row re-lays-out and pushes the other icons when locks toggle.
-    implicitWidth: column.implicitWidth
+    implicitWidth: Math.round(capsWidth + numWidth)
     implicitHeight: Tokens.sizes.bar.innerHeight
 
-    Behavior on gap {
+    Behavior on capsWidth {
         Anim {
             type: Anim.SlowEffects
         }
     }
 
-    Behavior on capsHeight {
+    Behavior on numWidth {
         Anim {
             type: Anim.SlowEffects
         }
     }
 
-    Behavior on numHeight {
-        Anim {
-            type: Anim.SlowEffects
-        }
-    }
+    Item {
+        id: capsSlot
 
-    ColumnLayout {
-        id: column
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
 
-        anchors.centerIn: parent
+        width: Math.round(root.capsWidth)
+        height: capslockIcon.implicitHeight
 
-        spacing: Math.round(root.gap)
+        MaterialIcon {
+            id: capslockIcon
 
-        Item {
-            implicitWidth: capslockIcon.implicitWidth
-            implicitHeight: Math.round(root.capsHeight)
+            anchors.centerIn: parent
 
-            MaterialIcon {
-                id: capslockIcon
+            scale: Hypr.capsLock ? 1 : 0.5
+            opacity: Hypr.capsLock ? 1 : 0
 
-                anchors.centerIn: parent
+            text: "keyboard_capslock_badge"
+            color: root.colour
+            fill: 1
+            grade: 25
 
-                scale: Hypr.capsLock ? 1 : 0.5
-                opacity: Hypr.capsLock ? 1 : 0
-
-                text: "keyboard_capslock_badge"
-                color: root.colour
-                fill: 1
-                grade: 25
-
-                Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
-                }
-
-                Behavior on scale {
-                    Anim {}
+            Behavior on opacity {
+                Anim {
+                    type: Anim.DefaultEffects
                 }
             }
+
+            Behavior on scale {
+                Anim {}
+            }
         }
+    }
 
-        Item {
-            implicitWidth: numlockIcon.implicitWidth
-            implicitHeight: Math.round(root.numHeight)
+    Item {
+        id: numSlot
 
-            MaterialIcon {
-                id: numlockIcon
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
 
-                anchors.centerIn: parent
+        width: Math.round(root.numWidth)
+        height: numlockIcon.implicitHeight
 
-                scale: Hypr.numLock ? 1 : 0.5
-                opacity: Hypr.numLock ? 1 : 0
+        MaterialIcon {
+            id: numlockIcon
 
-                text: "looks_one"
-                color: root.colour
-                fill: 1
-                grade: 25
+            anchors.centerIn: parent
 
-                Behavior on opacity {
-                    Anim {
-                        type: Anim.DefaultEffects
-                    }
+            scale: Hypr.numLock ? 1 : 0.5
+            opacity: Hypr.numLock ? 1 : 0
+
+            text: "looks_one"
+            color: root.colour
+            fill: 1
+            grade: 25
+
+            Behavior on opacity {
+                Anim {
+                    type: Anim.DefaultEffects
                 }
+            }
 
-                Behavior on scale {
-                    Anim {}
-                }
+            Behavior on scale {
+                Anim {}
             }
         }
     }
