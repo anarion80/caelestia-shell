@@ -351,7 +351,7 @@ Item {
                 Repeater {
                     model: ScriptModel {
                         values: {
-                            const windows = Hypr.toplevels.values.filter(c => c.workspace?.id === ws.wsId);
+                            const windows = Hypr.toplevelsForWs(ws.wsId);
                             const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
                             return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                         }

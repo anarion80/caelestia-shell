@@ -242,8 +242,8 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
 >
 > - `appearance`: `anim.*`, `transparency.*`
 > - `bar.tray`: `hiddenIcons`, `iconSubs`
-> - `bar.workspaces`: `perMonitorWorkspaces`, `specialWorkspaceIcons`,
->   `windowIcons`
+> - `bar.workspaces`: `ignoredTags`, `perMonitorWorkspaces`,
+>   `specialWorkspaceIcons`, `windowIcons`
 > - `dashboard`: `mediaUpdateInterval`, `resourceUpdateInterval`
 > - `general`: `apps.*`, `battery.*`, `idle.*`, `logo`
 > - `launcher`: `actionPrefix`, `actions`, `enableDangerousActions`,
@@ -524,30 +524,34 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "vaxes": { "ROND": 25 }
         },
         "workspaces": {
-          "shown": 5,
-          "activeIndicator": true,
-          "occupiedBg": false,
-          "showWindows": true,
-          "showWindowsOnSpecialWorkspaces": true,
-          "maxWindowIcons": 5,
-          "activeTrail": false,
-          "perMonitorWorkspaces": true,
-          "label": "  ",
-          "occupiedLabel": "󰮯",
-          "activeLabel": "󰮯",
-          "capitalisation": "preserve",
-          "specialWorkspaceIcons": [
-            {
-              "name": "steam",
-              "icon": "sports_esports"
-            }
-          ],
-          "windowIcons": [
-            {
-              "regex": "steam(_app_(default|[0-9]+))?",
-              "icon": "sports_esports"
-            }
-          ]
+            "shown": 5,
+            "activeIndicator": true,
+            "occupiedBg": false,
+            "showWindows": true,
+            "showWindowsOnSpecialWorkspaces": true,
+            "maxWindowIcons": 5,
+            "activeTrail": false,
+            "perMonitorWorkspaces": true,
+            "label": "  ",
+            "occupiedLabel": "󰮯",
+            "activeLabel": "󰮯",
+            "capitalisation": "preserve",
+            "specialWorkspaceIcons": [
+                {
+                    "name": "steam",
+                    "icon": "sports_esports"
+                }
+            ],
+            "ignoredTags": [
+                "hide_in_bar",
+                "xwl_popup"
+            ],
+            "windowIcons": [
+                {
+                    "regex": "steam(_app_(default|[0-9]+))?",
+                    "icon": "sports_esports"
+                }
+            ]
         },
         "activeWindow": {
           "compact": false,
