@@ -26,9 +26,7 @@ StyledRect {
 
     StateLayer {
         // Cursed workaround to make the height larger than the parent
-        function onClicked(): void {
-            Quickshell.execDetached(Config.bar.mail.clickCommand);
-        }
+        onClicked: Quickshell.execDetached(Config.bar.mail.clickCommand)
 
         anchors.fill: undefined
         anchors.centerIn: parent
