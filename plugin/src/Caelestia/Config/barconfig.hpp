@@ -92,9 +92,21 @@ class BarMail : public settings::ObjectNode {
     CONFIG_PROPERTY(bool, showNumber, false)
     CONFIG_PROPERTY(int, emailsShown, 5)
     CONFIG_GLOBAL_PROPERTY(QStringList, fetchCommand,
-        DEFAULT_ARG({ "notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash" }))
+        DEFAULT_ARG({
+            u"notmuch"_s,
+            u"search"_s,
+            u"--format=json"_s,
+            u"--output=summary"_s,
+            u"tag:unread"_s,
+            u"-tag:trash"_s,
+        }))
     CONFIG_GLOBAL_PROPERTY(QStringList, clickCommand,
-        DEFAULT_ARG({ "ghostty", "--title=NeomuttFloat", "-e", "neomutt" }))
+        DEFAULT_ARG({
+            u"ghostty"_s,
+            u"--title=NeomuttFloat"_s,
+            u"-e"_s,
+            u"neomutt"_s,
+        }))
 };
 
 class BarConfig : public settings::ObjectNode {
