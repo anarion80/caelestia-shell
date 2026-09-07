@@ -7,6 +7,7 @@ import qs.components
 import qs.components.misc
 import qs.services
 import Caelestia.Config
+import Caelestia.I18n
 import qs.utils
 
 StyledRect {
@@ -65,7 +66,7 @@ StyledRect {
 
             Layout.alignment: Qt.AlignVCenter
 
-            text: qsTr("%1").arg(MailService.unreadEmails.length)
+            text: Tr.tr("%1").arg(MailService.unreadEmails.length)
             font: Tokens.font.body.small
             color: Colours.palette.m3tertiary
         }

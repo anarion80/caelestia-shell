@@ -2,12 +2,13 @@ pragma ComponentBehavior: Bound
 
 import QtQuick.Layouts
 import Caelestia.Config
+import Caelestia.I18n
 import qs.modules.nexus.common
 
 PageBase {
     id: root
 
-    title: qsTr("Mail")
+    title: Tr.tr("Mail")
     isSubPage: true
 
     ColumnLayout {
@@ -19,16 +20,16 @@ PageBase {
         ToggleRow {
             Layout.fillWidth: true
             first: true
-            text: qsTr("Enabled")
-            subtext: qsTr("Show the mail indicator in the bar")
+            text: Tr.tr("Enabled")
+            subtext: Tr.tr("Show the mail indicator in the bar")
             checked: Config.bar.mail.enabled
             onToggled: GlobalConfig.bar.mail.enabled = checked
         }
 
         ToggleRow {
             Layout.fillWidth: true
-            text: qsTr("Show number")
-            subtext: qsTr("Display the unread email count")
+            text: Tr.tr("Show number")
+            subtext: Tr.tr("Display the unread email count")
             checked: Config.bar.mail.showNumber
             onToggled: GlobalConfig.bar.mail.showNumber = checked
         }
@@ -36,8 +37,8 @@ PageBase {
         StepperRow {
             Layout.fillWidth: true
             last: true
-            label: qsTr("Emails shown")
-            subtext: qsTr("Maximum emails shown in the popout")
+            label: Tr.tr("Emails shown")
+            subtext: Tr.tr("Maximum emails shown in the popout")
             value: Config.bar.mail.emailsShown
             from: 1
             to: 20
