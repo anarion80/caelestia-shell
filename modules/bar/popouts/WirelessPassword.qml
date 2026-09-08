@@ -198,6 +198,7 @@ ColumnLayout {
                     if (root.network) {
                         const ssid = root.network.ssid;
                         if (ssid && ssid.length > 0) {
+                            // TRANSLATORS: %1 = the network SSID
                             return Tr.tr("Network: %1").arg(ssid);
                         }
                     }
@@ -480,7 +481,7 @@ ColumnLayout {
                     Layout.minimumHeight: Tokens.font.body.medium.pointSize + Tokens.padding.medium * 2
                     inactiveColour: Colours.palette.m3secondaryContainer
                     inactiveOnColour: Colours.palette.m3onSecondaryContainer
-                    text: Tr.tr("Cancel")
+                    text: Tr.trCtx("Cancel", "button")
 
                     onClicked: root.closeDialog()
                 }
