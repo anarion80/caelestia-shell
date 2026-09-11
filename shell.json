@@ -134,7 +134,7 @@
       "label": "  ",
       "occupiedBg": true,
       "occupiedLabel": "󰮯",
-      "perMonitorWorkspaces": true,
+      "showUnoccupied": true,
       "showWindows": true,
       "shown": 8
     }
