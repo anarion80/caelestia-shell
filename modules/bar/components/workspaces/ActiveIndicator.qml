@@ -39,7 +39,7 @@ StyledRect {
     readonly property real trailEnd: {
         workspaces.count;
         const ws = workspaces.itemAt(trailWsIdx) as Workspace;
-        return ws ? ws.y + ws.height : 0;
+        return ws ? ws.x + ws.width : 0;
     }
     property bool clampTrailEnd: false
 
@@ -54,7 +54,7 @@ StyledRect {
             return 0;
 
         const ws = workspaces.itemAt(index) as Workspace;
-        return ws ? (switchWsIdx >= 0 ? ws.targetY : ws.y) : 0;
+        return ws ? (switchWsIdx >= 0 ? ws.targetY : ws.x) : 0;
     }
 
     function updateCurrentWorkspace(withAnimation: bool): void {
@@ -94,7 +94,15 @@ StyledRect {
 
     onSwitchSettledChanged: {
         if (switchSettled)
-            endWorkspaceSwitch();
+            // Deferred: ending the switch changes leading/trailing, which starts the geometry
+            // animations again. Doing that synchronously inside this change handler feeds the
+            // animation state back into the binding that observed it, which Qt reports as a
+            // binding loop on switchAnimating. The callback re-checks switchSettled so a switch
+            // started in the meantime is not ended.
+            Qt.callLater(() => {
+                if (switchSettled)
+                    endWorkspaceSwitch();
+            });
     }
 
     clip: true
