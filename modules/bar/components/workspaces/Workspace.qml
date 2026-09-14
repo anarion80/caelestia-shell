@@ -3,61 +3,27 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import M3Shapes
+import Caelestia.Components
 import Caelestia.Config
 import qs.components
 import qs.services
 import qs.utils
 
-RowLayout {
+Item {
     id: root
 
+    required property int modelData
     required property int index
     required property int activeWsId
-    required property var occupied
-    required property int groupOffset
-    required property bool shouldShow
+    required property int ws
 
-    required property Repeater workspaceRepeater
-    required property real layoutSpacing
-
-    readonly property bool isWorkspace: true // Flag for finding workspace children
-    // Unanimated prop for others to use as reference
-    readonly property int size: implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
-
-    readonly property int ws: groupOffset + index + 1
-    readonly property bool isOccupied: occupied[ws] ?? false
-    readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows && (Config.bar.workspaces.maxWindowIcons > 0)
+    readonly property list<HyprlandToplevel> toplevels: Hypr.toplevelsForWs(ws)
+    readonly property bool isOccupied: toplevels.length > 0
+    readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows && Config.bar.workspaces.maxWindowIcons > 0
     readonly property bool focused: activeWsId === ws
     readonly property list<int> focusedShapeList: [MaterialShape.Slanted, MaterialShape.Oval, MaterialShape.Pill, MaterialShape.Triangle, MaterialShape.Arrow, MaterialShape.Diamond, MaterialShape.Pentagon, MaterialShape.Gem, MaterialShape.VerySunny, MaterialShape.Sunny, MaterialShape.Cookie4Sided, MaterialShape.Cookie6Sided, MaterialShape.Cookie7Sided, MaterialShape.Cookie9Sided, MaterialShape.Cookie12Sided, MaterialShape.Clover4Leaf, MaterialShape.SoftBurst, MaterialShape.Ghostish]
-
-    readonly property real revealProgress: Math.max(0, Math.min(1, reveal))
-    readonly property bool revealTransitionRunning: revealAnimation.running
-    readonly property real precedingRevealProgress: {
-        let progress = 0;
-
-        for (let i = 0; i < index; ++i) {
-            const workspace = workspaceRepeater.itemAt(i) as Workspace;
-            if (workspace)
-                progress = Math.max(progress, workspace.revealProgress);
-        }
-
-        return progress;
-    }
-    readonly property real targetY: {
-        let offset = 0;
-
-        for (let i = 0; i < index; ++i) {
-            const workspace = workspaceRepeater.itemAt(i) as Workspace;
-            if (workspace?.shouldShow)
-                offset += workspace.size + layoutSpacing;
-        }
-
-        return offset;
-    }
-
-    property real reveal: shouldShow ? 1 : 0
-    property real animatedSize: size
 
     function updateShape(): void {
         const shape = indicator.item as MaterialShape;
@@ -70,27 +36,29 @@ RowLayout {
             shape.shape = Qt.binding(() => isOccupied ? MaterialShape.Square : MaterialShape.Circle);
     }
 
-    Layout.alignment: Qt.AlignVCenter
-    Layout.preferredWidth: animatedSize * revealProgress
-    Layout.leftMargin: layoutSpacing * Math.min(revealProgress, precedingRevealProgress)
+    anchors.verticalCenter: parent?.verticalCenter
+    LazyListView.preferredWidth: LazyListView.removing ? 0 : layout.implicitWidth + (hasWindows ? Tokens.padding.extraSmall : 0)
+    LazyListView.visibleWidth: LazyListView.preferredWidth
 
-    visible: shouldShow || revealProgress > 0
-    opacity: revealProgress
-    clip: true
-
-    spacing: 0
+    opacity: LazyListView.removing || LazyListView.adding ? 0 : 1
 
     onFocusedChanged: updateShape()
     Component.onCompleted: updateShape()
 
-    Loader {
-        id: indicator
+    Behavior on LazyListView.visibleWidth {
+        Anim {}
+    }
 
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.preferredHeight: Tokens.sizes.bar.innerHeight - Tokens.padding.small
-        sourceComponent: Config.bar.workspaces.displayType === BarWorkspaceDisplay.Text ? textComponent : shapeComponent
+    Behavior on x {
+        enabled: root.LazyListView.ready
 
-        onItemChanged: root.updateShape()
+        Anim {}
+    }
+
+    Behavior on opacity {
+        Anim {
+            type: Anim.DefaultEffects
+        }
     }
 
     Component {
@@ -153,70 +121,75 @@ RowLayout {
         }
     }
 
-    Loader {
-        id: windows
+    RowLayout {
+        id: layout
 
-        asynchronous: true
+        anchors.fill: parent
+        spacing: 0
 
-        Layout.alignment: Qt.AlignVCenter
-        Layout.fillWidth: true
-        Layout.leftMargin: -Tokens.spacing.extraSmall / 2
+        Loader {
+            id: indicator
 
-        visible: active
-        active: root.hasWindows
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small
+            sourceComponent: Config.bar.workspaces.displayType === BarWorkspaceDisplay.Text ? textComponent : shapeComponent
 
-        sourceComponent: Row {
-            spacing: 0
+            onItemChanged: root.updateShape()
+        }
 
-            add: Transition {
-                Anim {
-                    properties: "scale"
-                    from: 0
-                    to: 1
-                    easing: Tokens.anim.standardDecel
-                }
-            }
+        Loader {
+            id: windows
 
-            move: Transition {
-                Anim {
-                    properties: "scale"
-                    to: 1
-                    easing: Tokens.anim.standardDecel
-                }
-                Anim {
-                    properties: "x,y"
-                }
-            }
+            asynchronous: true
 
-            Repeater {
-                model: ScriptModel {
-                    values: {
-                        const windows = Hypr.toplevelsForWs(root.ws);
-                        const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
-                        return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
+            Layout.leftMargin: -Tokens.spacing.extraSmall / 2
+
+            visible: active
+            active: root.hasWindows
+
+            sourceComponent: Row {
+                spacing: 0
+
+                add: Transition {
+                    Anim {
+                        properties: "scale"
+                        from: 0
+                        to: 1
+                        easing: Tokens.anim.standardDecel
                     }
                 }
 
-                MaterialIcon {
-                    required property var modelData
+                move: Transition {
+                    Anim {
+                        properties: "scale"
+                        to: 1
+                        easing: Tokens.anim.standardDecel
+                    }
+                    Anim {
+                        properties: "x,y"
+                    }
+                }
 
-                    grade: 0
-                    text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
-                    color: Colours.palette.m3onSurfaceVariant
+                Repeater {
+                    model: ScriptModel {
+                        values: {
+                            const windows = root.toplevels;
+                            const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
+                            return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
+                        }
+                    }
+
+                    MaterialIcon {
+                        required property var modelData
+
+                        grade: 0
+                        text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
+                        color: Colours.palette.m3onSurfaceVariant
+                    }
                 }
             }
-        }
-    }
-
-    Behavior on animatedSize {
-        Anim {}
-    }
-
-    Behavior on reveal {
-        Anim {
-            id: revealAnimation
-
-            type: Anim.DefaultEffects
         }
     }
 }

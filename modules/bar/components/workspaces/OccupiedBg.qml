@@ -2,107 +2,112 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Caelestia.Config
+import Caelestia.Components
 import qs.components
 import qs.services
 
 Item {
     id: root
 
-    required property Repeater workspaces
-    required property var occupied
-    required property int groupOffset
-    required property bool layoutTransitionRunning
-    required property var workspaceIndex
+    required property var workspaces
+    required property int wsSpacing
 
-    property list<var> pills: []
+    readonly property color colour: Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
+    property color colourAnimated: colour
 
-    onOccupiedChanged: {
-        if (!occupied)
-            return;
-        let count = 0;
-        const start = groupOffset;
-        const end = start + Config.bar.workspaces.shown;
-        for (const [ws, occ] of Object.entries(occupied)) {
-            if (ws > start && ws <= end && occ) {
-                const isFirstInGroup = Number(ws) === start + 1;
-                const isLastInGroup = Number(ws) === end;
-                if (isFirstInGroup || !occupied[ws - 1]) {
-                    if (pills[count])
-                        pills[count].start = ws;
-                    else
-                        pills.push(pillComp.createObject(root, {
-                            start: ws
-                        }));
-                    count++;
+    Behavior on colourAnimated {
+        CAnim {}
+    }
+
+    // Item wrappers because `layer.enabled` clips the content, and the rects extend 1px outside the parent
+    Item {
+        anchors.fill: parent
+        anchors.margins: -1
+
+        opacity: root.colourAnimated.a
+        layer.enabled: opacity < 1 // Forces opacity to apply to children as a single layer
+
+        Item {
+            anchors.fill: parent
+            anchors.margins: 1
+
+            Repeater {
+                model: ScriptModel {
+                    values: root.workspaces
                 }
-                if ((isLastInGroup || !occupied[ws + 1]) && pills[count - 1])
-                    pills[count - 1].end = ws;
-            }
-        }
-        if (pills.length > count)
-            pills.splice(count, pills.length - count).forEach(p => p.destroy());
-    }
 
-    Repeater {
-        model: ScriptModel {
-            values: root.pills.filter(p => p)
-        }
-
-        StyledRect {
-            id: rect
-
-            required property var modelData
-
-            readonly property Workspace start: {
-                root.workspaces.count;
-                return root.workspaces.itemAt(root.workspaceIndex(modelData.start)) as Workspace ?? null;
-            }
-            readonly property Workspace end: {
-                root.workspaces.count;
-                return root.workspaces.itemAt(root.workspaceIndex(modelData.end)) as Workspace ?? null;
-            }
-
-            anchors.verticalCenter: root.verticalCenter
-
-            x: (start?.x ?? 0) - 1
-            implicitWidth: start && end ? end.x + end.size - start.x + 2 : 0
-            implicitHeight: Tokens.sizes.bar.innerHeight - Tokens.padding.small + 2
-
-            color: Colours.layer(Colours.palette.m3surfaceContainerHigh, 2)
-            radius: Tokens.rounding.full
-
-            scale: 0
-            Component.onCompleted: scale = 1
-
-            Behavior on scale {
-                Anim {
-                    easing: Tokens.anim.standardDecel
-                }
-            }
-
-            Behavior on x {
-                enabled: !root.layoutTransitionRunning
-
-                Anim {}
-            }
-
-            Behavior on implicitWidth {
-                enabled: !root.layoutTransitionRunning
-
-                Anim {}
+                OccupiedRect {}
             }
         }
     }
 
-    Component {
-        id: pillComp
+    component OccupiedRect: StyledRect {
+        required property int index
+        required property Workspace modelData
+        property real leftRadius: {
+            if (!modelData?.isOccupied || index === 0)
+                return height / 2;
+            return (root.workspaces[index - 1]?.isOccupied ?? false) ? 0 : height / 2;
+        }
+        property real rightRadius: {
+            if (!modelData?.isOccupied || index === root.workspaces.length - 1)
+                return height / 2;
+            return (root.workspaces[index + 1]?.isOccupied ?? false) ? 0 : height / 2;
+        }
+        property real leftPadding: {
+            if (!modelData?.isOccupied || index === 0)
+                return 0;
+            return (root.workspaces[index - 1]?.isOccupied ?? false) ? root.wsSpacing : 0;
+        }
+        property real rightPadding: {
+            if (!modelData?.isOccupied || index === root.workspaces.length - 1)
+                return 0;
+            return (root.workspaces[index + 1]?.isOccupied ?? false) ? root.wsSpacing : 0;
+        }
 
-        Pill {}
-    }
+        anchors.top: parent?.top
+        anchors.bottom: parent?.bottom
+        anchors.margins: -1
 
-    component Pill: QtObject {
-        property int start
-        property int end
+        x: modelData ? modelData.x + anchors.margins - leftPadding : 0
+        implicitWidth: modelData ? modelData.LazyListView.visibleWidth - anchors.margins * 2 + leftPadding + rightPadding : 0
+
+        color: Qt.alpha(root.colour, 1)
+        topLeftRadius: leftRadius
+        topRightRadius: rightRadius
+        bottomLeftRadius: leftRadius
+        bottomRightRadius: rightRadius
+
+        opacity: modelData?.isOccupied ? 1 : 0
+
+        Behavior on leftRadius {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
+
+        Behavior on rightRadius {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
+
+        Behavior on leftPadding {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
+
+        Behavior on rightPadding {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
+
+        Behavior on opacity {
+            Anim {
+                type: Anim.DefaultEffects
+            }
+        }
     }
 }

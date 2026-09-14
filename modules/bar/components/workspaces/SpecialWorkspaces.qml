@@ -218,7 +218,7 @@ Item {
         drag.target: view.contentItem
         drag.axis: Drag.XAxis
         drag.maximumX: 0
-        drag.minimumX: Math.min(0, view.width- view.contentWidth - Tokens.padding.extraSmall)
+        drag.minimumX: Math.min(0, view.width - view.contentWidth - Tokens.padding.extraSmall)
 
         onPressed: event => startX = event.x
 
@@ -367,7 +367,7 @@ Item {
                 }
             }
 
-            Behavior on Layout.preferredHeight {
+            Behavior on Layout.preferredWidth {
                 Anim {}
             }
         }
