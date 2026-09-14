@@ -234,6 +234,18 @@ void LazyListView::setCacheBuffer(qreal buffer) {
     polish();
 }
 
+bool LazyListView::cullDelegates() const {
+    return m_cullDelegates;
+}
+
+void LazyListView::setCullDelegates(bool cull) {
+    if (m_cullDelegates == cull)
+        return;
+    m_cullDelegates = cull;
+    emit cullDelegatesChanged();
+    polish();
+}
+
 // --- Sizing ---
 
 qreal LazyListView::estimatedHeight() const {
@@ -413,31 +425,24 @@ QQuickItem* LazyListView::itemAtIndex(int index) const {
     return m_delegates.value(index).item;
 }
 
-// Hit test in content coordinates against layout (non-animated) positions
+// Hit test against instantiated delegates at their current visual positions
 QQuickItem* LazyListView::itemAt(qreal x, qreal y) const {
-    if (m_layout.isEmpty() || x < 0 || x >= width() || y < 0)
+    if (x < 0 || x >= width() || y < 0)
         return nullptr;
 
-    // Binary search for the first item whose layout bottom is below y
-    int lo = 0;
-    int hi = static_cast<int>(m_layout.size()) - 1;
-    int candidate = -1;
+    const auto children = childItems();
+    for (auto* const item : children | std::views::reverse) {
+        if (!m_itemToIndex.contains(item) || !item->isVisible())
+            continue;
 
-    while (lo <= hi) {
-        const int mid = lo + (hi - lo) / 2;
-        if (m_layout[mid].targetY + layoutHeightAt(mid) > y) {
-            candidate = mid;
-            hi = mid - 1;
-        } else {
-            lo = mid + 1;
-        }
+        const auto top = item->y() + m_contentY;
+        const auto bottom = top + delegateVisibleHeight(item);
+
+        if (y >= top && y < bottom)
+            return item;
     }
 
-    // y lies past the last item, or in the spacing gap above the candidate
-    if (candidate < 0 || y < m_layout[candidate].targetY)
-        return nullptr;
-
-    return m_delegates.value(candidate).item;
+    return nullptr;
 }
 
 // --- QQuickItem Overrides ---
@@ -668,6 +673,10 @@ QRectF LazyListView::effectiveViewport() const {
 std::pair<int, int> LazyListView::computeVisibleRange() const {
     if (m_layout.isEmpty())
         return { -1, -1 };
+
+    // Culling disabled: keep every delegate alive
+    if (!m_cullDelegates)
+        return { 0, static_cast<int>(m_layout.size()) - 1 };
 
     const auto vp = effectiveViewport();
     if (vp.isEmpty())
