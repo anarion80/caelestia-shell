@@ -540,13 +540,11 @@ QQuickItem* LazyListView::itemAtIndex(int index) const {
     return m_delegates.value(index).item;
 }
 
-// Hit test in content coordinates against layout (non-animated) positions
+// Hit test against instantiated delegates at their current visual positions
 QQuickItem* LazyListView::itemAt(qreal x, qreal y) const {
-    if (m_layout.isEmpty())
-        return nullptr;
+    const bool horiz = horizontal();
 
     // The cross axis must be inside the view for a hit to count
-    const bool horiz = horizontal();
     if (horiz ? (y < 0 || y >= height()) : (x < 0 || x >= width()))
         return nullptr;
 
@@ -554,26 +552,19 @@ QQuickItem* LazyListView::itemAt(qreal x, qreal y) const {
     if (pos < 0)
         return nullptr;
 
-    // Binary search for the first item whose layout end is past pos
-    int lo = 0;
-    int hi = static_cast<int>(m_layout.size()) - 1;
-    int candidate = -1;
+    const auto children = childItems();
+    for (auto* const item : children | std::views::reverse) {
+        if (!m_itemToIndex.contains(item) || !item->isVisible())
+            continue;
 
-    while (lo <= hi) {
-        const int mid = lo + (hi - lo) / 2;
-        if (m_layout[mid].target + layoutSizeAt(mid) > pos) {
-            candidate = mid;
-            hi = mid - 1;
-        } else {
-            lo = mid + 1;
-        }
+        const qreal start = delegateMainPos(item) + m_contentPos;
+        const qreal end = start + delegateVisibleSize(item);
+
+        if (pos >= start && pos < end)
+            return item;
     }
 
-    // pos lies past the last item, or in the spacing gap before the candidate
-    if (candidate < 0 || pos < m_layout[candidate].target)
-        return nullptr;
-
-    return m_delegates.value(candidate).item;
+    return nullptr;
 }
 
 // --- QQuickItem Overrides ---
@@ -816,7 +807,8 @@ QRectF LazyListView::effectiveViewport() const {
         const qreal start = std::min(rectStart(vp, horiz), m_layoutSize);
         const qreal end = std::max(rectEnd(vp, horiz), 0.0);
         if (end > start)
-            vp = horiz ? QRectF(start, vp.y(), end - start, vp.height()) : QRectF(vp.x(), start, vp.width(), end - start);
+            vp = horiz ? QRectF(start, vp.y(), end - start, vp.height())
+                       : QRectF(vp.x(), start, vp.width(), end - start);
     }
 
     vp = horiz ? vp.adjusted(-m_cacheBuffer, 0, m_cacheBuffer, 0) : vp.adjusted(0, -m_cacheBuffer, 0, m_cacheBuffer);
