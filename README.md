@@ -370,11 +370,162 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "italic": false,
           "vaxes": { "ROND": 25 }
         },
-        "small": {
-          "size": 11,
-          "weight": 400,
-          "italic": false,
-          "vaxes": { "ROND": 25 }
+        "workspaces": {
+          "shown": 5,
+          "activeIndicator": true,
+          "occupiedBg": false,
+          "showUnoccupied": true,
+          "perMonitor": true,
+          "showWindows": true,
+          "showWindowsOnSpecialWorkspaces": true,
+          "maxWindowIcons": 5,
+          "activeTrail": false,
+          "displayType": "shapes",
+          "specialDisplayType": "icons",
+          "label": "  ",
+          "occupiedLabel": "󰮯",
+          "activeLabel": "󰮯",
+          "capitalisation": "preserve",
+          "workspaceIcons": [],
+          "specialWorkspaceIcons": [
+            {
+              "name": "special",
+              "icon": "star"
+            },
+            {
+              "name": "communication",
+              "icon": "forum"
+            },
+            {
+              "name": "music",
+              "icon": "music_cast"
+            },
+            {
+              "name": "todo",
+              "icon": "checklist"
+            },
+            {
+              "name": "sysmon",
+              "icon": "monitor_heart"
+            }
+          ],
+          "ignoredTags": ["hide_in_bar", "xwl_popup"],
+          "windowIcons": [
+            {
+              "regex": "steam(_app_(default|[0-9]+))?",
+              "icon": "sports_esports"
+            }
+          ]
+        },
+        "activeWindow": {
+          "compact": false,
+          "inverted": false,
+          "showOnHover": true
+        },
+        "tray": {
+          "background": false,
+          "recolour": false,
+          "compact": false,
+          "iconSubs": [],
+          "hiddenIcons": []
+        },
+        "clock": {
+          "background": false,
+          "showDate": false,
+          "showIcon": true
+        },
+        "statusIcons": [
+          {
+            "id": "lockStatus",
+            "enabled": true
+          },
+          {
+            "id": "audio",
+            "enabled": false
+          },
+          {
+            "id": "microphone",
+            "enabled": false
+          },
+          {
+            "id": "kbLayout",
+            "enabled": false
+          },
+          {
+            "id": "network",
+            "enabled": true
+          },
+          {
+            "id": "bluetooth",
+            "enabled": true
+          },
+          {
+            "id": "battery",
+            "enabled": true
+          }
+        ],
+        "entries": [
+          {
+            "id": "logo",
+            "enabled": true
+          },
+          {
+            "id": "workspaces",
+            "enabled": true
+          },
+          {
+            "id": "spacer",
+            "enabled": true
+          },
+          {
+            "id": "activeWindow",
+            "enabled": true
+          },
+          {
+            "id": "spacer",
+            "enabled": true
+          },
+          {
+            "id": "tray",
+            "enabled": true
+          },
+          {
+            "id": "clock",
+            "enabled": true
+          },
+          {
+            "id": "statusIcons",
+            "enabled": true
+          },
+          {
+            "id": "power",
+            "enabled": true
+          }
+        ],
+        "excludedScreens": []
+      },
+      "border": {
+        "thickness": 10,
+        "rounding": 25,
+        "smoothing": 20
+      },
+      "dashboard": {
+        "enabled": true,
+        "showOnHover": true,
+        "showDashboard": true,
+        "showMedia": true,
+        "showPerformance": true,
+        "showWeather": true,
+        "mediaUpdateInterval": 500,
+        "resourceUpdateInterval": 1000,
+        "dragThreshold": 50,
+        "performance": {
+          "showBattery": true,
+          "showGpu": true,
+          "showCpu": true,
+          "showMemory": true,
+          "showStorage": true,
+          "showNetwork": true
         }
       },
       "mono": {
