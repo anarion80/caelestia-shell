@@ -12,6 +12,7 @@ StyledRect {
 
     required property Workspace activeWs
     required property Item mask
+    property alias contentColour: colouriser.colorizationColor
 
     property real start
     property real end
@@ -65,13 +66,15 @@ StyledRect {
     }
 
     Colouriser {
+        id: colouriser
+
         source: root.mask
         sourceColor: Colours.palette.m3onSurface
         colorizationColor: Colours.palette.m3onPrimary
 
         x: -parent.start
         y: 0
-        implicitWidth: root.mask.implicitWidth
+        implicitWidth: root.mask.width
         implicitHeight: root.mask.height
 
         anchors.verticalCenter: parent.verticalCenter

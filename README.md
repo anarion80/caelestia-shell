@@ -243,7 +243,8 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
 >
 > - `appearance`: `anim.*`, `transparency.*`
 > - `bar.tray`: `hiddenIcons`, `iconSubs`
-> - `bar.workspaces`: `ignoredTags`, `specialWorkspaceIcons`, `windowIcons`
+> - `bar.workspaces`: `ignoredTags`, `specialWorkspaceIcons`, `windowIcons`,
+>   `workspaceIcons`
 > - `dashboard`: `mediaUpdateInterval`, `resourceUpdateInterval`
 > - `general`: `apps.*`, `battery.*`, `idle.*`, `logo`
 > - `launcher`: `actionPrefix`, `actions`, `enableDangerousActions`,
@@ -254,12 +255,11 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
 > - `notifs`: `actionOnClick`, `defaultExpireTimeout`, `expire`, `fullscreen`,
 >   `fullscreenExpireTimeout`
 > - `paths`: `lyricsDir`, `wallpaperDir`
-> - `services`: `audioIncrement`, `brightnessIncrement`, `dataUnits`,
->   `defaultPlayer`, `gpuType`, `lyricsBackend`, `maxVolume`, `playerAliases`,
->   `sensorUnits`, `smartScheme`, `useTwelveHourClock`, `visualiserBars`,
+> - `services`: `audioIncrement`, `brightnessIncrement`, `clockFormat`,
+>   `dataUnits`, `defaultPlayer`, `gpuType`, `lyricsBackend`, `maxVolume`,
+>   `playerAliases`, `sensorUnits`, `smartScheme`, `visualiserBars`,
 >   `weatherLocation`, `weatherUnits`
-> - `utilities.toasts`: all except `fullscreen`
-> - `utilities.vpn`: `enabled`, `provider`, `selectedProvider`
+> - `utilities`: `toasts.*`, `vpn.*`
 >
 > </details>
 
@@ -292,6 +292,7 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
     "font": {
       "scale": 1,
       "clock": "Rubik",
+      "workspaces": "Rubik",
       "headline": {
         "family": "GoogleSansFlex",
         "large": {
@@ -306,180 +307,26 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "italic": false,
           "vaxes": { "ROND": 25 }
         },
-        "padding": {
-          "scale": 1
-        },
-        "font": {
-          "scale": 1,
-          "clock": "Rubik",
-          "workspaces": "Rubik",
-          "headline": {
-            "family": "GoogleSansFlex",
-            "large": {
-              "size": 32,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "medium": {
-              "size": 28,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "small": {
-              "size": 24,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            }
-          },
-          "title": {
-            "family": "GoogleSansFlex",
-            "large": {
-              "size": 22,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "medium": {
-              "size": 16,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "small": {
-              "size": 14,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            }
-          },
-          "body": {
-            "family": "GoogleSansFlex",
-            "large": {
-              "size": 16,
-              "weight": 400,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "medium": {
-              "size": 14,
-              "weight": 400,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "small": {
-              "size": 12,
-              "weight": 400,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            }
-          },
-          "label": {
-            "family": "GoogleSansFlex",
-            "large": {
-              "size": 14,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "medium": {
-              "size": 12,
-              "weight": 500,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            },
-            "small": {
-              "size": 11,
-              "weight": 400,
-              "italic": false,
-              "vaxes": { "ROND": 25 }
-            }
-          },
-          "mono": {
-            "family": "CaskaydiaCove NF",
-            "large": {
-              "size": 16,
-              "weight": 400,
-              "italic": false,
-              "vaxes": {}
-            },
-            "medium": {
-              "size": 14,
-              "weight": 400,
-              "italic": false,
-              "vaxes": {}
-            },
-            "small": { "size": 12, "weight": 400, "italic": false, "vaxes": {} }
-          },
-          "icon": {
-            "family": "Material Symbols Rounded",
-            "extraLarge": {
-              "size": 36,
-              "weight": 400,
-              "italic": false,
-              "vaxes": {}
-            },
-            "large": {
-              "size": 24,
-              "weight": 400,
-              "italic": false,
-              "vaxes": {}
-            },
-            "medium": {
-              "size": 18,
-              "weight": 400,
-              "italic": false,
-              "vaxes": {}
-            },
-            "small": { "size": 15, "weight": 400, "italic": false, "vaxes": {} }
-          }
-        },
-        "anim": {
-          "durations": {
-            "scale": 1
-          }
-        },
-        "transparency": {
-          "enabled": false,
-          "base": 0.85,
-          "layers": 0.4
+        "small": {
+          "size": 24,
+          "weight": 500,
+          "italic": false,
+          "vaxes": { "ROND": 25 }
         }
-    },
-    "general": {
-        "logo": "",
-        "showOverFullscreen": false,
-        "mediaGifSpeedAdjustment": 300,
-        "sessionGifSpeed": 0.7,
-        "apps": {
-            "terminal": ["foot"],
-            "audio": ["pwvucontrol"],
-            "playback": ["mpv"],
-            "explorer": ["thunar"]
+      },
+      "title": {
+        "family": "GoogleSansFlex",
+        "large": {
+          "size": 22,
+          "weight": 500,
+          "italic": false,
+          "vaxes": { "ROND": 25 }
         },
-        "idle": {
-            "lockBeforeSleep": true,
-            "inhibitWhenAudio": true,
-            "inhibitWhenCharging": false,
-            "timeouts": [
-                {
-                    "timeout": 180,
-                    "idleAction": "lock",
-                    "inhibitWhenAudio": false,
-                    "inhibitWhenCharging": false,
-                    "respectInhibitors": true
-                },
-                {
-                    "timeout": 300,
-                    "idleAction": "dpms off",
-                    "returnAction": "dpms on"
-                },
-                {
-                    "timeout": 600,
-                    "idleAction": ["suspendThenHibernate"]
-                }
-            ]
+        "medium": {
+          "size": 16,
+          "weight": 500,
+          "italic": false,
+          "vaxes": { "ROND": 25 }
         },
         "small": {
           "size": 14,
@@ -523,152 +370,27 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "italic": false,
           "vaxes": { "ROND": 25 }
         },
-        "workspaces": {
-            "shown": 5,
-            "activeIndicator": true,
-            "occupiedBg": false,
-            "showUnoccupied": true,
-            "showWindows": true,
-            "showWindowsOnSpecialWorkspaces": true,
-            "maxWindowIcons": 5,
-            "activeTrail": false,
-            "displayType": "shapes",
-            "label": "  ",
-            "occupiedLabel": "󰮯",
-            "activeLabel": "󰮯",
-            "capitalisation": "preserve",
-            "specialWorkspaceIcons": [
-                {
-                    "name": "steam",
-                    "icon": "sports_esports"
-                }
-            ],
-            "ignoredTags": [
-                "hide_in_bar",
-                "xwl_popup"
-            ],
-            "windowIcons": [
-                {
-                    "regex": "steam(_app_(default|[0-9]+))?",
-                    "icon": "sports_esports"
-                }
-            ]
-        },
-        "activeWindow": {
-          "compact": false,
-          "inverted": false,
-          "showOnHover": true
-        },
-        "tray": {
-          "background": false,
-          "recolour": false,
-          "compact": false,
-          "iconSubs": [],
-          "hiddenIcons": []
-        },
-        "clock": {
-          "background": false,
-          "showDate": false,
-          "showIcon": true
-        },
-        "statusIcons": [
-            {
-                "id": "lockStatus",
-                "enabled": true
-            },
-            {
-                "id": "audio",
-                "enabled": false
-            },
-            {
-                "id": "microphone",
-                "enabled": false
-            },
-            {
-                "id": "kbLayout",
-                "enabled": false
-            },
-            {
-                "id": "network",
-                "enabled": true
-            },
-            {
-                "id": "bluetooth",
-                "enabled": true
-            },
-            {
-                "id": "battery",
-                "enabled": true
-            }
-        ],
-        "entries": [
-          {
-            "id": "logo",
-            "enabled": true
-          },
-          {
-            "id": "workspaces",
-            "enabled": true
-          },
-          {
-            "id": "spacer",
-            "enabled": true
-          },
-          {
-            "id": "activeWindow",
-            "enabled": true
-          },
-          {
-            "id": "spacer",
-            "enabled": true
-          },
-          {
-            "id": "tray",
-            "enabled": true
-          },
-          {
-            "id": "clock",
-            "enabled": true
-          },
-          {
-            "id": "statusIcons",
-            "enabled": true
-          },
-          {
-            "id": "power",
-            "enabled": true
-          }
-        ],
-        "excludedScreens": []
-      },
-      "border": {
-        "thickness": 10,
-        "rounding": 25,
-        "smoothing": 20
-      },
-      "dashboard": {
-        "enabled": true,
-        "showOnHover": true,
-        "showDashboard": true,
-        "showMedia": true,
-        "showPerformance": true,
-        "showWeather": true,
-        "mediaUpdateInterval": 500,
-        "resourceUpdateInterval": 1000,
-        "dragThreshold": 50,
-        "performance": {
-          "showBattery": true,
-          "showGpu": true,
-          "showCpu": true,
-          "showMemory": true,
-          "showStorage": true,
-          "showNetwork": true
+        "small": {
+          "size": 11,
+          "weight": 400,
+          "italic": false,
+          "vaxes": { "ROND": 25 }
         }
       },
       "mono": {
         "family": "CaskaydiaCove NF",
-        "large": { "size": 16, "weight": 400, "italic": false, "vaxes": {} },
-        "medium": { "size": 14, "weight": 400, "italic": false, "vaxes": {} },
+        "large": {
+          "size": 16,
+          "weight": 400,
+          "italic": false,
+          "vaxes": {}
+        },
+        "medium": {
+          "size": 14,
+          "weight": 400,
+          "italic": false,
+          "vaxes": {}
+        },
         "small": { "size": 12, "weight": 400, "italic": false, "vaxes": {} }
       },
       "icon": {
@@ -679,251 +401,30 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "italic": false,
           "vaxes": {}
         },
-        "actions": [
-            {
-                "name": "Calculator",
-                "icon": "calculate",
-                "description": "Do simple math equations (powered by Qalc)",
-                "command": ["autocomplete", "calc"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Scheme",
-                "icon": "palette",
-                "description": "Change the current colour scheme",
-                "command": ["autocomplete", "scheme"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Wallpaper",
-                "icon": "image",
-                "description": "Change the current wallpaper",
-                "command": ["autocomplete", "wallpaper"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Variant",
-                "icon": "colors",
-                "description": "Change the current scheme variant",
-                "command": ["autocomplete", "variant"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Random",
-                "icon": "casino",
-                "description": "Switch to a random wallpaper",
-                "command": ["caelestia", "wallpaper", "-r"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Light",
-                "icon": "light_mode",
-                "description": "Change the scheme to light mode",
-                "command": ["setMode", "light"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Dark",
-                "icon": "dark_mode",
-                "description": "Change the scheme to dark mode",
-                "command": ["setMode", "dark"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Shutdown",
-                "icon": "power_settings_new",
-                "description": "Shutdown the system",
-                "command": ["poweroff"],
-                "enabled": true,
-                "dangerous": true
-            },
-            {
-                "name": "Reboot",
-                "icon": "cached",
-                "description": "Reboot the system",
-                "command": ["reboot"],
-                "enabled": true,
-                "dangerous": true
-            },
-            {
-                "name": "Logout",
-                "icon": "exit_to_app",
-                "description": "Log out of the current session",
-                "command": ["logout"],
-                "enabled": true,
-                "dangerous": true
-            },
-            {
-                "name": "Lock",
-                "icon": "lock",
-                "description": "Lock the current session",
-                "command": ["loginctl", "lock-session"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Sleep",
-                "icon": "bedtime",
-                "description": "Suspend then hibernate",
-                "command": ["suspendThenHibernate"],
-                "enabled": true,
-                "dangerous": false
-            },
-            {
-                "name": "Settings",
-                "icon": "settings",
-                "description": "Configure the shell",
-                "command": ["caelestia", "shell", "nexus", "open"],
-                "enabled": true,
-                "dangerous": false
-            }
-        ]
-    },
-    "lock": {
-        "enabled": true,
-        "useWallpaper": false,
-        "recolourLogo": true,
-        "enableFprint": true,
-        "maxFprintTries": 3,
-        "enableHowdy": true,
-        "maxHowdyTries": 3,
-        "triggerHowdyOnWake": true,
-        "hideNotifs": false
-    },
-    "nexus": {
-        "wallpapersPerRow": 4,
-        "networkRescanInterval": 15000
-    },
-    "notifs": {
-        "expire": true,
-        "fullscreen": "On",
-        "defaultExpireTimeout": 5000,
-        "fullscreenExpireTimeout": 2000,
-        "clearThreshold": 0.3,
-        "expandThreshold": 20,
-        "actionOnClick": false,
-        "groupPreviewNum": 3,
-        "openExpanded": false
-    },
-    "osd": {
-        "enabled": true,
-        "hideDelay": 2000,
-        "enableBrightness": true,
-        "enableMicrophone": false
-    },
-    "services": {
-        "weatherLocation": "",
-        "weatherUnits": "Celsius",
-        "sensorUnits": "Celsius",
-        "dataUnits": "Binary",
-        "useTwelveHourClock": false,
-        "gpuType": "Auto",
-        "visualiserBars": 60,
-        "audioIncrement": 0.1,
-        "brightnessIncrement": 0.1,
-        "maxVolume": 1.0,
-        "smartScheme": true,
-        "defaultPlayer": "Spotify",
-        "playerAliases": [{ "from": "com.github.th_ch.youtube_music", "to": "YT Music" }],
-        "lyricsBackend": "Auto"
-    },
-    "session": {
-        "enabled": true,
-        "dragThreshold": 30,
-        "vimKeybinds": false,
-        "icons": {
-            "logout": "logout",
-            "shutdown": "power_settings_new",
-            "hibernate": "downloading",
-            "reboot": "cached"
+        "large": {
+          "size": 24,
+          "weight": 400,
+          "italic": false,
+          "vaxes": {}
         },
-        "commands": {
-            "logout": ["logout"],
-            "shutdown": ["poweroff"],
-            "hibernate": ["hibernate"],
-            "reboot": ["reboot"]
-        }
-    },
-    "sidebar": {
-        "enabled": true,
-        "showOnHover": false,
-        "minHoverThreshold": 200,
-        "dragThreshold": 80
-    },
-    "utilities": {
-        "enabled": true,
-        "maxToasts": 4,
-        "toasts": {
-            "fullscreen": "off",
-            "configLoaded": true,
-            "chargingChanged": true,
-            "gameModeChanged": true,
-            "dndChanged": true,
-            "audioOutputChanged": true,
-            "audioInputChanged": true,
-            "capsLockChanged": true,
-            "numLockChanged": true,
-            "kbLayoutChanged": true,
-            "kbLimit": true,
-            "vpnChanged": true,
-            "nowPlaying": false
+        "medium": {
+          "size": 18,
+          "weight": 400,
+          "italic": false,
+          "vaxes": {}
         },
-        "vpn": {
-            "enabled": false,
-            "provider": [
-                {
-                    "name": "wireguard",
-                    "interface": "your-connection-name",
-                    "displayName": "Wireguard (Your VPN)",
-                    "enabled": false
-                }
-            ]
-        },
-        "quickToggles": [
-            {
-                "id": "wifi",
-                "enabled": true
-            },
-            {
-                "id": "bluetooth",
-                "enabled": true
-            },
-            {
-                "id": "mic",
-                "enabled": true
-            },
-            {
-                "id": "settings",
-                "enabled": true
-            },
-            {
-                "id": "gameMode",
-                "enabled": true
-            },
-            {
-                "id": "dnd",
-                "enabled": true
-            },
-            {
-                "id": "vpn",
-                "enabled": false
-            }
-        ]
+        "small": { "size": 15, "weight": 400, "italic": false, "vaxes": {} }
+      }
     },
-    "paths": {
-        "wallpaperDir": "~/Pictures/Wallpapers",
-        "lyricsDir": "~/Music/lyrics/",
-        "sessionGif": "root:/assets/kurukuru.gif",
-        "mediaGif": "root:/assets/bongocat.gif",
-        "noNotifsPic": "root:/assets/dino.png",
-        "lockNoNotifsPic": "root:/assets/dino.png"
+    "anim": {
+      "durations": {
+        "scale": 1
+      }
+    },
+    "transparency": {
+      "enabled": false,
+      "base": 0.85,
+      "layers": 0.4
     }
   },
   "general": {
@@ -940,10 +441,14 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
     "idle": {
       "lockBeforeSleep": true,
       "inhibitWhenAudio": true,
+      "inhibitWhenCharging": false,
       "timeouts": [
         {
           "timeout": 180,
-          "idleAction": "lock"
+          "idleAction": "lock",
+          "inhibitWhenAudio": false,
+          "inhibitWhenCharging": false,
+          "respectInhibitors": true
         },
         {
           "timeout": 300,
@@ -1026,21 +531,41 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
       "shown": 5,
       "activeIndicator": true,
       "occupiedBg": false,
+      "showUnoccupied": true,
       "showWindows": true,
       "showWindowsOnSpecialWorkspaces": true,
       "maxWindowIcons": 5,
       "activeTrail": false,
-      "perMonitorWorkspaces": true,
+      "displayType": "shapes",
+      "specialDisplayType": "icons",
       "label": "  ",
       "occupiedLabel": "󰮯",
       "activeLabel": "󰮯",
       "capitalisation": "preserve",
+      "workspaceIcons": [],
       "specialWorkspaceIcons": [
         {
-          "name": "steam",
-          "icon": "sports_esports"
+          "name": "special",
+          "icon": "star"
+        },
+        {
+          "name": "communication",
+          "icon": "forum"
+        },
+        {
+          "name": "music",
+          "icon": "music_cast"
+        },
+        {
+          "name": "todo",
+          "icon": "checklist"
+        },
+        {
+          "name": "sysmon",
+          "icon": "monitor_heart"
         }
       ],
+      "ignoredTags": ["hide_in_bar", "xwl_popup"],
       "windowIcons": [
         {
           "regex": "steam(_app_(default|[0-9]+))?",
@@ -1060,16 +585,36 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
       "iconSubs": [],
       "hiddenIcons": []
     },
-    "status": {
-      "showAudio": false,
-      "showMicrophone": false,
-      "showKbLayout": false,
-      "showNetwork": true,
-      "showWifi": true,
-      "showBluetooth": true,
-      "showBattery": true,
-      "showLockStatus": true
-    },
+    "statusIcons": [
+      {
+        "id": "lockStatus",
+        "enabled": true
+      },
+      {
+        "id": "audio",
+        "enabled": false
+      },
+      {
+        "id": "microphone",
+        "enabled": false
+      },
+      {
+        "id": "kbLayout",
+        "enabled": false
+      },
+      {
+        "id": "network",
+        "enabled": true
+      },
+      {
+        "id": "bluetooth",
+        "enabled": true
+      },
+      {
+        "id": "battery",
+        "enabled": true
+      }
+    ],
     "clock": {
       "background": false,
       "showDate": false,
@@ -1285,9 +830,14 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
     ]
   },
   "lock": {
+    "enabled": true,
+    "useWallpaper": false,
     "recolourLogo": true,
     "enableFprint": true,
     "maxFprintTries": 3,
+    "enableHowdy": true,
+    "maxHowdyTries": 3,
+    "triggerHowdyOnWake": true,
     "hideNotifs": false
   },
   "nexus": {
@@ -1296,7 +846,7 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
   },
   "notifs": {
     "expire": true,
-    "fullscreen": "on",
+    "fullscreen": "On",
     "defaultExpireTimeout": 5000,
     "fullscreenExpireTimeout": 2000,
     "clearThreshold": 0.3,
@@ -1313,10 +863,11 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
   },
   "services": {
     "weatherLocation": "",
-    "useFahrenheit": false,
-    "useFahrenheitPerformance": false,
-    "useTwelveHourClock": false,
-    "gpuType": "",
+    "weatherUnits": "Auto",
+    "sensorUnits": "Celsius",
+    "dataUnits": "Binary",
+    "clockFormat": "Auto",
+    "gpuType": "Auto",
     "visualiserBars": 60,
     "audioIncrement": 0.1,
     "brightnessIncrement": 0.1,
@@ -1347,6 +898,8 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
   },
   "sidebar": {
     "enabled": true,
+    "showOnHover": false,
+    "minHoverThreshold": 200,
     "dragThreshold": 80
   },
   "utilities": {

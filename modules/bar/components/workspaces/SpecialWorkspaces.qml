@@ -1,25 +1,79 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
+import Caelestia
+import Caelestia.Components
 import Caelestia.Config
 import qs.components
 import qs.components.effects
 import qs.services
-import qs.utils
 
 Item {
     id: root
 
     required property ShellScreen screen
+
     readonly property HyprlandMonitor monitor: Hypr.monitorFor(screen)
-    readonly property string activeSpecial: monitor?.lastIpcObject.specialWorkspace?.name ?? ""
+    readonly property int activeSpecialId: monitor?.lastIpcObject.specialWorkspace?.id ?? 0
+    readonly property var wsIds: Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && w.monitor === root.monitor).map(w => w.id)
+    readonly property int activeIdx: wsIds.indexOf(activeSpecialId)
+    readonly property real maxViewX: Math.max(0, view.contentWidth - width)
+
+    readonly property Workspace activeWs: {
+        view.itemsDirty;
+        return view.itemAtIndex(activeIdx) as Workspace;
+    }
+
+    function ensureVisible(animate = true): void {
+        if (!activeWs)
+            return;
+
+        const left = activeWs.LazyListView.layoutX;
+        const right = left + activeWs.LazyListView.preferredWidth;
+
+        let target = view.x;
+        if (left < -target)
+            target = -left;
+        else if (right > -target + width)
+            target = -(right - width);
+
+        target = CUtils.clamp(target, -maxViewX, 0);
+        if (target !== view.x) {
+            if (animate) {
+                const type = viewXAnim.type;
+                viewXAnim.type = Anim.DefaultSpatial;
+                view.x = target;
+                viewXAnim.type = type;
+            } else {
+                viewXBehavior.enabled = false;
+                view.x = target;
+                viewXBehavior.enabled = true;
+            }
+        }
+    }
+
+    onActiveWsChanged: ensureVisible()
+    onWidthChanged: ensureVisible(false)
+    Component.onCompleted: ensureVisible(false)
+    onMaxViewXChanged: ensureVisible()
 
     layer.enabled: true
     layer.effect: Mask {
         maskSource: mask
+    }
+
+    Connections {
+        function onLayoutXChanged(): void {
+            root.ensureVisible();
+        }
+
+        function onPreferredWidthChanged(): void {
+            root.ensureVisible();
+        }
+
+        target: root.activeWs?.LazyListView ?? null
     }
 
     Item {
@@ -41,11 +95,11 @@ Item {
                     color: Qt.rgba(0, 0, 0, 0)
                 }
                 GradientStop {
-                    position: 0.3
+                    position: 0.2
                     color: Qt.rgba(0, 0, 0, 1)
                 }
                 GradientStop {
-                    position: 0.7
+                    position: 0.8
                     color: Qt.rgba(0, 0, 0, 1)
                 }
                 GradientStop {
@@ -62,7 +116,7 @@ Item {
 
             radius: Tokens.rounding.full
             implicitWidth: parent.width / 2
-            opacity: view.contentX > 0 ? 0 : 1
+            opacity: view.x < -Tokens.padding.extraSmall ? 0 : 1
 
             Behavior on opacity {
                 Anim {
@@ -78,7 +132,7 @@ Item {
 
             radius: Tokens.rounding.full
             implicitWidth: parent.width / 2
-            opacity: view.contentX < view.contentWidth - parent.width + Tokens.padding.extraSmall ? 0 : 1
+            opacity: view.x > -root.maxViewX + Tokens.padding.extraSmall ? 0 : 1
 
             Behavior on opacity {
                 Anim {
@@ -88,287 +142,90 @@ Item {
         }
     }
 
-    ListView {
+    LazyListView {
         id: view
 
-        anchors.fill: parent
-        spacing: Tokens.spacing.medium
-        interactive: false
-        orientation: ListView.Horizontal
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        implicitWidth: contentWidth
 
-        currentIndex: model.values.findIndex(w => w.name === root.activeSpecial)
-        onCurrentIndexChanged: currentIndex = Qt.binding(() => model.values.findIndex(w => w.name === root.activeSpecial))
+        orientation: Qt.Horizontal
+
+        cullDelegates: false
+        spacing: Tokens.spacing.small
+        removeDuration: Tokens.anim.durations.expressiveDefaultEffects
+
+        onContentWidthChanged: root.ensureVisible()
 
         model: ScriptModel {
-            values: Hypr.workspaces.values.filter(w => w.name.startsWith("special:") && w.monitor === root.monitor)
+            values: root.wsIds
         }
 
-        preferredHighlightBegin: 0
-        preferredHighlightEnd: width
-        highlightRangeMode: ListView.StrictlyEnforceRange
-
-        highlightFollowsCurrentItem: false
-        highlight: Item {
-            x: view.currentItem?.x ?? 0
-            implicitWidth: (view.currentItem as SpecialWsDelegate)?.size ?? 0
-
-            Behavior on x {
-                Anim {}
-            }
+        delegate: Workspace {
+            activeWsId: root.activeSpecialId
+            ws: modelData
+            displayType: Config.bar.workspaces.specialDisplayType
+            showWindows: Config.bar.workspaces.showWindowsOnSpecialWorkspaces
+            iconRules: GlobalConfig.bar.workspaces.specialWorkspaceIcons
         }
 
-        delegate: SpecialWsDelegate {}
+        Behavior on x {
+            id: viewXBehavior
 
-        add: Transition {
             Anim {
-                properties: "scale"
-                from: 0
-                to: 1
-                easing: Tokens.anim.standardDecel
-            }
-        }
+                id: viewXAnim
 
-        remove: Transition {
-            Anim {
-                property: "scale"
-                to: 0.5
-                type: Anim.StandardSmall
-            }
-            Anim {
-                property: "opacity"
-                to: 0
-                type: Anim.StandardSmall
-            }
-        }
-
-        move: Transition {
-            Anim {
-                properties: "scale"
-                to: 1
-                easing: Tokens.anim.standardDecel
-            }
-            Anim {
-                properties: "x,y"
-            }
-        }
-
-        displaced: Transition {
-            Anim {
-                properties: "scale"
-                to: 1
-                easing: Tokens.anim.standardDecel
-            }
-            Anim {
-                properties: "x,y"
+                type: Anim.FastEffects
             }
         }
     }
 
     Loader {
         asynchronous: true
+        anchors.top: view.top
+        anchors.bottom: view.bottom
         active: Config.bar.workspaces.activeIndicator
-        anchors.fill: parent
 
-        sourceComponent: Item {
-            StyledClippingRect {
-                id: indicator
-
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-
-                x: (view.currentItem?.x ?? 0) - view.contentX
-                implicitWidth: (view.currentItem as SpecialWsDelegate)?.size ?? 0
-
-                color: Colours.palette.m3tertiary
-                radius: Tokens.rounding.full
-
-                Colouriser {
-                    source: view
-                    sourceColor: Colours.palette.m3onSurface
-                    colorizationColor: Colours.palette.m3onTertiary
-
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    x: -indicator.x
-                    y: 0
-                    implicitWidth: view.width
-                    implicitHeight: view.height
-                }
-
-                Behavior on x {
-                    Anim {
-                        type: Anim.Emphasized
-                    }
-                }
-
-                Behavior on implicitWidth {
-                    Anim {
-                        type: Anim.Emphasized
-                    }
-                }
-            }
+        sourceComponent: ActiveIndicator {
+            activeWs: root.activeWs
+            mask: view
+            color: Colours.palette.m3tertiary
+            contentColour: Colours.palette.m3onTertiary
         }
     }
 
     MouseArea {
         property real startX
+        property real startViewX
+        property bool dragging
 
-        anchors.fill: view
+        anchors.fill: parent
 
-        drag.target: view.contentItem
-        drag.axis: Drag.XAxis
-        drag.maximumX: 0
-        drag.minimumX: Math.min(0, view.width - view.contentWidth - Tokens.padding.extraSmall)
+        onPressed: event => {
+            startX = event.x;
+            startViewX = view.x;
+            dragging = false;
+        }
 
-        onPressed: event => startX = event.x
+        onPositionChanged: event => {
+            if (!dragging && Math.abs(event.x - startX) > drag.threshold)
+                dragging = true;
+
+            if (dragging)
+                view.x = CUtils.clamp(startViewX + (event.x - startX), -root.maxViewX, 0);
+        }
 
         onClicked: event => {
-            if (Math.abs(event.x - startX) > drag.threshold)
+            if (dragging)
                 return;
 
-            const ws = view.itemAt(event.x, event.y) as SpecialWsDelegate;
-            if (ws?.modelData)
-                Hypr.dispatch(Hypr.usingLua ? `hl.dsp.workspace.toggle_special("${ws.modelData.name.slice(8)}")` : `togglespecialworkspace ${ws.modelData.name.slice(8)}`);
-            else
-                Hypr.dispatch(Hypr.usingLua ? 'hl.dsp.workspace.toggle_special("special")' : "togglespecialworkspace special");
-        }
-    }
-
-    component SpecialWsDelegate: RowLayout {
-        id: ws
-
-        required property HyprlandWorkspace modelData
-        readonly property int size: label.Layout.preferredWidth + (hasWindows ? windows.implicitWidth + Tokens.padding.extraSmall : 0)
-        property int wsId
-        property string icon
-        property bool hasWindows
-
-        anchors.top: view.contentItem.top
-        anchors.bottom: view.contentItem.bottom
-
-        spacing: 0
-
-        Component.onCompleted: {
-            wsId = modelData.id;
-            icon = Icons.getSpecialWsIcon(modelData.name);
-            hasWindows = Config.bar.workspaces.showWindowsOnSpecialWorkspaces && modelData.lastIpcObject.windows > 0;
-        }
-
-        // Hacky thing cause modelData gets destroyed before the remove anim finishes
-        Connections {
-            function onIdChanged(): void {
-                if (ws.modelData)
-                    ws.wsId = ws.modelData.id;
-            }
-
-            function onNameChanged(): void {
-                if (ws.modelData)
-                    ws.icon = Icons.getSpecialWsIcon(ws.modelData.name);
-            }
-
-            function onLastIpcObjectChanged(): void {
-                if (ws.modelData)
-                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
-            }
-
-            target: ws.modelData
-        }
-
-        Connections {
-            function onShowWindowsOnSpecialWorkspacesChanged(): void {
-                if (ws.modelData)
-                    ws.hasWindows = root.Config.bar.workspaces.showWindowsOnSpecialWorkspaces && ws.modelData.lastIpcObject.windows > 0;
-            }
-
-            target: root.Config.bar.workspaces
-        }
-
-        Loader {
-            id: label
-
-            asynchronous: true
-
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-            Layout.preferredWidth: Tokens.sizes.bar.innerHeight - Tokens.padding.small
-
-            sourceComponent: ws.icon.length === 1 ? letterComp : iconComp
-
-            Component {
-                id: iconComp
-
-                MaterialIcon {
-                    fill: 1
-                    text: ws.icon
-                    horizontalAlignment: Qt.AlignHCenter
-                }
-            }
-
-            Component {
-                id: letterComp
-
-                StyledText {
-                    text: ws.icon
-                    horizontalAlignment: Qt.AlignHCenter
-                }
-            }
-        }
-
-        Loader {
-            id: windows
-
-            asynchronous: true
-
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: implicitWidth
-
-            visible: active
-            active: ws.hasWindows
-
-            sourceComponent: Row {
-                spacing: 0
-
-                add: Transition {
-                    Anim {
-                        properties: "scale"
-                        from: 0
-                        to: 1
-                        easing: Tokens.anim.standardDecel
-                    }
-                }
-
-                move: Transition {
-                    Anim {
-                        properties: "scale"
-                        to: 1
-                        easing: Tokens.anim.standardDecel
-                    }
-                    Anim {
-                        properties: "x,y"
-                    }
-                }
-
-                Repeater {
-                    model: ScriptModel {
-                        values: {
-                            const windows = Hypr.toplevelsForWs(ws.wsId);
-                            const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
-                            return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
-                        }
-                    }
-
-                    MaterialIcon {
-                        required property var modelData
-
-                        grade: 0
-                        text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
-                        color: Colours.palette.m3onSurfaceVariant
-                    }
-                }
-            }
-
-            Behavior on Layout.preferredWidth {
-                Anim {}
+            const ws = view.itemAt(event.x - view.x, event.y) as Workspace;
+            if (ws) {
+                const match = Hypr.workspaces.values.find(w => w.id === ws.ws);
+                if (match)
+                    Hypr.toggleSpecial(Hypr.trimWsName(match.name));
+            } else {
+                Hypr.toggleSpecial("special");
             }
         }
     }
