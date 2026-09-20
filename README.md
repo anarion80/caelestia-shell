@@ -536,11 +536,173 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "italic": false,
           "vaxes": {}
         },
-        "medium": {
-          "size": 14,
-          "weight": 400,
-          "italic": false,
-          "vaxes": {}
+        "actions": [
+          {
+            "name": "Calculator",
+            "icon": "calculate",
+            "description": "Do simple math equations (powered by Qalc)",
+            "command": ["autocomplete", "calc"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Scheme",
+            "icon": "palette",
+            "description": "Change the current colour scheme",
+            "command": ["autocomplete", "scheme"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Wallpaper",
+            "icon": "image",
+            "description": "Change the current wallpaper",
+            "command": ["autocomplete", "wallpaper"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Variant",
+            "icon": "colors",
+            "description": "Change the current scheme variant",
+            "command": ["autocomplete", "variant"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Random",
+            "icon": "casino",
+            "description": "Switch to a random wallpaper",
+            "command": ["caelestia", "wallpaper", "-r"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Light",
+            "icon": "light_mode",
+            "description": "Change the scheme to light mode",
+            "command": ["setMode", "light"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Dark",
+            "icon": "dark_mode",
+            "description": "Change the scheme to dark mode",
+            "command": ["setMode", "dark"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Shutdown",
+            "icon": "power_settings_new",
+            "description": "Shutdown the system",
+            "command": ["poweroff"],
+            "enabled": true,
+            "dangerous": true
+          },
+          {
+            "name": "Reboot",
+            "icon": "cached",
+            "description": "Reboot the system",
+            "command": ["reboot"],
+            "enabled": true,
+            "dangerous": true
+          },
+          {
+            "name": "Logout",
+            "icon": "exit_to_app",
+            "description": "Log out of the current session",
+            "command": ["logout"],
+            "enabled": true,
+            "dangerous": true
+          },
+          {
+            "name": "Lock",
+            "icon": "lock",
+            "description": "Lock the current session",
+            "command": ["loginctl", "lock-session"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Sleep",
+            "icon": "bedtime",
+            "description": "Suspend then hibernate",
+            "command": ["suspendThenHibernate"],
+            "enabled": true,
+            "dangerous": false
+          },
+          {
+            "name": "Settings",
+            "icon": "settings",
+            "description": "Configure the shell",
+            "command": ["caelestia", "shell", "nexus", "open"],
+            "enabled": true,
+            "dangerous": false
+          }
+        ]
+      },
+      "lock": {
+        "enabled": true,
+        "useWallpaper": false,
+        "recolourLogo": true,
+        "enableFprint": true,
+        "maxFprintTries": 3,
+        "enableHowdy": true,
+        "maxHowdyTries": 3,
+        "triggerHowdyOnWake": true,
+        "hideNotifs": false,
+        "enableSessionControls": true
+      },
+      "nexus": {
+        "wallpapersPerRow": 4,
+        "networkRescanInterval": 15000
+      },
+      "notifs": {
+        "expire": true,
+        "fullscreen": "On",
+        "defaultExpireTimeout": 5000,
+        "fullscreenExpireTimeout": 2000,
+        "clearThreshold": 0.3,
+        "expandThreshold": 20,
+        "actionOnClick": false,
+        "groupPreviewNum": 3,
+        "openExpanded": false
+      },
+      "osd": {
+        "enabled": true,
+        "hideDelay": 2000,
+        "enableBrightness": true,
+        "enableMicrophone": false
+      },
+      "services": {
+        "weatherLocation": "",
+        "weatherUnits": "Auto",
+        "sensorUnits": "Celsius",
+        "dataUnits": "Binary",
+        "clockFormat": "Auto",
+        "gpuType": "Auto",
+        "visualiserBars": 60,
+        "audioIncrement": 0.1,
+        "brightnessIncrement": 0.1,
+        "maxVolume": 1.0,
+        "smartScheme": true,
+        "defaultPlayer": "Spotify",
+        "playerAliases": [
+          { "from": "com.github.th_ch.youtube_music", "to": "YT Music" }
+        ],
+        "lyricsBackend": "Auto"
+      },
+      "session": {
+        "enabled": true,
+        "dragThreshold": 30,
+        "vimKeybinds": false,
+        "icons": {
+          "logout": "logout",
+          "shutdown": "power_settings_new",
+          "hibernate": "downloading",
+          "reboot": "cached"
         },
         "small": { "size": 12, "weight": 400, "italic": false, "vaxes": {} }
       },
