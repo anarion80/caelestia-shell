@@ -229,9 +229,9 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
 
 ```json
 {
-  "bar": {
-    "persistent": false
-  }
+    "bar": {
+        "persistent": false
+    }
 }
 ```
 
@@ -277,11 +277,165 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
 
 ```json
 {
-  "enabled": true,
-  "appearance": {
-    "deformScale": 1,
-    "rounding": {
-      "scale": 1
+    "enabled": true,
+    "appearance": {
+        "deformScale": 1,
+        "rounding": {
+            "scale": 1
+        },
+        "spacing": {
+            "scale": 1
+        },
+        "padding": {
+            "scale": 1
+        },
+        "font": {
+            "scale": 1,
+            "clock": "Rubik",
+            "workspaces": "Rubik",
+            "headline": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "size": 32,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "medium": {
+                    "size": 28,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "small": {
+                    "size": 24,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                }
+            },
+            "title": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "size": 22,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "medium": {
+                    "size": 16,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "small": {
+                    "size": 14,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                }
+            },
+            "body": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "size": 16,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "medium": {
+                    "size": 14,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "small": {
+                    "size": 12,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                }
+            },
+            "label": {
+                "family": "GoogleSansFlex",
+                "large": {
+                    "size": 14,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "medium": {
+                    "size": 12,
+                    "weight": 500,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                },
+                "small": {
+                    "size": 11,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": { "ROND": 25 }
+                }
+            },
+            "mono": {
+                "family": "CaskaydiaCove NF",
+                "large": {
+                    "size": 16,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                },
+                "medium": {
+                    "size": 14,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                },
+                "small": {
+                    "size": 12,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                }
+            },
+            "icon": {
+                "family": "Material Symbols Rounded",
+                "extraLarge": {
+                    "size": 36,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                },
+                "large": {
+                    "size": 24,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                },
+                "medium": {
+                    "size": 18,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                },
+                "small": {
+                    "size": 15,
+                    "weight": 400,
+                    "italic": false,
+                    "vaxes": {}
+                }
+            }
+        },
+        "anim": {
+            "durations": {
+                "scale": 1
+            }
+        },
+        "transparency": {
+            "enabled": false,
+            "base": 0.85,
+            "layers": 0.4
+        }
     },
     "spacing": {
       "scale": 1
@@ -371,51 +525,51 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
           "vaxes": { "ROND": 25 }
         },
         "workspaces": {
-          "shown": 5,
-          "activeIndicator": true,
-          "occupiedBg": false,
-          "showUnoccupied": true,
-          "perMonitor": true,
-          "showWindows": true,
-          "showWindowsOnSpecialWorkspaces": true,
-          "maxWindowIcons": 5,
-          "activeTrail": false,
-          "displayType": "shapes",
-          "specialDisplayType": "icons",
-          "label": "  ",
-          "occupiedLabel": "󰮯",
-          "activeLabel": "󰮯",
-          "capitalisation": "preserve",
-          "workspaceIcons": [],
-          "specialWorkspaceIcons": [
-            {
-              "name": "special",
-              "icon": "star"
-            },
-            {
-              "name": "communication",
-              "icon": "forum"
-            },
-            {
-              "name": "music",
-              "icon": "music_cast"
-            },
-            {
-              "name": "todo",
-              "icon": "checklist"
-            },
-            {
-              "name": "sysmon",
-              "icon": "monitor_heart"
-            }
-          ],
-          "ignoredTags": ["hide_in_bar", "xwl_popup"],
-          "windowIcons": [
-            {
-              "regex": "steam(_app_(default|[0-9]+))?",
-              "icon": "sports_esports"
-            }
-          ]
+            "shown": 5,
+            "activeIndicator": true,
+            "occupiedBg": false,
+            "showUnoccupied": true,
+            "perMonitor": true,
+            "showWindows": true,
+            "showWindowsOnSpecialWorkspaces": true,
+            "maxWindowIcons": 5,
+            "activeTrail": false,
+            "displayType": "shapes",
+            "specialDisplayType": "icons",
+            "label": "  ",
+            "occupiedLabel": "󰮯",
+            "activeLabel": "󰮯",
+            "capitalisation": "preserve",
+            "workspaceIcons": [],
+            "specialWorkspaceIcons": [
+                {
+                    "name": "special",
+                    "icon": "star"
+                },
+                {
+                    "name": "communication",
+                    "icon": "forum"
+                },
+                {
+                    "name": "music",
+                    "icon": "music_cast"
+                },
+                {
+                    "name": "todo",
+                    "icon": "checklist"
+                },
+                {
+                    "name": "sysmon",
+                    "icon": "monitor_heart"
+                }
+            ],
+            "ignoredTags": ["hide_in_bar", "xwl_popup"],
+            "windowIcons": [
+                {
+                    "regex": "steam(_app_(default|[0-9]+))?",
+                    "icon": "sports_esports"
+                }
+            ]
         },
         "activeWindow": {
           "compact": false,
@@ -690,7 +844,7 @@ For example, to automatically hide the bar on the monitor named `DP-1`:
         "smartScheme": true,
         "defaultPlayer": "Spotify",
         "playerAliases": [
-          { "from": "com.github.th_ch.youtube_music", "to": "YT Music" }
+            { "from": "com.github.th_ch.youtube_music", "to": "YT Music" }
         ],
         "lyricsBackend": "Auto"
       },
@@ -1400,16 +1554,16 @@ Example configuration for different email setups:
 
 - **Notmuch (default)**:
 
-  ```json
-  "fetchCommand": ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"],
-  "clickCommand": ["alacritty", "-e", "neomutt"]
-  ```
+    ```json
+    "fetchCommand": ["notmuch", "search", "--format=json", "--output=summary", "tag:unread", "-tag:trash"],
+    "clickCommand": ["alacritty", "-e", "neomutt"]
+    ```
 
 - **Custom script**: Write a script that returns JSON in the expected format:
-  ```json
-  "fetchCommand": ["/path/to/your/email-script.sh"],
-  "clickCommand": ["thunderbird"]
-  ```
+    ```json
+    "fetchCommand": ["/path/to/your/email-script.sh"],
+    "clickCommand": ["thunderbird"]
+    ```
 
 The `fetchCommand` must return a JSON array where each object has `authors` and
 `subject` properties. If the command fails or returns invalid JSON, the mail
@@ -1436,11 +1590,11 @@ for now):
 ## Stonks 📈
 
 <a href="https://www.star-history.com/#caelestia-dots/shell&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date" />
- </picture>
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date&theme=dark" />
+        <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date" />
+        <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=caelestia-dots/shell&type=Date" />
+    </picture>
 </a>
 
 [dots-repo]: https://github.com/caelestia-dots/caelestia
