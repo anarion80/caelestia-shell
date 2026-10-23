@@ -33,7 +33,7 @@ QRectF clipAxis(const QRectF& rect, bool horizontal, qreal start, qreal end) {
 
 } // namespace
 
-namespace caelestia::components {
+namespace caelestia::shell::components {
 
 using Qt::StringLiterals::operator""_s;
 
@@ -1436,4 +1436,4 @@ void LazyListView::onModelReset() {
     resetContent();
 }
 
-} // namespace caelestia::components
+} // namespace caelestia::shell::components
