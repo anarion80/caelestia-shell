@@ -3,11 +3,11 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Caelestia.Config
+import Caelestia.I18n
 import qs.components
 import qs.components.misc
 import qs.services
-import Caelestia.Config
-import Caelestia.I18n
 import qs.utils
 
 StyledRect {
